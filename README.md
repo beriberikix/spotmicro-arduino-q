@@ -87,6 +87,18 @@ Thingiverse blocks scripted downloads, so download them by hand with "Download a
 /Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd scripts/export_stls.py
 ```
 
+### MakerWorld project
+
+```sh
+python3 scripts/build_makerworld_3mf.py --no-orient
+```
+
+writes `makerworld/SpotUnoQ_P1S.3mf`: a sliced Bambu Studio project for the P1S (0.4 mm nozzle, 0.20 mm Standard),
+10 plates, one filament each (Bambu PLA Basic black and white, Bambu TPU 95A HF), auto-arranged plate by plate, with
+100% infill on the covers and 20% elsewhere. The script stops if any part fails to land on its plate or Bambu Studio
+reports a slicing warning. Without `--no-orient` it also auto-orients every part, which lays
+`Top_Cover_Split_Rear_with_OLED` down in a position that needs supports.
+
 ### Coordinate frame
 
 The plate and cover files share a body frame: +Y toward the head, +X to the robot's right, plate top at Z = 5 mm,
