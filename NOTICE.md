@@ -4,11 +4,11 @@ This project builds on the following work. Each keeps its own license.
 
 | Work | Author | License | Used here |
 | ---- | ------ | ------- | --------- |
-| [Spotmicro - robot dog](https://www.thingiverse.com/thing:3445283) | Deok-yeon Kim (KDY0523) | See the Thingiverse page | The original design every Spot Micro derives from |
+| [Spotmicro - robot dog](https://www.thingiverse.com/thing:3445283) | Deok-yeon Kim (KDY0523) | CC BY | The original design every Spot Micro derives from |
 | [SpotMicroESP32 (prints without supports)](https://www.thingiverse.com/thing:4559827) | Michael Kubina (Kooba) | CC BY | `cad/UnoQ_Mountingplate.FCStd` is a modified copy of `Circuitry_Mountingplate_SZBK07.FCStd`. All other printed parts are used unchanged. |
 | [SpotMicroESP32 repository](https://github.com/michaelkubina/SpotMicroESP32) | Michael Kubina | GPL-3.0 | `cad/SpotUnoQ.FCStd` links to the full assembly `spotmicroesp32_assembled_quick_and_dirty.FCStd`. It is fetched by `scripts/fetch-references.sh`, not redistributed. |
 | [SpotMicroESP32-Leika](https://github.com/runeharlyk/SpotMicroESP32-Leika) | Rune Harlyk | MIT | Kinematic dimensions, electronics list and the firmware this project will port |
-| [Reinforced shoulder remix](https://www.thingiverse.com/thing:4937631) | robjk | See the Thingiverse page | Recommended replacement shoulders |
+| [Reinforced shoulder remix](https://www.thingiverse.com/thing:4937631) | robjk | CC BY 4.0 | Recommended replacement shoulders |
 | [Arduino UNO Q STEP model](https://docs.arduino.cc/hardware/uno-q/) | Arduino | See Arduino's documentation | Board model, fetched and converted by the scripts, not redistributed |
 
 ## Changes to Kooba's mounting plate
