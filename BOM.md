@@ -14,7 +14,7 @@ Check the specs listed in the notes before buying.
 | 1 | Arduino UNO Q, 4 GB (ABX00173) | Replaces the ESP32. Runs from the battery through VIN (7-24 V). The 2 GB ABX00162 has the same footprint. | [Arduino Store](https://store-usa.arduino.cc/products/uno-q-4gb) |
 | 1 | PCA9685 16-channel 12-bit PWM driver | Same as Leika. Mounts on Kooba's existing posts. Runs on the UNO Q's 3.3 V I2C. | [Adafruit 815](https://www.adafruit.com/product/815) |
 | 1 | Pololu D24V150F6, 6 V 15 A step-down regulator | Servo rail. 43.2 x 31.8 mm, M2 holes 38.86 x 25.4 mm; the plate posts are sized for it. Replaces the SZBK07/XL4016. About 17.5 A continuous at 8 V in. Dropout is about 1.3 V at 3 A and 1.45 V at 10 A, so it holds 6 V only while the pack is above about 7.4 V; below that the servos get a little less than 6 V, which is still inside their rating. | [Pololu 2882](https://www.pololu.com/product/2882) |
-| 12 | Servos, 25T spline, standard size: DS3218MG (20 kg) or MG996R (11 kg) | See [Servos](#servos). Both fit the same mounts and run on the 6 V rail. | [DS3218MG search](https://www.amazon.com/s?k=DS3218MG+servo) · [MG996R search](https://www.amazon.com/s?k=MG996R+servo) |
+| 12 | Servos, 25T spline, standard size: DS3218MG (20 kg) or MG996R (11 kg) | See [Servos](#servos). Both fit the same mounts and run on the 6 V rail. | [DS3218 180°, HOOYIJ 4-pack (buy 3)](https://www.amazon.com/HOOYIJ-Digital-Waterproof-Crawler-Control/dp/B0CJ7B2MBN) · [DS3218MG search](https://www.amazon.com/s?k=DS3218MG+servo) · [MG996R search](https://www.amazon.com/s?k=MG996R+servo) |
 | 12 | 25T six-arm servo horn (FSH6S type) | Often included with the servos. `Servohorn_6_B_Star` is a printable fallback. | [search](https://www.amazon.com/s?k=25T+servo+horn+aluminum) |
 | 48 | Servo rubber dampeners | Usually included with the servos. | - |
 | 4 | Servo extension cable, 10-15 cm | For the lower-leg servos. | [search](https://www.amazon.com/s?k=servo+extension+cable+15cm) |
@@ -48,6 +48,9 @@ The head's ESP32-CAM mount has no UNO Q replacement yet.
 | Stall torque at 6 V | about 11 kg·cm | about 20 kg·cm |
 | Stall current | about 2.5 A at 6 V | about 1.8-2.6 A |
 | Builder experience | Kubina: stands and walks, "not great, but also not horrible", with jitter and play. Leika: the minimum. | Kubina: walks significantly better, no jitter |
+
+Buy the 180° version: Kubina's and Leika's calibration assumes 180°, and the 270° version moves a different amount per
+signal step.
 
 Both run directly from the 6 V rail and both need it: a full 2S pack (8.4 V) is above either rating.
 A cheaper middle ground from Kubina: DS3218MG on the four lower legs (the most loaded joints) and MG996R elsewhere.
