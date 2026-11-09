@@ -36,7 +36,8 @@ Power, from a 2S LiPo (7.4-8.4 V):
 Positions, standoff heights, hole sizes and the regulator hole spacing are all in the `Params` spreadsheet in
 `cad/UnoQ_Mountingplate.FCStd`. If you use a different regulator, change `Buck_SX`, `Buck_SY` and `Buck_Screw_D`.
 
-Parts and buy links are in [BOM.md](BOM.md).
+Parts and buy links are in [BOM.md](BOM.md). Optional sensors and changes not yet in the BOM are in
+[docs/ideas.md](docs/ideas.md).
 
 ## Repository layout
 

@@ -81,3 +81,14 @@ About 1 kg of PLA or PETG, plus a little TPU for the foot tips.
   (also on [Thingiverse](https://www.thingiverse.com/thing:4559827)), **except** the circuitry mounting plate.
 - Print `cad/export/UnoQ_Mountingplate.stl` in place of the circuitry mounting plate.
 - Kooba recommends robjk's [reinforced shoulders](https://www.thingiverse.com/thing:4937631).
+
+### Optional: helper stand
+
+Holds the robot by its belly with the legs hanging free. Leika's calibration guide needs this to level the IMU,
+and it is handy for servo calibration and bench work.
+Print from [Leika's `hardware/printable/helper_stand`](https://github.com/runeharlyk/SpotMicroESP32-Leika/tree/main/hardware/printable/helper_stand):
+2× `stand_top`, 2× `stand_bottom`, 2× `stand_brace`, 4× `stand_feet`.
+
+No changes needed: the body and covers are the same as Leika's, and the UNO Q build doesn't touch the underside.
+Checked against the bottom cover's cross-section: the cover (113 mm wide) sits in the 126 mm cradle about 15 mm above
+the cradle floor, held by the cradle's sides.

@@ -9,6 +9,8 @@ This project builds on the following work. Each keeps its own license.
 | [SpotMicroESP32 repository](https://github.com/michaelkubina/SpotMicroESP32) | Michael Kubina | GPL-3.0 | `cad/SpotUnoQ.FCStd` links to the full assembly `spotmicroesp32_assembled_quick_and_dirty.FCStd`. It is fetched by `scripts/fetch-references.sh`, not redistributed. |
 | [SpotMicroESP32-Leika](https://github.com/runeharlyk/SpotMicroESP32-Leika) | Rune Harlyk | MIT | Kinematic dimensions, electronics list and the firmware this project will port |
 | [Reinforced shoulder remix](https://www.thingiverse.com/thing:4937631) | robjk | CC BY 4.0 | Recommended replacement shoulders |
+| [stronger microspot stand top](https://www.thingiverse.com/thing:4814187) | stefi01 | CC BY 4.0 | Helper stand top (optional, via Leika's repo, not redistributed) |
+| [Nova-SM2 stand parts](https://github.com/cguweb-com/Arduino-Projects/tree/main/Nova-SM2/STL%20Files) | cguweb | MIT | Helper stand bottom, brace and feet (optional, via Leika's repo, not redistributed) |
 | [Arduino UNO Q STEP model](https://docs.arduino.cc/hardware/uno-q/) | Arduino | See Arduino's documentation | Board model, fetched and converted by the scripts, not redistributed |
 
 ## Changes to Kooba's mounting plate
