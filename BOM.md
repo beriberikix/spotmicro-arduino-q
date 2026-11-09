@@ -1,0 +1,66 @@
+# Bill of materials
+
+This is the [SpotMicroESP32](https://github.com/michaelkubina/SpotMicroESP32#bill-of-material) /
+[Leika](https://github.com/runeharlyk/SpotMicroESP32-Leika/blob/main/docs/1_components.md) BOM, changed for the
+Arduino UNO Q. The mechanical parts are unchanged; the electronics bay is new.
+
+Links marked *search* go to a marketplace search, because these parts are sold by many vendors under the same name.
+Check the specs listed in the notes before buying.
+
+## Electronics
+
+| Qty | Part | Notes | Where to buy |
+| --- | ---- | ----- | ------------ |
+| 1 | Arduino UNO Q, 4 GB (ABX00173) | Replaces the ESP32. Runs from the battery through VIN (7-24 V). The 2 GB ABX00162 has the same footprint. | [Arduino Store](https://store-usa.arduino.cc/products/uno-q-4gb) |
+| 1 | PCA9685 16-channel 12-bit PWM driver | Same as Leika. Mounts on Kooba's existing posts. Runs on the UNO Q's 3.3 V I2C. | [Adafruit 815](https://www.adafruit.com/product/815) |
+| 1 | Pololu D24V150F6, 6 V 15 A step-down regulator | Servo rail. 43.2 x 31.8 mm, M2 holes 38.86 x 25.4 mm; the plate posts are sized for it. Replaces the SZBK07/XL4016. Check its dropout at low battery voltage before relying on it below about 7 V. | [Pololu 2882](https://www.pololu.com/product/2882) |
+| 12 | DS3218MG 20 kg servo, 180° | Kubina found these walk much better than MG996R. Rated up to 6.8 V, so they suit the 6 V rail. MG996R also works, with more play. | [search](https://www.amazon.com/s?k=DS3218MG+servo) |
+| 12 | 25T six-arm servo horn (FSH6S type) | Often included with the servos. `Servohorn_6_B_Star` is a printable fallback. | [search](https://www.amazon.com/s?k=25T+servo+horn+aluminum) |
+| 48 | Servo rubber dampeners | Usually included with the servos. | - |
+| 4 | Servo extension cable, 10-15 cm | For the lower-leg servos. | [search](https://www.amazon.com/s?k=servo+extension+cable+15cm) |
+| 1 | GY-521 (MPU-6050) IMU | The plate keeps Kooba's GY-521 posts. Leika also supports the ICM-20948 and BNO055, which need their own mount. | [search](https://www.amazon.com/s?k=GY-521+MPU6050) |
+| 1 | 2S LiPo, 5200-6200 mAh, 30C+ | Fits Kooba's LiPo brackets under the plate. Feeds the UNO Q VIN and the servo regulator. | [search](https://www.amazon.com/s?k=2S+LiPo+5200mAh+hardcase) |
+| 1 | Main power switch or 19 mm latching push button | Kooba's covers have a 19 mm cutout. | [search](https://www.amazon.com/s?k=19mm+latching+push+button+LED) |
+| 1 | XT60 connector pair | Battery connector. | [search](https://www.amazon.com/s?k=XT60+connector+pair) |
+| 1 | USB-C PD power supply, 5 V 3 A | For bench work and flashing. The UNO Q does not boot from a non-PD supply. | [search](https://www.amazon.com/s?k=USB-C+PD+charger+15W) |
+| - | Wire (16 AWG for power, 22-26 AWG for signals), Dupont jumpers, heat shrink | | |
+
+### Optional
+
+| Qty | Part | Notes | Where to buy |
+| --- | ---- | ----- | ------------ |
+| 1 | INA219 current/voltage sensor | Servo rail monitoring and low-battery cut-off, as in Leika. Needs a mount. | [Adafruit 904](https://www.adafruit.com/product/904) |
+| 2 | HC-SR04 ultrasonic sensor | Kubina's head holds two. The echo pin is 5 V; use a divider for the UNO Q's 3.3 V inputs. | [search](https://www.amazon.com/s?k=HC-SR04) |
+| 1 | WS2812 LED ring, 12 LEDs, 50 mm | Status LEDs. | [search](https://www.amazon.com/s?k=WS2812B+12+LED+ring+50mm) |
+| 1 | USB-C extension, right angle | Gives access to the UNO Q's USB-C port without removing the top cover. | [search](https://www.amazon.com/s?k=usb-c+right+angle+extension+short) |
+
+### Removed from the ESP32 build
+
+ESP32 DevKitC, ESP32-CAM, FT232RL USB-TTL adapter, LM2596 5 V buck (the UNO Q takes the battery on VIN),
+HW-482 relay, micro-USB DIP adapters, ACS712 current sensor, 25 V voltage sensor, SZBK07/XL4016 buck.
+The head's ESP32-CAM mount has no UNO Q replacement yet.
+
+## Hardware
+
+From Kubina's BOM, plus the new electronics bay.
+
+| Qty | Part | Used for |
+| --- | ---- | -------- |
+| 84 + 84 | M2x8 cylinder-head screws + M2 nuts | Servo horns, bearing pins |
+| 80 + 80 | M3x8 cylinder-head screws + M3 nuts | General assembly |
+| 64 + 64 | M3x20 cylinder-head screws + M3 nuts | Servos, upper legs |
+| 4 | M3x8 screws | UNO Q to the standoffs (2.6 mm pilot holes) |
+| 4 | M2x6 screws | Pololu regulator to its posts (1.8 mm pilot holes) |
+| 8 | 625ZZ ball bearing, unflanged | Shoulder and leg joints (12 with robjk's reinforced shoulders) |
+
+[625ZZ search](https://www.amazon.com/s?k=625ZZ+bearing) ·
+[M2/M3 screw kit search](https://www.amazon.com/s?k=M2+M3+socket+cap+screw+nut+kit)
+
+## Printed parts
+
+About 1 kg of PLA or PETG, plus a little TPU for the foot tips.
+
+- Print every part in [Kubina's parts list](https://github.com/michaelkubina/SpotMicroESP32/blob/master/parts/SpotMicroESP32_parts_v1_0_0/)
+  (also on [Thingiverse](https://www.thingiverse.com/thing:4559827)), **except** the circuitry mounting plate.
+- Print `cad/export/UnoQ_Mountingplate.stl` in place of the circuitry mounting plate.
+- Kooba recommends robjk's [reinforced shoulders](https://www.thingiverse.com/thing:4937631).

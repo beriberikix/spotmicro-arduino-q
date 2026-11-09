@@ -1,0 +1,13 @@
+# FreeCAD backups
+*.FCBak
+
+# Third-party CAD fetched by scripts/fetch-references.sh or downloaded by hand
+/reference/
+/cad/UnoQ_board.FCStd
+
+# Local Claude Code settings
+/.claude/settings.local.json
+
+# OS
+.DS_Store
+__pycache__/
