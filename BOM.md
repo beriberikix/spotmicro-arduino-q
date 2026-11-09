@@ -66,28 +66,32 @@ From Kubina's BOM, plus the new electronics bay.
 | 84 + 84 | M2x8 cylinder-head screws + M2 nuts | Servo horns, bearing pins |
 | 80 + 80 | M3x8 cylinder-head screws + M3 nuts | General assembly |
 | 64 + 64 | M3x20 cylinder-head screws + M3 nuts | Servos, upper legs |
+| extra | M3x20 screws + M3 nuts | Reinforced shoulder covers to the extended servo caps. robjk doesn't give a count; a bulk pack covers it. |
+| 4 | M3x8 screws | robjk's `Shoulder_Joint_Ball_Bearing_Pin_M3x8` pins |
 | 4 | M3x8 screws | UNO Q to the standoffs (2.6 mm pilot holes) |
 | 4 | M2x6 screws | Pololu regulator to its posts (1.8 mm pilot holes) |
-| 8 | 625ZZ ball bearing, unflanged | Shoulder and leg joints (12 with robjk's reinforced shoulders) |
+| 12 | 625ZZ ball bearing, unflanged | Shoulder and leg joints (8), plus the reinforced shoulder covers (4) |
 
 [625ZZ search](https://www.amazon.com/s?k=625ZZ+bearing) ·
 [M2/M3 screw kit search](https://www.amazon.com/s?k=M2+M3+socket+cap+screw+nut+kit)
 
 ## Printed parts
 
-About 1 kg of PLA or PETG, plus a little TPU for the foot tips.
+About 1 kg of PLA or PETG, plus a little TPU for the foot tips. Everything prints without supports.
 
-- Print every part in [Kubina's parts list](https://github.com/michaelkubina/SpotMicroESP32/blob/master/parts/SpotMicroESP32_parts_v1_0_0/)
-  (also on [Thingiverse](https://www.thingiverse.com/thing:4559827)), **except** the circuitry mounting plate.
-- Print `cad/export/UnoQ_Mountingplate.stl` in place of the circuitry mounting plate.
-- Kooba recommends robjk's [reinforced shoulders](https://www.thingiverse.com/thing:4937631).
+All STLs are in [`stl/`](stl/README.md), with quantities, mirrored copies, material and infill for each part.
+They are Kooba's SpotMicroESP32 parts, with:
+
+- **The new electronics plate** (`stl/electronics/UnoQ_Mountingplate.stl`) in place of the ESP32 circuitry plate.
+- **robjk's reinforced shoulders** in place of Kooba's shoulder joints. The shoulder cover adds a second, bearing-supported
+  attachment to the outside of each upper leg, so the leg no longer hangs on the servo shaft alone. They need the matching
+  upper-leg shell, `Limb_Top_Shell_with_BB_hole`, which replaces Kooba's `Limb_Top_Shell`.
 
 ### Optional: helper stand
 
 Holds the robot by its belly with the legs hanging free. Leika's calibration guide needs this to level the IMU,
-and it is handy for servo calibration and bench work.
-Print from [Leika's `hardware/printable/helper_stand`](https://github.com/runeharlyk/SpotMicroESP32-Leika/tree/main/hardware/printable/helper_stand):
-2× `stand_top`, 2× `stand_bottom`, 2× `stand_brace`, 4× `stand_feet`.
+and it is handy for servo calibration and bench work. Print `stl/optional/helper-stand/`: 2× top, 2× bottom,
+2× brace, 4× feet.
 
 No changes needed: the body and covers are the same as Leika's, and the UNO Q build doesn't touch the underside.
 Checked against the bottom cover's cross-section: the cover (113 mm wide) sits in the 126 mm cradle about 15 mm above

@@ -6,8 +6,10 @@
 #   reference/unoq/step/               Arduino UNO Q STEP model (Arduino)
 #   cad/UnoQ_board.FCStd               built from the STEP, linked by cad/SpotUnoQ.FCStd
 #
-# Kooba's per-part files (Thingiverse thing:4559827, CC BY) must be downloaded by hand,
-# because Thingiverse blocks scripted downloads. See README.md.
+#   reference/leika/helper_stand/      Leika's helper stand STLs (stefi01 CC BY 4.0, Nova-SM2 MIT)
+#
+# Kooba's (thing:4559827) and robjk's (thing:4937631) files are CC BY and must be downloaded
+# by hand, because Thingiverse blocks scripted downloads. See README.md.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -21,6 +23,13 @@ if [[ ! -f "$KUBINA" ]]; then
   curl -fL -o "$KUBINA" \
     "https://raw.githubusercontent.com/michaelkubina/SpotMicroESP32/master/assembly/spotmicroesp32_assembled_quick_and_dirty.FCStd"
 fi
+
+STAND="$ROOT/reference/leika/helper_stand"
+mkdir -p "$STAND"
+for f in 2x_stand_top 2x_stand_bottom 2x_stand_brace 4x_stand_feet; do
+  [[ -f "$STAND/$f.stl" ]] || curl -fL -o "$STAND/$f.stl" \
+    "https://raw.githubusercontent.com/runeharlyk/SpotMicroESP32-Leika/master/hardware/printable/helper_stand/$f.stl"
+done
 
 STEP_ZIP="$ROOT/reference/unoq/ABX00162-step.zip"
 if [[ ! -f "$STEP_ZIP" ]]; then

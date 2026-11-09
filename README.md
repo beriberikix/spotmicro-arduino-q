@@ -11,7 +11,7 @@ original [Spot Micro](https://www.thingiverse.com/thing:3445283).
 
 | Area | State |
 | ---- | ----- |
-| Mechanical (frame, legs, covers, head) | Unchanged from SpotMicroESP32 |
+| Mechanical (frame, legs, covers, head) | SpotMicroESP32, with robjk's reinforced shoulders. The CAD assembly still shows Kubina's original shoulders. |
 | Electronics bay | New mounting plate for the UNO Q, PCA9685, GY-521 and a Pololu 6 V 15 A regulator. Interference-checked in the full assembly. Not yet printed. |
 | Firmware | Not started. See [firmware/README.md](firmware/README.md). |
 | Head camera mount | Still the ESP32-CAM mount; needs a redesign for a USB or MIPI-CSI camera |
@@ -46,7 +46,8 @@ cad/
   SpotUnoQ.FCStd              full assembly: links Kubina's assembly + the new electronics
   UnoQ_Mountingplate.FCStd    new electronics plate (parametric, PartDesign)
   UnoQ_board.FCStd            UNO Q model, built by scripts/fetch-references.sh (not committed)
-  export/                     STL and STEP of the new plate for printing
+  export/                     STEP of the new plate
+stl/                          every printable part, with quantities (stl/README.md)
 docs/images/                  renders
 firmware/                     placeholder for the Leika port
 scripts/                      fetch third-party CAD, build the board model
@@ -66,9 +67,16 @@ FreeCAD at `/Applications/FreeCAD.app`; set `FREECADCMD` otherwise.
 
 Then open `cad/SpotUnoQ.FCStd`. FreeCAD asks to open the linked documents; allow it.
 
-Kooba's individual part files are only needed to edit or print the unchanged parts. Thingiverse blocks scripted
-downloads, so get them from [thing:4559827](https://www.thingiverse.com/thing:4559827) ("Download all files", three
-zips) and unzip them into `reference/kooba/`.
+To print, you only need [`stl/`](stl/README.md).
+
+To regenerate `stl/` (for example after changing the plate), you also need Kooba's and robjk's original files.
+Thingiverse blocks scripted downloads, so download them by hand with "Download all files" and unzip them:
+[thing:4559827](https://www.thingiverse.com/thing:4559827) (three zips) into `reference/kooba/`, and
+[thing:4937631](https://www.thingiverse.com/thing:4937631) into `reference/robjk/`. Then run:
+
+```sh
+/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd scripts/export_stls.py
+```
 
 ### Coordinate frame
 
@@ -87,5 +95,6 @@ server from the MCP Addon workbench.
 - Code (scripts, firmware): MIT, see [LICENSE](LICENSE).
 - Hardware and documentation (CAD in `cad/`, renders, docs): CC BY-SA 4.0, see [LICENSE-HARDWARE](LICENSE-HARDWARE).
 
-Third-party work keeps its own license; see [NOTICE.md](NOTICE.md). In particular, Kubina's assembly is GPL-3.0 and is
+Third-party work keeps its own license; see [NOTICE.md](NOTICE.md). Most files in `stl/` are Kooba's and robjk's
+parts (CC BY) and the helper stand (CC BY 4.0 and MIT). In particular, Kubina's assembly is GPL-3.0 and is
 fetched rather than redistributed.
