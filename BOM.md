@@ -67,7 +67,7 @@ From Kubina's BOM, plus the new electronics bay.
 | 80 + 80 | M3x8 cylinder-head screws + M3 nuts | General assembly |
 | 64 + 64 | M3x20 cylinder-head screws + M3 nuts | Servos, upper legs |
 | extra | M3x20 screws + M3 nuts | Reinforced shoulder covers to the extended servo caps. robjk doesn't give a count; a bulk pack covers it. |
-| 4 | M3x8 screws | robjk's `Shoulder_Joint_Ball_Bearing_Pin_M3x8` pins |
+| 4 + 4 | M3x8 screws + M3 nuts | robjk's bearing pins: each pin runs in the shoulder cover's 625ZZ and is screwed to the upper-leg shell's 3.2 mm hole on the pivot axis |
 | 4 | M3x8 screws | UNO Q to the standoffs (2.6 mm pilot holes) |
 | 4 | M2x6 screws | Pololu regulator to its posts (1.8 mm pilot holes) |
 | 12 | 625ZZ ball bearing, unflanged | Shoulder and leg joints (8), plus the reinforced shoulder covers (4) |

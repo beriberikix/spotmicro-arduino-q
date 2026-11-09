@@ -35,7 +35,7 @@ thing:4559827 and thing:4937631), the helper stand from Leika (stefi01, CC BY 4.
 | [Shoulder_Joint_Servomount_extended_BB.stl](shoulders/Shoulder_Joint_Servomount_extended_BB.stl) · [Shoulder_Joint_Servomount_extended_BB_mirrored.stl](shoulders/Shoulder_Joint_Servomount_extended_BB_mirrored.stl) | 2 | 2 | PLA | 20% | robjk |
 | [Shoulder_Joint_Servo_Cap_Extended.stl](shoulders/Shoulder_Joint_Servo_Cap_Extended.stl) | 4 | - | PLA | 20% | robjk |
 | [Shoulder_Cover.stl](shoulders/Shoulder_Cover.stl) | 4 | - | PLA | 20% | robjk; symmetric, no mirrored copy |
-| [Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl](shoulders/Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl) | 4 | - | PLA | 20% | robjk; for the shoulder-cover bearings |
+| [Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl](shoulders/Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl) | 4 | - | PLA | 20% | robjk; runs in the shoulder-cover bearing, M3x8 into the upper-leg shell |
 | [Shoulder_Joint_Ball_Bearing_Pin.stl](shoulders/Shoulder_Joint_Ball_Bearing_Pin.stl) | 8 | - | PLA | 20% | 4 for the shoulder joints, 4 for the legs |
 
 ## legs

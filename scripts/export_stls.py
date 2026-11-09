@@ -38,7 +38,7 @@ PARTS = [
     ("shoulders", ROBJK + "Shoulder_Joint_Servomount_extended_BB.stl", "Shoulder_Joint_Servomount_extended_BB", 2, 2, "PLA", "20%", "robjk"),
     ("shoulders", ROBJK + "Shoulder_Joint_Servo_Cap_Extended.stl", "Shoulder_Joint_Servo_Cap_Extended", 4, 0, "PLA", "20%", "robjk"),
     ("shoulders", ROBJK + "Shoulder_Cover.stl", "Shoulder_Cover", 4, 0, "PLA", "20%", "robjk; symmetric, no mirrored copy"),
-    ("shoulders", ROBJK + "Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl", "Shoulder_Joint_Ball_Bearing_Pin_M3x8", 4, 0, "PLA", "20%", "robjk; for the shoulder-cover bearings"),
+    ("shoulders", ROBJK + "Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl", "Shoulder_Joint_Ball_Bearing_Pin_M3x8", 4, 0, "PLA", "20%", "robjk; runs in the shoulder-cover bearing, M3x8 into the upper-leg shell"),
     ("shoulders", KOOBA + "Shoulder_Joint_Ball_Bearing_Pin.stl", "Shoulder_Joint_Ball_Bearing_Pin", 8, 0, "PLA", "20%", "4 for the shoulder joints, 4 for the legs"),
     # Legs
     ("legs", ROBJK + "Limb_Top_Shell_with_BB_hole.stl", "Limb_Top_Shell_with_BB_hole", 2, 2, "PLA", "20%", "robjk; replaces Limb_Top_Shell"),
