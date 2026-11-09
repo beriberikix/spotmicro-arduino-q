@@ -11,10 +11,19 @@ original [Spot Micro](https://www.thingiverse.com/thing:3445283).
 
 | Area | State |
 | ---- | ----- |
-| Mechanical (frame, legs, covers, head) | SpotMicroESP32, with robjk's reinforced shoulders. The CAD assembly still shows Kubina's original shoulders. |
+| Mechanical (frame, legs, covers, head) | SpotMicroESP32, with robjk's reinforced shoulders, in the CAD assembly and the STLs |
 | Electronics bay | New mounting plate for the UNO Q, PCA9685, GY-521 and a Pololu 6 V 15 A regulator. Interference-checked in the full assembly. Not yet printed. |
 | Firmware | Not started. See [firmware/README.md](firmware/README.md). |
 | Head camera mount | Still the ESP32-CAM mount; needs a redesign for a USB or MIPI-CSI camera |
+
+## Reinforced shoulders
+
+![Reinforced shoulder](docs/images/reinforced-shoulder.png)
+
+robjk's shoulder cover bolts to an extended servo cap and carries a 625ZZ bearing on the outside of the upper leg, so
+each leg pivots on two supports instead of hanging on the servo shaft. In `cad/SpotUnoQ.FCStd` the parts are in the
+`Reinforced_Shoulders_robjk` group, fitted to Kubina's assembly: the cover's bearing bore is on the shoulder servo axis to
+within 0.3 mm on all four legs, and the covers and leg shells don't collide with anything.
 
 ## Electronics bay
 
@@ -43,7 +52,7 @@ Parts and buy links are in [BOM.md](BOM.md). Optional sensors and changes not ye
 
 ```
 cad/
-  SpotUnoQ.FCStd              full assembly: links Kubina's assembly + the new electronics
+  SpotUnoQ.FCStd              full assembly: Kubina's assembly (linked), robjk's shoulders, the new electronics
   UnoQ_Mountingplate.FCStd    new electronics plate (parametric, PartDesign)
   UnoQ_board.FCStd            UNO Q model, built by scripts/fetch-references.sh (not committed)
   export/                     STEP of the new plate
