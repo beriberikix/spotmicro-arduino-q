@@ -7,10 +7,8 @@ Every part is in its print orientation, centred, with its lowest point at Z = 0.
 
 Sources and licenses: Kooba's SpotMicroESP32 and robjk's reinforced shoulders (CC BY, Thingiverse
 thing:4559827 and thing:4937631), the helper stand from Leika (stefi01, CC BY 4.0; Nova-SM2, MIT), and
-`electronics/UnoQ_Mountingplate.stl` (this project, CC BY-SA 4.0). See ../NOTICE.md.
-
-`variants/media-carrier-cameras/` holds the parts that change for the UNO Media Carrier + cameras build
-(see ../docs/variant-media-carrier.md); print them instead of the parts they replace.
+`electronics/UnoQ_Mountingplate.stl` and `head/Sensormount_DualCam.stl` (this project, modified from Kooba,
+CC BY-SA 4.0). See ../NOTICE.md.
 
 
 ## chassis
@@ -30,7 +28,7 @@ thing:4559827 and thing:4937631), the helper stand from Leika (stefi01, CC BY 4.
 
 | File | Normal | Mirrored | Material | Infill | Notes |
 | ---- | ------ | -------- | -------- | ------ | ----- |
-| [UnoQ_Mountingplate.stl](electronics/UnoQ_Mountingplate.stl) | 1 | - | PLA | 20% | New: UNO Q, PCA9685, GY-521, Pololu D24V150F6 |
+| [UnoQ_Mountingplate.stl](electronics/UnoQ_Mountingplate.stl) | 1 | - | PLA | 20% | New: UNO Media Carrier + UNO Q + servo shield stack, SZBK07, GY-521 |
 
 ## shoulders
 
@@ -70,9 +68,7 @@ thing:4559827 and thing:4937631), the helper stand from Leika (stefi01, CC BY 4.
 | File | Normal | Mirrored | Material | Infill | Notes |
 | ---- | ------ | -------- | -------- | ------ | ----- |
 | [Front_Cover_Optimized.stl](head/Front_Cover_Optimized.stl) | 1 | - | PLA | 100% |  |
-| [Sensormount.stl](head/Sensormount.stl) | 1 | - | PLA | 20% | Holds the two HC-SR04s |
-| [Cameramount_ESP32_CAM.stl](head/Cameramount_ESP32_CAM.stl) | 1 | - | PLA | 20% | ESP32-CAM mount, kept until a UNO Q camera mount exists |
-| [Cameramount_ESP32_CAM_Counterpiece.stl](head/Cameramount_ESP32_CAM_Counterpiece.stl) | 1 | - | PLA | 20% | As above |
+| [Sensormount_DualCam.stl](head/Sensormount_DualCam.stl) | 1 | - | PLA | 20% | New: Kooba's sensor mount, holding two Raspberry Pi Camera Module 2s |
 
 ## optional/servo-horns
 
@@ -100,26 +96,7 @@ thing:4559827 and thing:4937631), the helper stand from Leika (stefi01, CC BY 4.
 
 | File | Normal | Mirrored | Material | Infill | Notes |
 | ---- | ------ | -------- | -------- | ------ | ----- |
-| [UnoQ_Mount_Test.stl](optional/test-prints/UnoQ_Mount_Test.stl) | 1 | - | PLA | 20% | UNO Q standoffs from the electronics plate, same height and pilot holes |
-| [Pololu_Mount_Test.stl](optional/test-prints/Pololu_Mount_Test.stl) | 1 | - | PLA | 20% | Pololu D24V150F6 posts from the electronics plate |
+| [Carrier_Mount_Test.stl](optional/test-prints/Carrier_Mount_Test.stl) | 1 | - | PLA | 20% | Media Carrier pads, hooks and snap clips from the electronics plate |
+| [SZBK07_Mount_Test.stl](optional/test-prints/SZBK07_Mount_Test.stl) | 1 | - | PLA | 20% | SZBK07 posts from the electronics plate |
 
-## variants/media-carrier-cameras/electronics
-
-| File | Normal | Mirrored | Material | Infill | Notes |
-| ---- | ------ | -------- | -------- | ------ | ----- |
-| [MediaCarrier_Mountingplate.stl](variants/media-carrier-cameras/electronics/MediaCarrier_Mountingplate.stl) | 1 | - | PLA | 20% | Replaces UnoQ_Mountingplate: Media Carrier pads and clips, SZBK07 posts |
-
-## variants/media-carrier-cameras/head
-
-| File | Normal | Mirrored | Material | Infill | Notes |
-| ---- | ------ | -------- | -------- | ------ | ----- |
-| [Sensormount_DualCam.stl](variants/media-carrier-cameras/head/Sensormount_DualCam.stl) | 1 | - | PLA | 20% | Replaces Sensormount and the ESP32-CAM mount: two Camera Module 2s |
-
-## variants/media-carrier-cameras/test-prints
-
-| File | Normal | Mirrored | Material | Infill | Notes |
-| ---- | ------ | -------- | -------- | ------ | ----- |
-| [Carrier_Mount_Test.stl](variants/media-carrier-cameras/test-prints/Carrier_Mount_Test.stl) | 1 | - | PLA | 20% | Media Carrier pads, hooks and snap clips from the variant plate |
-| [SZBK07_Mount_Test.stl](variants/media-carrier-cameras/test-prints/SZBK07_Mount_Test.stl) | 1 | - | PLA | 20% | SZBK07 posts from the variant plate |
-
-Required prints: 76 parts.
+Required prints: 74 parts.

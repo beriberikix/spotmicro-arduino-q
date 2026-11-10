@@ -18,9 +18,9 @@ original [Spot Micro](https://www.thingiverse.com/thing:3445283).
 | Area | State |
 | ---- | ----- |
 | Mechanical (frame, legs, covers, head) | SpotMicroESP32, with robjk's reinforced shoulders, in the CAD assembly and the STLs |
-| Electronics bay | New mounting plate for the UNO Q, PCA9685, GY-521 and a Pololu 6 V 15 A regulator. Interference-checked in the full assembly. Not yet printed. |
+| Electronics bay | New mounting plate for a stacked UNO Media Carrier, UNO Q and Adafruit servo shield, an SZBK07 regulator and the GY-521. Interference-checked in the full assembly. Not yet printed. |
+| Head | Kooba's sensor mount, changed to hold two Raspberry Pi Camera Module 2s. Not yet printed. |
 | Firmware | Not started. See [firmware/README.md](firmware/README.md). |
-| Head camera mount | Still the ESP32-CAM mount; needs a redesign for a USB or MIPI-CSI camera |
 
 ## Reinforced shoulders
 
@@ -35,44 +35,93 @@ within 0.3 mm on all four legs, and the covers and leg shells don't collide with
 
 ![Electronics bay](docs/images/electronics-bay-top.png)
 
-The UNO Q sits middle-left on four 8 mm standoffs, USB-C facing the rear. The standoffs clear the two bottom
-connectors (JMISC, JMEDIA), which hang 5 mm below the board. Green is the PCA9685, red is the servo regulator,
-yellow is an 8 mm space reserved above the UNO Q headers for plugged-in wires.
+The boards form one stack at the rear of the plate:
 
-Clearances in the assembly: UNO Q to top cover 7.9 mm, wiring space to top cover 3.4 mm, UNO Q to side rails 4.4 mm,
-regulator to UNO Q 5.8 mm.
+- **Bottom:** an [Arduino UNO Media Carrier](https://store-usa.arduino.cc/products/uno-media-carrier).
+- **Middle:** the UNO Q, plugged into the carrier's high-speed connectors.
+- **Top:** Adafruit's [16-channel servo shield](https://www.adafruit.com/product/1411) on the UNO Q's headers.
+
+The stack's front edge faces the head: the carrier's two camera connectors are underneath it, and the servo headers
+sit on top of the shield. Right-angle headers make the servo plugs lie flat and point forward, 1.8 mm under the top
+cover.
+
+The red box in front of the stack is the SZBK07 servo regulator. The two orange ribbons are the camera cables. They
+run flat on the plate, under the SZBK07, and through the front shoulder plates to the head.
+
+The Media Carrier has no mounting holes; it hangs from the UNO Q's connectors. The plate holds it instead:
+
+- four pads under the bare middle of its underside
+- two fixed hooks on the edge opposite the USB-C
+- two snap clips on the USB-C edge
+
+Clip the carrier in first, then press the UNO Q onto it.
+
+Clearances in the assembly:
+
+| Between | Clearance |
+| ------- | --------- |
+| Servo plugs and the top cover | 1.8 mm |
+| SZBK07 and the top cover | 4.5 mm |
+| Media Carrier bottom sockets and the plate | 0.95 mm |
+| Board stack and the battery-cable tunnel (rear) | 0.7 mm |
+| Servo plugs and the SZBK07 | 5.5 mm |
+
+The servo wires run sideways into the channels on either side of the SZBK07: 23 mm wide on the left, 19 mm on the
+right. The UNO Q's USB-C port faces the right side rail, 20 mm away, so use a right-angle USB-C plug or program it
+over Wi-Fi.
+
+The plate has no raised power-cable cap like Kooba's. The XT60 battery lead runs under the plate beside the battery
+and comes up through the slot at the rear-left corner.
 
 Power, from a 2S LiPo (7.4-8.4 V):
 
-- **UNO Q:** straight from the battery into VIN (7-24 V). The ESP32 build's LM2596 5 V buck is gone.
-- **Servos:** Pololu D24V150F6 at 6 V, through the PCA9685's V+ terminal.
-- **Logic:** PCA9685 and IMU on the UNO Q's 3.3 V I2C (UNO header A4/A5 or Qwiic).
+- **UNO Q:** straight from the battery into VIN (7-24 V). The Media Carrier is powered through the UNO Q.
+- **Servos:** SZBK07 set to 6.0 V, into the shield's V+ terminal block. The SZBK07 needs about 1-2 V of headroom, so
+  it holds 6.0 V down to roughly 7.5 V of battery; below that the servo rail follows the battery down, still inside
+  the servos' rating.
+- **Logic:** the shield's PCA9685 and the IMU are on the UNO Q's I2C.
 
-Positions, standoff heights, hole sizes and the regulator hole spacing are all in the `Params` spreadsheet in
-`cad/UnoQ_Mountingplate.FCStd`. If you use a different regulator, change `Buck_SX`, `Buck_SY` and `Buck_Screw_D`.
+Every position, height and clearance is in the `Params` spreadsheet in `cad/UnoQ_Mountingplate.FCStd`:
+
+- **Stack:** `Carrier_X0`, `Carrier_Y0`, `Standoff_H`, `Standoff_D`.
+- **Clips:** `Clip_W`, `Clip_Gap`, `Hook_T`, `Hook_Lip`, `Snap_T`, `Snap_Lip`, `Lip_H`.
+- **SZBK07:** `Buck_CX`, `Buck_CY`, `Buck_SX`, `Buck_SY`, `Buck_H`, `Buck_Post_D`, `Buck_Screw_D`.
+
+## Cameras
+
+![Camera head](docs/images/camera-head.png)
+
+Two Raspberry Pi Camera Module 2s replace Leika's ultrasonic sensors, in about the same place. The Media Carrier
+officially supports only IMX219 cameras, which is why this uses Camera Module 2 and not Camera Module 3. The cameras
+are 47 mm apart and face the same way as the head, so their images are parallel for stereo.
+
+`cad/Sensormount_DualCam.FCStd` is Kooba's sensor mount with these changes:
+
+- The ultrasonic and ESP32-CAM openings are filled in.
+- Each camera gets a recess on the back for its lens module, four M2 pilot holes, and a lens window that opens
+  towards the front to clear its full 62° × 49° field of view.
+
+Every camera dimension is in the mount's `Params` spreadsheet. The lens position (`Cam_Lens_From_Top`, 9.46 mm
+below the board's top edge) uses commonly cited Camera Module 2 figures that haven't been checked against an
+official drawing, so check it on the first print.
+
+Use two **Standard–Mini 200 mm** camera cables; the cable in the camera box is Standard–Standard and doesn't fit the
+carrier. The modelled routes (`FPC_left`, `FPC_right` in the assembly) use about 172 mm each, leaving about 28 mm of
+slack to fold flat in the shoulder box. The cable nearer the carrier's USB-C edge goes to the right camera.
 
 Parts and buy links are in [BOM.md](BOM.md). Optional sensors and changes not yet in the BOM are in
 [docs/ideas.md](docs/ideas.md).
-
-### Variant: Media Carrier and two cameras
-
-[docs/variant-media-carrier.md](docs/variant-media-carrier.md) swaps the PCA9685 breakout for Adafruit's servo shield,
-the Pololu regulator for a cheaper SZBK07, and the two ultrasonic sensors for two Raspberry Pi Camera Module 2s on an
-Arduino UNO Media Carrier. Only two printed parts change: the electronics plate and the head's sensor mount.
 
 ## Repository layout
 
 ```
 cad/
-  SpotUnoQ.FCStd              full assembly: Kubina's assembly (linked), robjk's shoulders, the new electronics
+  SpotUnoQ.FCStd              full assembly: Kubina's assembly (linked), robjk's shoulders, the new electronics and head
   UnoQ_Mountingplate.FCStd    new electronics plate (parametric, PartDesign)
+  Sensormount_DualCam.FCStd   two-camera head mount (parametric, PartDesign)
   UnoQ_board.FCStd            UNO Q model, built by scripts/fetch-references.sh (not committed)
-  export/                     STEP of the new plate
-  SpotUnoQ_MediaCarrier.FCStd       Media Carrier + cameras variant assembly
-  MediaCarrier_Mountingplate.FCStd  its electronics plate
-  Sensormount_DualCam.FCStd         its two-camera head mount
-  MediaCarrier_board.FCStd          Media Carrier model, built by scripts/fetch-references.sh (not committed)
-stl/                          every printable part, with quantities (stl/README.md); variants/ for the variant
+  MediaCarrier_board.FCStd    Media Carrier model, built by scripts/fetch-references.sh (not committed)
+stl/                          every printable part, with quantities (stl/README.md)
 step/                         the same parts as STEP, from the designers' FreeCAD sources (see below)
 docs/images/                  renders
 firmware/                     placeholder for the Leika port
@@ -88,14 +137,15 @@ Requires [FreeCAD](https://www.freecad.org/) 1.1 or later.
 scripts/fetch-references.sh
 ```
 
-This downloads Kubina's assembly and Arduino's UNO Q model, and builds `cad/UnoQ_board.FCStd`. On macOS it expects
+This downloads Kubina's assembly and Arduino's UNO Q and Media Carrier models, and builds `cad/UnoQ_board.FCStd` and
+`cad/MediaCarrier_board.FCStd`. On macOS it expects
 FreeCAD at `/Applications/FreeCAD.app`; set `FREECADCMD` otherwise.
 
 Then open `cad/SpotUnoQ.FCStd`. FreeCAD asks to open the linked documents; allow it.
 
 To print, you only need [`stl/`](stl/README.md).
 
-To regenerate `stl/` (for example after changing the plate), you also need Kooba's and robjk's original files.
+To regenerate `stl/` (for example after changing the plate or the camera mount), you also need Kooba's and robjk's original files.
 Thingiverse blocks scripted downloads, so download them by hand with "Download all files" and unzip them:
 [thing:4559827](https://www.thingiverse.com/thing:4559827) (three zips) into `reference/kooba/`, and
 [thing:4937631](https://www.thingiverse.com/thing:4937631) into `reference/robjk/`. Then run:
@@ -107,7 +157,8 @@ Thingiverse blocks scripted downloads, so download them by hand with "Download a
 ### STEP files
 
 `step/` mirrors `stl/` with STEP versions of every part that has a FreeCAD source: Kooba's parts, robjk's shoulder
-cover, extended cap, upper-leg shell and medium rear cover, and this project's electronics plate (in `cad/export/`).
+cover, extended cap, upper-leg shell and medium rear cover, and this project's electronics plate and camera mount
+(written by `scripts/export_stls.py`).
 Each solid is fitted to its STL so the two match in print orientation and position; the script refuses any part whose
 STL surface lies more than 0.1 mm from the STEP (95th percentile). robjk's extended servo mount and M3 bearing pin
 exist only as STL upstream.
@@ -144,10 +195,10 @@ writes `makerworld/SpotUnoQ_P1S.3mf`: a sliced Bambu Studio project for the P1S 
 reports a slicing warning. Without `--no-orient` it also auto-orients every part, which lays
 `Top_Cover_Split_Rear_with_OLED` down in a position that needs supports.
 
-Add `--test-prints` for `makerworld/SpotUnoQ_P1S_test_prints.3mf`: a 2-hour, 62 g fit test to print before the robot.
-One black plate has the UNO Q standoffs and the Pololu regulator posts (cut from the electronics plate onto a thin
-frame), a shoulder servo mount, an extended servo cap, an upper-leg bearing mount and one of each bearing pin; one white
-plate has a shoulder cover. See [docs/test-prints.md](docs/test-prints.md) for what to check and what to change if
+Add `--test-prints` for `makerworld/SpotUnoQ_P1S_test_prints.3mf`: a 2.8-hour, 84 g fit test to print before the
+robot. One black plate has the Media Carrier pads and clips and the SZBK07 posts (cut from the electronics plate onto
+thin frames), the camera mount, a shoulder servo mount, an extended servo cap, an upper-leg bearing mount and one of
+each bearing pin; one white plate has a shoulder cover. See [docs/test-prints.md](docs/test-prints.md) for what to check and what to change if
 something doesn't fit.
 
 ### Coordinate frame
