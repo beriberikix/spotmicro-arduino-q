@@ -87,6 +87,8 @@ They are Kooba's SpotMicroESP32 parts, with:
   attachment to the outside of each upper leg, so the leg no longer hangs on the servo shaft alone. They need the matching
   upper-leg shell, `Limb_Top_Shell_with_BB_hole`, which replaces Kooba's `Limb_Top_Shell`.
 
+Before printing everything, print the fit tests (about 2 hours): see [docs/test-prints.md](docs/test-prints.md).
+
 ### Optional: helper stand
 
 Holds the robot by its belly with the legs hanging free. Leika's calibration guide needs this to level the IMU,

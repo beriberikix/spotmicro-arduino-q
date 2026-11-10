@@ -102,8 +102,8 @@ reports a slicing warning. Without `--no-orient` it also auto-orients every part
 Add `--test-prints` for `makerworld/SpotUnoQ_P1S_test_prints.3mf`: a 2-hour, 62 g fit test to print before the robot.
 One black plate has the UNO Q standoffs and the Pololu regulator posts (cut from the electronics plate onto a thin
 frame), a shoulder servo mount, an extended servo cap, an upper-leg bearing mount and one of each bearing pin; one white
-plate has a shoulder cover. Check the board and regulator screw down, a servo and its horn fit, and a 625ZZ bearing
-fits its pockets and pins.
+plate has a shoulder cover. See [docs/test-prints.md](docs/test-prints.md) for what to check and what to change if
+something doesn't fit.
 
 ### Coordinate frame
 
