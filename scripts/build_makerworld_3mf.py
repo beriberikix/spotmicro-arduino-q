@@ -167,6 +167,23 @@ def write_assemble_list(tmp):
     return path, names
 
 
+def object_extruders(text):
+    """The assemble list sets the filament on each part only. The slicer honours that, but the Bambu
+    Studio app colours and assigns by the object's own extruder, which then defaults to filament 1.
+    Copy each object's part extruder up to the object, as Bambu Studio's own projects do."""
+    def fix(m):
+        head, body = m.group(1), m.group(2)
+        if re.search(r'^\s*<metadata key="extruder"', body.split("<part", 1)[0], re.M):
+            return m.group(0)
+        part = re.search(r'<metadata key="extruder" value="(\d+)"/>', body)
+        if not part:
+            return m.group(0)
+        body = re.sub(r'(<metadata key="name" value="[^"]*"/>)',
+                      r'\1\n    <metadata key="extruder" value="%s"/>' % part.group(1), body, count=1)
+        return head + body + "</object>"
+    return re.sub(r'(<object id="\d+">)(.*?)</object>', fix, text, flags=re.S)
+
+
 def rename_objects(path, names):
     """Bambu names each assembled object assemble_N; give it the part's name instead."""
     tmp = path + ".tmp"
@@ -176,6 +193,8 @@ def rename_objects(path, names):
             if item.filename in ("Metadata/model_settings.config", "Metadata/slice_info.config", "3D/3dmodel.model"):
                 text = data.decode("utf-8")
                 text = re.sub(r'(?<=")assemble_\d+(?=")', lambda m: names.get(m.group(0), m.group(0)), text)
+                if item.filename == "Metadata/model_settings.config":
+                    text = object_extruders(text)
                 data = text.encode("utf-8")
             zout.writestr(item, data)
     os.replace(tmp, path)
