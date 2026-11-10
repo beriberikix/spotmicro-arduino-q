@@ -7,7 +7,8 @@ original [Spot Micro](https://www.thingiverse.com/thing:3445283).
 
 ![Exploding and reassembling the robot](docs/images/spot-unoq-explode.gif)
 
-10-second loop rendered from `cad/SpotUnoQ.FCStd` in FreeCAD; full-resolution video: [docs/images/spot-unoq-explode.mp4](docs/images/spot-unoq-explode.mp4).
+10-second loop rendered from `cad/SpotUnoQ.FCStd` by `scripts/explode_animation.FCMacro`; 1080p video:
+[docs/images/spot-unoq-explode.mp4](docs/images/spot-unoq-explode.mp4).
 
 ## Status
 
@@ -101,6 +102,22 @@ exist only as STL upstream.
 ```sh
 /Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd scripts/export_steps.py
 ```
+
+### Exploded-view animation
+
+`scripts/explode_animation.FCMacro` renders the exploded turntable loop from the assembly and encodes
+`docs/images/spot-unoq-explode.mp4` (1080p) and `.gif` with ffmpeg (`brew install ffmpeg`). Run it inside the FreeCAD
+GUI with `cad/SpotUnoQ.FCStd` open: Macro → Macros… → Execute, or from the Python console:
+
+```python
+exec(open("/path/to/spotmicro-arduino-q/scripts/explode_animation.FCMacro").read())
+```
+
+If the assembly isn't open, set `SPOT_ROOT` to the repository first so the macro can find it.
+
+Timing, size, frame rate and how far each group of parts moves are settings at the top of the file. Frames are rendered
+at twice the output size and scaled down, since FreeCAD's image export doesn't anti-alias. The macro puts every part
+back when it finishes and doesn't save the document.
 
 ### MakerWorld project
 

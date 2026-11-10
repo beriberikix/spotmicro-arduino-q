@@ -1,0 +1,242 @@
+# -*- coding: utf-8 -*-
+# Exploded-view turntable animation of cad/SpotUnoQ.FCStd.
+#
+# Run inside the FreeCAD GUI (Macro > Macros..., or from the Python console with
+#   exec(open("scripts/explode_animation.FCMacro").read())
+# ). It opens the assembly if it isn't open, renders a seamless loop (assembled -> exploded ->
+# assembled while the model turns 360 degrees) and encodes it with ffmpeg into docs/images/.
+# Every part is put back afterwards and the document is not saved.
+#
+# Frames are rendered at SUPERSAMPLE x the output size and scaled down with a Lanczos filter,
+# which smooths the edges (FreeCAD's image export has no anti-aliasing of its own).
+import math
+import os
+import shutil
+import subprocess
+import tempfile
+
+import FreeCAD
+import FreeCADGui
+from FreeCAD import Vector as V
+from pivy import coin
+
+# ---------------------------------------------------------------- settings
+def _repo():
+    if os.environ.get("SPOT_ROOT"):
+        return os.environ["SPOT_ROOT"]
+    if "__file__" in globals():  # run as a file: scripts/ is one level below the repository
+        return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if "SpotUnoQ" in FreeCAD.listDocuments():  # run from the console with the assembly open
+        return os.path.dirname(os.path.dirname(FreeCAD.getDocument("SpotUnoQ").FileName))
+    raise RuntimeError("Set SPOT_ROOT to the repository, or open cad/SpotUnoQ.FCStd first")
+
+
+REPO = _repo()
+ASSEMBLY = os.path.join(REPO, "cad", "SpotUnoQ.FCStd")
+OUT_DIR = os.path.join(REPO, "docs", "images")
+NAME = "spot-unoq-explode"
+
+FPS = 24
+SECONDS = 10
+WIDTH, HEIGHT = 1920, 1080        # video size
+SUPERSAMPLE = 2                   # render at 2x and scale down for smooth edges
+GIF_WIDTH, GIF_FPS = 960, 15
+BACKGROUND = "White"
+TURNS = 1.0                       # turntable revolutions per loop
+
+# Timeline in seconds: (start, end, from, to) of the explosion amount; outside the ramps it holds.
+TIMELINE = [(1.0, 4.0, 0.0, 1.0), (6.0, 9.0, 1.0, 0.0)]
+
+# Extra moves (mm, global X forward / Y left / Z up) for named parts, by label.
+SPECIAL = {
+    "L_Top_Cover_Assembly": (0, 0, 250),
+    "L_Top_and_Bottom_Cover_Screws_all": (0, 0, 320),
+    "L_Cover_Nuts": (0, 0, -210),
+    "L_Bottom_Cover_Assembly": (0, 0, -150),
+    "L_Head": (110, 0, 0),
+    "L_Head_Cover_Screws": (140, 0, 0),
+    "L_Rear_Cover_Assembly": (-110, 0, 0),
+    "L_Rear_Cover_Screws001": (-140, 0, 0),
+    "UnoQ_Mountingplate": (0, 0, 40),
+    "Arduino_UNO_Q": (0, 0, 120),
+    "PCA9685 16ch PWM (placeholder)": (0, 0, 95),
+    "Pololu D24V150F6 6V 15A buck (placeholder)": (0, 0, 95),
+}
+LEG_OFFSET = 60                   # mm from the centre line beyond which a part belongs to a leg
+LEG_MOVE = (45, 85, -20)          # each leg moves out (x towards its end, y to its side, z)
+LEG_SPREAD = (0.25, 1.1, 0.35)    # parts spread within their leg, per axis
+BODY_SPREAD = (0.35, 0.9, 0.6)    # body parts spread from the body centre, per axis
+SHOW = ["L_Top_Cover_Assembly"]   # hidden in the saved file, shown in the animation
+HIDE = ["UnoQ_Wiring_Keepout"]    # shown in the saved file, hidden in the animation (object names)
+
+
+# ---------------------------------------------------------------- helpers
+def smootherstep(x):
+    x = min(max(x, 0.0), 1.0)
+    return x * x * x * (x * (x * 6 - 15) + 10)
+
+
+def explode_amount(s):
+    value = 0.0
+    for start, end, a, b in TIMELINE:
+        if s >= end:
+            value = b
+        elif s >= start:
+            return a + (b - a) * smootherstep((s - start) / (end - start))
+    return value
+
+
+def leaves(group, out):
+    for o in group.Group:
+        if o.TypeId == "App::Part":
+            leaves(o, out)
+        elif o.TypeId in ("App::Link", "Part::Feature", "Mesh::Feature", "Part::Box"):
+            out.append(o)
+    return out
+
+
+def placement_prop(o):
+    return "LinkPlacement" if o.TypeId == "App::Link" else "Placement"
+
+
+def bbox(o):
+    try:
+        b = (o.Mesh if o.TypeId == "Mesh::Feature" else o.Shape).BoundBox
+    except Exception:
+        return None
+    return None if b.DiagonalLength > 2000 or b.DiagonalLength == 0 else b
+
+
+def mul(t, v):
+    return [t[i] * v[i] for i in range(3)]
+
+
+def main():
+    doc = FreeCAD.getDocument("SpotUnoQ") if "SpotUnoQ" in FreeCAD.listDocuments() else FreeCAD.openDocument(ASSEMBLY)
+    FreeCAD.setActiveDocument(doc.Name)
+    gdoc = FreeCADGui.getDocument(doc.Name)
+    FreeCADGui.ActiveDocument = gdoc
+    view = gdoc.ActiveView
+
+    objs = []
+    for top in doc.Objects:
+        if top.TypeId == "App::Part" and not [p for p in top.InList if p.TypeId == "App::Part"]:
+            leaves(top, objs)
+    shown = {o.Name: o.Visibility for o in objs}
+    for o in objs:
+        if o.Label in SHOW or o.Name in SHOW:
+            o.Visibility = True
+        if o.Name in HIDE or o.Label in HIDE:
+            o.Visibility = False
+    render = [o for o in objs if o.Visibility]
+    base = {o.Name: FreeCAD.Placement(getattr(o, placement_prop(o))) for o in render}
+
+    plate = doc.getObject("UnoQ_Mountingplate").Shape.BoundBox
+    centre = [plate.Center.x, plate.Center.y, plate.Center.z]
+
+    # explosion vector per part
+    disp, legs = {}, {}
+    centres = {}
+    for o in render:
+        b = bbox(o)
+        if b is None:
+            continue
+        c = [b.Center.x, b.Center.y, b.Center.z]
+        centres[o.Name] = c
+        d = [c[i] - centre[i] for i in range(3)]
+        if o.Label in SPECIAL or o.Name in SPECIAL:
+            disp[o.Name] = list(SPECIAL.get(o.Label, SPECIAL.get(o.Name)))
+        elif abs(d[1]) > LEG_OFFSET:
+            legs.setdefault((math.copysign(1, d[0]), math.copysign(1, d[1])), []).append(o.Name)
+        else:
+            disp[o.Name] = mul(BODY_SPREAD, d)
+    for (sx, sy), names in legs.items():
+        lc = [sum(centres[n][i] for n in names) / len(names) for i in range(3)]
+        for n in names:
+            r = [centres[n][i] - lc[i] for i in range(3)]
+            spread = mul(LEG_SPREAD, r)
+            disp[n] = [sx * LEG_MOVE[0] + spread[0], sy * LEG_MOVE[1] + spread[1], LEG_MOVE[2] + spread[2]]
+
+    pivot = V(*centre)
+
+    def pose(amount, yaw):
+        turn = FreeCAD.Placement(pivot, FreeCAD.Rotation()).multiply(
+            FreeCAD.Placement(V(), FreeCAD.Rotation(V(0, 0, 1), yaw))).multiply(FreeCAD.Placement(-pivot, FreeCAD.Rotation()))
+        for o in render:
+            p = FreeCAD.Placement(base[o.Name])
+            dv = disp.get(o.Name)
+            if dv:
+                p.Base = p.Base + V(*dv) * amount
+            setattr(o, placement_prop(o), turn.multiply(p))
+
+    # camera: isometric, aimed at the body centre, sized to the exploded model at any angle
+    view.setCameraType("Orthographic")
+    view.viewIsometric()
+    cam = view.getCameraNode()
+    rot = cam.orientation.getValue()
+
+    def axis(vec):
+        return list(rot.multVec(coin.SbVec3f(*vec)).getValue())
+
+    view_dir, up, right = axis((0, 0, -1)), axis((0, 1, 0)), axis((1, 0, 0))
+    max_up = max_right = 0.0
+    for yaw in range(0, 360, 30):
+        pose(1.0, yaw)
+        for o in render:
+            b = bbox(o)
+            if b is None:
+                continue
+            for x in (b.XMin, b.XMax):
+                for y in (b.YMin, b.YMax):
+                    for z in (b.ZMin, b.ZMax):
+                        d = [x - centre[0], y - centre[1], z - centre[2]]
+                        max_up = max(max_up, abs(sum(d[i] * up[i] for i in range(3))))
+                        max_right = max(max_right, abs(sum(d[i] * right[i] for i in range(3))))
+    height = 2 * max(max_up, max_right * HEIGHT / WIDTH) * 1.06
+    dist = 1500.0
+
+    def aim():
+        cam = view.getCameraNode()
+        cam.position.setValue(*[centre[i] - view_dir[i] * dist for i in range(3)])
+        cam.focalDistance.setValue(dist)
+        cam.height.setValue(height)
+
+    frames = tempfile.mkdtemp(prefix="spot_explode_")
+    n = int(FPS * SECONDS)
+    try:
+        for i in range(n):
+            pose(explode_amount(i / FPS), 360.0 * TURNS * i / n)
+            aim()
+            FreeCADGui.updateGui()
+            view.redraw()
+            FreeCADGui.updateGui()  # the off-screen render reads the camera only after a redraw
+            view.saveImage(os.path.join(frames, f"frame_{i:04d}.png"), WIDTH * SUPERSAMPLE, HEIGHT * SUPERSAMPLE, BACKGROUND)
+            if i % FPS == 0:
+                FreeCAD.Console.PrintMessage(f"explode animation: frame {i}/{n}\n")
+    finally:
+        for o in render:
+            setattr(o, placement_prop(o), base[o.Name])
+        for o in objs:
+            o.Visibility = shown[o.Name]
+        view.viewIsometric()
+        view.fitAll()
+
+    ffmpeg = shutil.which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
+    os.makedirs(OUT_DIR, exist_ok=True)
+    mp4 = os.path.join(OUT_DIR, NAME + ".mp4")
+    gif = os.path.join(OUT_DIR, NAME + ".gif")
+    src = ["-framerate", str(FPS), "-i", os.path.join(frames, "frame_%04d.png")]
+    subprocess.run([ffmpeg, "-y", "-loglevel", "error", *src,
+                    "-vf", f"scale={WIDTH}:{HEIGHT}:flags=lanczos",
+                    "-c:v", "libx264", "-preset", "slow", "-crf", "16", "-pix_fmt", "yuv420p",
+                    "-movflags", "+faststart", mp4], check=True)
+    subprocess.run([ffmpeg, "-y", "-loglevel", "error", *src,
+                    "-vf", f"fps={GIF_FPS},scale={GIF_WIDTH}:-1:flags=lanczos,split[a][b];"
+                           "[a]palettegen=max_colors=256:stats_mode=full[p];[b][p]paletteuse=dither=none",
+                    "-loop", "0", gif], check=True)
+    shutil.rmtree(frames, ignore_errors=True)
+    FreeCAD.Console.PrintMessage(f"explode animation: wrote {mp4} and {gif}\n")
+    return mp4, gif
+
+
+RESULT = main()
