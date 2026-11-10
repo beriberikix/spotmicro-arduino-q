@@ -1,4 +1,4 @@
-# spot-unoq
+# SpotMicro for Arduino UNO Q
 
 A Spot Micro quadruped built around the [Arduino UNO Q](https://docs.arduino.cc/hardware/uno-q/) instead of an ESP32.
 It is a port of [SpotMicroESP32-Leika](https://github.com/runeharlyk/SpotMicroESP32-Leika), which uses Michael Kubina's
