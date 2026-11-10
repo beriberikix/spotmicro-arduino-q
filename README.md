@@ -57,6 +57,7 @@ cad/
   UnoQ_board.FCStd            UNO Q model, built by scripts/fetch-references.sh (not committed)
   export/                     STEP of the new plate
 stl/                          every printable part, with quantities (stl/README.md)
+step/                         the same parts as STEP, from the designers' FreeCAD sources (see below)
 docs/images/                  renders
 firmware/                     placeholder for the Leika port
 scripts/                      fetch third-party CAD, build the board model
@@ -85,6 +86,18 @@ Thingiverse blocks scripted downloads, so download them by hand with "Download a
 
 ```sh
 /Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd scripts/export_stls.py
+```
+
+### STEP files
+
+`step/` mirrors `stl/` with STEP versions of every part that has a FreeCAD source: Kooba's parts, robjk's shoulder
+cover, extended cap, upper-leg shell and medium rear cover, and this project's electronics plate (in `cad/export/`).
+Each solid is fitted to its STL so the two match in print orientation and position; the script refuses any part whose
+STL surface lies more than 0.1 mm from the STEP (95th percentile). robjk's extended servo mount and M3 bearing pin
+exist only as STL upstream.
+
+```sh
+/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd scripts/export_steps.py
 ```
 
 ### MakerWorld project
