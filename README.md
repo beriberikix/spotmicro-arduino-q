@@ -10,6 +10,9 @@ original [Spot Micro](https://www.thingiverse.com/thing:3445283).
 10-second loop rendered from `cad/SpotUnoQ.FCStd` by `scripts/explode_animation.FCMacro`; 1080p video:
 [docs/images/spot-unoq-explode.mp4](docs/images/spot-unoq-explode.mp4).
 
+**Print it:** [SpotMicro Robot Dog for Arduino UNO Q on MakerWorld](https://makerworld.com/en/models/3584508-spotmicro-robot-dog-for-arduino-uno-q)
+(Bambu Studio print profiles for the P1S).
+
 ## Status
 
 | Area | State |
