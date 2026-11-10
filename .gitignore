@@ -4,6 +4,7 @@
 # Third-party CAD fetched by scripts/fetch-references.sh or downloaded by hand
 /reference/
 /cad/UnoQ_board.FCStd
+/cad/MediaCarrier_board.FCStd
 
 # Local Claude Code settings
 /.claude/settings.local.json

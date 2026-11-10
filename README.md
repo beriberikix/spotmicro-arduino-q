@@ -54,6 +54,12 @@ Positions, standoff heights, hole sizes and the regulator hole spacing are all i
 Parts and buy links are in [BOM.md](BOM.md). Optional sensors and changes not yet in the BOM are in
 [docs/ideas.md](docs/ideas.md).
 
+### Variant: Media Carrier and two cameras
+
+[docs/variant-media-carrier.md](docs/variant-media-carrier.md) swaps the PCA9685 breakout for Adafruit's servo shield,
+the Pololu regulator for a cheaper SZBK07, and the two ultrasonic sensors for two Raspberry Pi Camera Module 2s on an
+Arduino UNO Media Carrier. Only two printed parts change: the electronics plate and the head's sensor mount.
+
 ## Repository layout
 
 ```
@@ -62,7 +68,11 @@ cad/
   UnoQ_Mountingplate.FCStd    new electronics plate (parametric, PartDesign)
   UnoQ_board.FCStd            UNO Q model, built by scripts/fetch-references.sh (not committed)
   export/                     STEP of the new plate
-stl/                          every printable part, with quantities (stl/README.md)
+  SpotUnoQ_MediaCarrier.FCStd       Media Carrier + cameras variant assembly
+  MediaCarrier_Mountingplate.FCStd  its electronics plate
+  Sensormount_DualCam.FCStd         its two-camera head mount
+  MediaCarrier_board.FCStd          Media Carrier model, built by scripts/fetch-references.sh (not committed)
+stl/                          every printable part, with quantities (stl/README.md); variants/ for the variant
 step/                         the same parts as STEP, from the designers' FreeCAD sources (see below)
 docs/images/                  renders
 firmware/                     placeholder for the Leika port

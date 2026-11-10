@@ -5,6 +5,8 @@
 #   reference/kubina/assembled.FCStd   Michael Kubina's full SpotMicroESP32 assembly (GPL-3.0)
 #   reference/unoq/step/               Arduino UNO Q STEP model (Arduino)
 #   cad/UnoQ_board.FCStd               built from the STEP, linked by cad/SpotUnoQ.FCStd
+#   reference/media-carrier/step/      Arduino UNO Media Carrier STEP model (Arduino)
+#   cad/MediaCarrier_board.FCStd       built from it, linked by cad/SpotUnoQ_MediaCarrier.FCStd
 #
 #   reference/leika/helper_stand/      Leika's helper stand STLs (stefi01 CC BY 4.0, Nova-SM2 MIT)
 #
@@ -46,6 +48,27 @@ if [[ ! -f "$ROOT/cad/UnoQ_board.FCStd" ]]; then
       "$FREECADCMD" "$ROOT/scripts/build_unoq_board.py"
   else
     echo "freecadcmd not found; set FREECADCMD and re-run to build cad/UnoQ_board.FCStd" >&2
+    exit 1
+  fi
+fi
+
+MC_ZIP="$ROOT/reference/media-carrier/ASX00083-step.zip"
+mkdir -p "$ROOT/reference/media-carrier/step"
+if [[ ! -f "$MC_ZIP" ]]; then
+  echo "Downloading Arduino UNO Media Carrier STEP model..."
+  curl -fL -o "$MC_ZIP" "https://docs.arduino.cc/resources/models/ASX00083-step.zip"
+fi
+unzip -oq "$MC_ZIP" -d "$ROOT/reference/media-carrier/step"
+
+if [[ ! -f "$ROOT/cad/MediaCarrier_board.FCStd" ]]; then
+  if [[ -x "$FREECADCMD" ]]; then
+    echo "Building cad/MediaCarrier_board.FCStd..."
+    UNOQ_STEP="$ROOT/reference/media-carrier/step/ASX00083-step.step" \
+    UNOQ_OUT="$ROOT/cad/MediaCarrier_board.FCStd" \
+    UNOQ_LABEL="Arduino UNO Media Carrier" \
+      "$FREECADCMD" "$ROOT/scripts/build_unoq_board.py"
+  else
+    echo "freecadcmd not found; set FREECADCMD and re-run to build cad/MediaCarrier_board.FCStd" >&2
     exit 1
   fi
 fi

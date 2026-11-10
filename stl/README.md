@@ -9,6 +9,9 @@ Sources and licenses: Kooba's SpotMicroESP32 and robjk's reinforced shoulders (C
 thing:4559827 and thing:4937631), the helper stand from Leika (stefi01, CC BY 4.0; Nova-SM2, MIT), and
 `electronics/UnoQ_Mountingplate.stl` (this project, CC BY-SA 4.0). See ../NOTICE.md.
 
+`variants/media-carrier-cameras/` holds the parts that change for the UNO Media Carrier + cameras build
+(see ../docs/variant-media-carrier.md); print them instead of the parts they replace.
+
 
 ## chassis
 
@@ -99,5 +102,24 @@ thing:4559827 and thing:4937631), the helper stand from Leika (stefi01, CC BY 4.
 | ---- | ------ | -------- | -------- | ------ | ----- |
 | [UnoQ_Mount_Test.stl](optional/test-prints/UnoQ_Mount_Test.stl) | 1 | - | PLA | 20% | UNO Q standoffs from the electronics plate, same height and pilot holes |
 | [Pololu_Mount_Test.stl](optional/test-prints/Pololu_Mount_Test.stl) | 1 | - | PLA | 20% | Pololu D24V150F6 posts from the electronics plate |
+
+## variants/media-carrier-cameras/electronics
+
+| File | Normal | Mirrored | Material | Infill | Notes |
+| ---- | ------ | -------- | -------- | ------ | ----- |
+| [MediaCarrier_Mountingplate.stl](variants/media-carrier-cameras/electronics/MediaCarrier_Mountingplate.stl) | 1 | - | PLA | 20% | Replaces UnoQ_Mountingplate: Media Carrier pads and clips, SZBK07 posts |
+
+## variants/media-carrier-cameras/head
+
+| File | Normal | Mirrored | Material | Infill | Notes |
+| ---- | ------ | -------- | -------- | ------ | ----- |
+| [Sensormount_DualCam.stl](variants/media-carrier-cameras/head/Sensormount_DualCam.stl) | 1 | - | PLA | 20% | Replaces Sensormount and the ESP32-CAM mount: two Camera Module 2s |
+
+## variants/media-carrier-cameras/test-prints
+
+| File | Normal | Mirrored | Material | Infill | Notes |
+| ---- | ------ | -------- | -------- | ------ | ----- |
+| [Carrier_Mount_Test.stl](variants/media-carrier-cameras/test-prints/Carrier_Mount_Test.stl) | 1 | - | PLA | 20% | Media Carrier pads, hooks and snap clips from the variant plate |
+| [SZBK07_Mount_Test.stl](variants/media-carrier-cameras/test-prints/SZBK07_Mount_Test.stl) | 1 | - | PLA | 20% | SZBK07 posts from the variant plate |
 
 Required prints: 76 parts.

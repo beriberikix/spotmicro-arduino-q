@@ -34,6 +34,11 @@ Check the specs listed in the notes before buying.
 | 1 | WS2812 LED ring, 12 LEDs, 50 mm | Status LEDs. | [search](https://www.amazon.com/s?k=WS2812B+12+LED+ring+50mm) |
 | 1 | USB-C extension, right angle | Gives access to the UNO Q's USB-C port without removing the top cover. | [search](https://www.amazon.com/s?k=usb-c+right+angle+extension+short) |
 
+### Variant: Media Carrier and two cameras
+
+Servo shield instead of the PCA9685, SZBK07 instead of the Pololu, two Camera Module 2s instead of the HC-SR04s. The
+parts list and what it replaces are in [docs/variant-media-carrier.md](docs/variant-media-carrier.md#hardware-changes).
+
 ### Removed from the ESP32 build
 
 ESP32 DevKitC, ESP32-CAM, FT232RL USB-TTL adapter, LM2596 5 V buck (the UNO Q takes the battery on VIN),
