@@ -36,6 +36,7 @@ FILAMENTS = [  # (preset, colour)
 ]
 BLACK, WHITE, TPU = 1, 2, 3
 INFILL = "20%"  # Kubina's parts list: 20% for parts
+BED = "Textured PEI Plate"  # the plate the P1S ships with
 SOLID = {"sparse_infill_density": "100%"}  # and 100% for the covers
 
 # (plate name, filament, [(stl path relative to stl/, copies, print overrides)])
@@ -132,6 +133,7 @@ def write_presets(tmp):
     machine = resolve(index, "machine", MACHINE)
     process = resolve(index, "process", PROCESS)
     process["sparse_infill_density"] = INFILL
+    process["curr_bed_type"] = BED
     paths = [os.path.join(tmp, "machine.json"), os.path.join(tmp, "process.json")]
     json.dump(machine, open(paths[0], "w"))
     json.dump(process, open(paths[1], "w"))
