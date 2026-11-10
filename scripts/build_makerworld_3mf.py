@@ -38,15 +38,16 @@ BLACK, WHITE, TPU = 1, 2, 3
 INFILL = "20%"  # Kubina's parts list: 20% for parts
 BED = "Textured PEI Plate"  # the plate the P1S ships with
 SOLID = {"sparse_infill_density": "100%"}  # and 100% for the covers
+STRUCTURAL = {"wall_loops": "3"}  # load-bearing plates get a third wall
 
-# (plate name, filament, [(stl path relative to stl/, copies, print overrides)])
+# (plate name, plate-wide print overrides, filament, [(stl path relative to stl/, copies, print overrides)])
 PLATES = [
-    ("Chassis plates and rails", BLACK, [
+    ("Chassis plates and rails", STRUCTURAL, BLACK, [
         ("chassis/Inner_Shoulder.stl", 2, {}),
         ("chassis/Outer_Shoulder.stl", 2, {}),
         ("chassis/Chassis_Side.stl", 2, {}),
     ]),
-    ("Electronics plate and chassis blocks", BLACK, [
+    ("Electronics plate and chassis blocks", STRUCTURAL, BLACK, [
         ("electronics/UnoQ_Mountingplate.stl", 1, {}),
         ("chassis/Top_Shoulder.stl", 2, {}),
         ("chassis/Bottom_Shoulder.stl", 2, {}),
@@ -54,7 +55,7 @@ PLATES = [
         ("chassis/LiPo_Mountingbracket_Middle.stl", 1, {}),
         ("chassis/LiPo_Mountingbracket_Rear.stl", 1, {}),
     ]),
-    ("Shoulder joints and head mounts", BLACK, [
+    ("Shoulder joints and head mounts", STRUCTURAL, BLACK, [
         ("shoulders/Shoulder_Joint_Servomount_extended_BB.stl", 2, {}),
         ("shoulders/Shoulder_Joint_Servomount_extended_BB_mirrored.stl", 2, {}),
         ("shoulders/Shoulder_Joint_Servo_Cap_Extended.stl", 4, {}),
@@ -64,39 +65,39 @@ PLATES = [
         ("head/Cameramount_ESP32_CAM.stl", 1, {}),
         ("head/Cameramount_ESP32_CAM_Counterpiece.stl", 1, {}),
     ]),
-    ("Upper leg frames", BLACK, [
+    ("Upper leg frames", STRUCTURAL, BLACK, [
         ("legs/Limb_Ball_Bearing_Mount_long_v4.stl", 2, {}),
         ("legs/Limb_Ball_Bearing_Mount_long_v4_mirrored.stl", 2, {}),
         ("legs/Limb_Servohorn_Mount_long_v4.stl", 2, {}),
         ("legs/Limb_Servohorn_Mount_long_v4_mirrored.stl", 2, {}),
     ]),
-    ("Lower legs", BLACK, [
+    ("Lower legs", STRUCTURAL, BLACK, [
         ("legs/Wrist.stl", 2, {}),
         ("legs/Wrist_mirrored.stl", 2, {}),
         ("legs/Wrist_Counterpart.stl", 2, {}),
         ("legs/Wrist_Counterpart_mirrored.stl", 2, {}),
     ]),
-    ("Upper leg top shells", WHITE, [
+    ("Upper leg top shells", STRUCTURAL, WHITE, [
         ("legs/Limb_Top_Shell_with_BB_hole.stl", 2, {}),
         ("legs/Limb_Top_Shell_with_BB_hole_mirrored.stl", 2, {}),
     ]),
-    ("Upper leg bottom shells and shoulder covers", WHITE, [
+    ("Upper leg bottom shells and shoulder covers", STRUCTURAL, WHITE, [
         ("legs/Limb_Bottom_Shell.stl", 2, {}),
         ("legs/Limb_Bottom_Shell_mirrored.stl", 2, {}),
         ("shoulders/Shoulder_Cover.stl", 4, {}),
     ]),
-    ("Body covers", WHITE, [
+    ("Body covers", {}, WHITE, [
         ("hull/Top_Cover_Split_Front.stl", 1, SOLID),
         ("hull/Top_Cover_Split_Rear_with_OLED.stl", 1, SOLID),
         ("hull/Bottom_Cover_Split_Front.stl", 1, SOLID),
         ("hull/Bottom_Cover_Split_Rear.stl", 1, SOLID),
     ]),
-    ("Head and rear covers", WHITE, [
+    ("Head and rear covers", {}, WHITE, [
         ("head/Front_Cover_Optimized.stl", 1, SOLID),
         ("hull/Rear_Cover_Shell_Long.stl", 1, SOLID),
         ("hull/Rear_Cover_Plate.stl", 1, SOLID),
     ]),
-    ("Feet (TPU)", TPU, [
+    ("Feet (TPU)", {}, TPU, [
         ("legs/Foot_Tip.stl", 4, {}),
     ]),
 ]
@@ -150,9 +151,10 @@ def write_presets(tmp):
 
 def write_assemble_list(tmp):
     plates, names, n = [], {}, 0
-    for plate_name, fil, parts in PLATES:
+    for plate_name, plate_params, fil, parts in PLATES:
         objs = []
-        for rel, copies, params in parts:
+        for rel, copies, part_params in parts:
+            params = {**plate_params, **part_params}
             path = os.path.join(ROOT, "stl", rel)
             if not os.path.exists(path):
                 sys.exit(f"missing {path}; run scripts/export_stls.py")
@@ -169,21 +171,50 @@ def write_assemble_list(tmp):
     return path, names
 
 
-def object_extruders(text):
-    """The assemble list sets the filament on each part only. The slicer honours that, but the Bambu
-    Studio app colours and assigns by the object's own extruder, which then defaults to filament 1.
-    Copy each object's part extruder up to the object, as Bambu Studio's own projects do."""
+PART_KEYS = ("name", "matrix", "extruder", "source_file", "source_object_id", "source_volume_id",
+             "source_offset_x", "source_offset_y", "source_offset_z")
+
+
+def object_settings(text):
+    """The assemble list puts a part's filament and print overrides on the mesh inside each object.
+    The command-line slicer honours them there, but the Bambu Studio app shows and edits a
+    single-part object's settings at object level, and colours the object by its own extruder
+    (otherwise filament 1). Move the overrides up to the object and copy the extruder, as
+    Bambu Studio's own projects do."""
     def fix(m):
         head, body = m.group(1), m.group(2)
-        if re.search(r'^\s*<metadata key="extruder"', body.split("<part", 1)[0], re.M):
+        obj, sep, parts = body.partition("<part")
+        if not sep:
             return m.group(0)
-        part = re.search(r'<metadata key="extruder" value="(\d+)"/>', body)
-        if not part:
+        meta = re.findall(r'\n\s*<metadata key="([^"]+)" value="([^"]*)"/>', parts.split("<mesh_stat", 1)[0])
+        moved = [(k, v) for k, v in meta if k not in PART_KEYS]
+        ext = [v for k, v in meta if k == "extruder"]
+        add = ([("extruder", ext[0])] if ext and 'key="extruder"' not in obj else []) + moved
+        if not add:
             return m.group(0)
-        body = re.sub(r'(<metadata key="name" value="[^"]*"/>)',
-                      r'\1\n    <metadata key="extruder" value="%s"/>' % part.group(1), body, count=1)
-        return head + body + "</object>"
+        for k, v in moved:
+            parts = parts.replace(f'<metadata key="{k}" value="{v}"/>', "", 1)
+        oname = re.search(r'<metadata key="name" value="([^"]*)"/>', obj)
+        if oname:
+            parts = re.sub(r'<metadata key="name" value="[^"]*"/>', f'<metadata key="name" value="{oname.group(1)}"/>', parts, count=1)
+        lines = "".join(f'\n    <metadata key="{k}" value="{v}"/>' for k, v in add)
+        obj = re.sub(r'(<metadata key="name" value="[^"]*"/>)', lambda n: n.group(1) + lines, obj, count=1)
+        parts = re.sub(r"\n\s*\n", "\n", parts)
+        return head + obj + sep + parts + "</object>"
     return re.sub(r'(<object id="\d+">)(.*?)</object>', fix, text, flags=re.S)
+
+
+def project_settings(text):
+    """Bambu Studio reloads every value of a named system preset unless the key is listed in
+    different_settings_to_system (index 0 is the process preset), so record our process change."""
+    d = json.loads(text)
+    diffs = d.get("different_settings_to_system") or [""] * (len(FILAMENTS) + 2)
+    keys = [k for k in diffs[0].split(";") if k]
+    if "sparse_infill_density" not in keys:
+        keys.append("sparse_infill_density")
+    diffs[0] = ";".join(sorted(keys))
+    d["different_settings_to_system"] = diffs
+    return json.dumps(d, indent=4)
 
 
 def rename_objects(path, names):
@@ -192,11 +223,13 @@ def rename_objects(path, names):
     with zipfile.ZipFile(path) as zin, zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as zout:
         for item in zin.infolist():
             data = zin.read(item.filename)
-            if item.filename in ("Metadata/model_settings.config", "Metadata/slice_info.config", "3D/3dmodel.model"):
+            if item.filename == "Metadata/project_settings.config":
+                data = project_settings(data.decode("utf-8")).encode("utf-8")
+            elif item.filename in ("Metadata/model_settings.config", "Metadata/slice_info.config", "3D/3dmodel.model"):
                 text = data.decode("utf-8")
                 text = re.sub(r'(?<=")assemble_\d+(?=")', lambda m: names.get(m.group(0), m.group(0)), text)
                 if item.filename == "Metadata/model_settings.config":
-                    text = object_extruders(text)
+                    text = object_settings(text)
                 data = text.encode("utf-8")
             zout.writestr(item, data)
     os.replace(tmp, path)
@@ -223,7 +256,7 @@ def main():
     total_h = total_g = 0
     problems = []
     first = 1
-    for (plate_name, fil, parts), p in zip(PLATES, result["sliced_plates"]):
+    for (plate_name, _, fil, parts), p in zip(PLATES, result["sliced_plates"]):
         h = p["main_predication"] / 3600
         g = sum(f["total_used_g"] for f in p["filaments"])
         total_h += h
