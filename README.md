@@ -5,7 +5,9 @@ It is a port of [SpotMicroESP32-Leika](https://github.com/runeharlyk/SpotMicroES
 [SpotMicroESP32](https://github.com/michaelkubina/SpotMicroESP32) printed parts, which in turn derive from KDY0523's
 original [Spot Micro](https://www.thingiverse.com/thing:3445283).
 
-![Assembled robot, top cover hidden](docs/images/spot-unoq-iso.png)
+![Exploding and reassembling the robot](docs/images/spot-unoq-explode.gif)
+
+10-second loop rendered from `cad/SpotUnoQ.FCStd` in FreeCAD; full-resolution video: [docs/images/spot-unoq-explode.mp4](docs/images/spot-unoq-explode.mp4).
 
 ## Status
 
