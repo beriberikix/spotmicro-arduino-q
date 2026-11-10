@@ -34,6 +34,6 @@ In `cad/MediaCarrier_Mountingplate.FCStd` (a copy of `cad/UnoQ_Mountingplate.FCS
 
 In `cad/Sensormount_DualCam.FCStd` (a copy of Kooba's `sensormount_esp32_cam.FCStd`):
 
-- Removed: the four HC-SR04 transducer holes and the two crystal pockets.
+- Removed: the four HC-SR04 transducer holes, the two crystal pockets, and the ESP32-CAM lens and flash openings.
 - Added: a `Params` spreadsheet, and for each of two Raspberry Pi Camera Module 2s a component recess, four M2 pilot
   holes and a flared lens window.

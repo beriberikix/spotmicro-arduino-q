@@ -82,9 +82,9 @@ cameras are dimensioned placeholders):
 ## Camera cables
 
 Both cables run flat on the plate from the carrier's front edge, under the SZBK07 between its posts. They go through
-the 36 × 40 mm windows in the front shoulder plates, then turn up to the connectors on the bottom edges of the cameras.
+the 36 × 40 mm windows in the front shoulder plates, then fold sideways just behind the head and run up to the connectors on the bottom edges of the cameras.
 The routes are modelled in the assembly (orange, `FPC_left` and `FPC_right`) and clear everything. Each uses about
-168 mm, so the **200 mm** cable leaves about 30 mm of slack. Fold that slack flat in the shoulder box.
+172 mm, so the **200 mm** cable leaves about 28 mm of slack. Fold that slack flat in the shoulder box.
 
 The SZBK07 sits on 5 mm posts, leaving about 3 mm between the cables and its solder joints. Put a strip of Kapton
 tape on the cables where they pass under it.
@@ -101,7 +101,8 @@ other to the left. Map CSI0/CSI1 to left/right in software.
 - A lens window that opens towards the front to clear the camera's full 62° × 49° field of view, plus 3° of margin.
 
 The cameras sit 47 mm apart, 3 mm inboard of the old sensors, and both face the same way as the head, so the images
-are parallel for stereo. Kooba's central ESP32-CAM and flashlight openings are left as they were.
+are parallel for stereo. Kooba's central ESP32-CAM lens and flash openings are filled in, so the front has only the
+two camera windows.
 
 Every camera dimension is in the `Params` spreadsheet in `cad/Sensormount_DualCam.FCStd`:
 
