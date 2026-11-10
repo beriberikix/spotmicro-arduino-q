@@ -1,28 +1,28 @@
-# Ideas to explore
+# Ideas
 
-Optional parts and changes suggested by Leika, Kubina or Kooba that are not in the [BOM](../BOM.md) yet.
+Additions that aren't built yet, and what each would take.
 
 ## Sensors
 
-| Idea | Suggested by | What it would take |
-| ---- | ------------ | ------------------ |
-| ICM-20948 or BNO055 IMU | Leika | Both have a compass; the BNO055 fuses on chip. Needs a mount on the plate in place of the GY-521 posts. |
-| HMC5883L magnetometer | Leika | A compass for the MPU-6050. Only needed if the GY-521 stays. The GY-87 board combines both. |
-| BMP180 barometer | Leika | Pressure, temperature and altitude over I2C. Needs a mount. |
-| PAJ7620U2 gesture sensor | Leika | Hand-gesture interaction over I2C. Probably belongs in the head. |
-| INA219 current/voltage sensor | Leika | Already listed as optional in the BOM. Needs a mount, and I2C address 0x41 (tie A0 high) because 0x40 is the servo shield's PCA9685. |
-| Distance sensing | Leika, Kubina (2× HC-SR04) | The cameras took the ultrasonic sensors' place in the head. Stereo depth from the two cameras may cover it; otherwise a VL53L1X time-of-flight breakout on I2C, in a new opening in the camera mount's middle. |
+| Idea | What it takes |
+| ---- | ------------- |
+| ICM-20948 or BNO055 IMU (with compass; the BNO055 fuses on chip) | A mount in place of the GY-521 posts |
+| HMC5883L magnetometer, or a GY-87 (MPU-6050 + compass) | A mount; only if the GY-521 stays |
+| BMP180 barometer | A mount; I2C |
+| PAJ7620U2 gesture sensor | A mount in the head; I2C |
+| INA219 current/voltage sensor | A mount; I2C address 0x41 (A0 high), since the shield's PCA9685 is 0x40 |
+| VL53L1X time-of-flight distance sensor | An opening in the middle of the camera mount; I2C. Stereo depth from the cameras may make it unnecessary. |
 
-## Camera and head
+## Head and display
 
-| Idea | Suggested by | What it would take |
-| ---- | ------------ | ------------------ |
-| Camera Module 3 (autofocus) | - | The Media Carrier officially supports IMX219 (Camera Module 2) only. If Arduino adds IMX708 support, Camera Module 3 has the same board size and hole pattern, but a taller lens; check the mount's lens window and `Cam_Pupil_Depth`. |
-| 0.96" SSD1306 OLED | Leika, Kubina | Kooba's `Top_Cover_Split_Rear_with_OLED` already has the cutout. Leika's firmware has no display driver. |
+| Idea | What it takes |
+| ---- | ------------- |
+| Camera Module 3 (autofocus) | Media Carrier support for the IMX708. The board and hole pattern match; check the lens window and `Cam_Pupil_Depth` for its taller lens. |
+| 0.96" SSD1306 OLED | `Top_Cover_Split_Rear_with_OLED` has the cutout; needs firmware support |
 
 ## Power
 
-| Idea | Suggested by | What it would take |
-| ---- | ------------ | ------------------ |
-| Servo power cut-off | Kubina (HW-482 relay) | The SZBK07 has no enable pin. Either switch its input with a MOSFET or relay module from a UNO Q GPIO, or pull the servo shield's OE pin high to stop driving the servos (they stay powered but go limp). |
-| Battery voltage monitoring | Kubina (ACS712, 25 V sensor) | Covered by the INA219, or a resistor divider into a UNO Q analog pin. |
+| Idea | What it takes |
+| ---- | ------------- |
+| Servo power cut-off | The SZBK07 has no enable pin: switch its input with a MOSFET or relay from a UNO Q GPIO, or pull the shield's OE pin high (servos go limp but stay powered) |
+| Battery voltage monitoring | The INA219, or a resistor divider into a UNO Q analog pin |
