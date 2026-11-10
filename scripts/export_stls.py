@@ -22,6 +22,8 @@ KOOBA = "kooba/files/"
 ROBJK = "robjk/files/"
 STAND = "leika/helper_stand/"
 PLATE = "cad:UnoQ_Mountingplate"
+UNOQ_TEST = "cad:UnoQ_Mount_Test"
+POLOLU_TEST = "cad:Pololu_Mount_Test"
 
 PARTS = [
     # Chassis
@@ -68,6 +70,9 @@ PARTS = [
     ("optional/helper-stand", STAND + "2x_stand_bottom.stl", "Stand_Bottom", 2, 0, "PLA", "20%", "Nova-SM2"),
     ("optional/helper-stand", STAND + "2x_stand_brace.stl", "Stand_Brace", 2, 0, "PLA", "20%", "Nova-SM2"),
     ("optional/helper-stand", STAND + "4x_stand_feet.stl", "Stand_Feet", 4, 0, "PLA", "20%", "Nova-SM2"),
+    # Fit tests: the UNO Q and regulator standoffs from the electronics plate, on a light frame
+    ("optional/test-prints", UNOQ_TEST, "UnoQ_Mount_Test", 1, 0, "PLA", "20%", "UNO Q standoffs from the electronics plate, same height and pilot holes"),
+    ("optional/test-prints", POLOLU_TEST, "Pololu_Mount_Test", 1, 0, "PLA", "20%", "Pololu D24V150F6 posts from the electronics plate"),
 ]
 
 def export_plate(dest):
@@ -76,6 +81,49 @@ def export_plate(dest):
     shape = body.Shape.copy()
     MeshPart.meshFromShape(Shape=shape, LinearDeflection=0.05, AngularDeflection=0.2, Relative=False).write(dest)
     shape.exportStep(os.path.join(ROOT, "cad", "export", "UnoQ_Mountingplate.step"))
+    FreeCAD.closeDocument(doc.Name)
+
+
+# UNO R3 hole pattern on the UNO Q, in board coordinates (x along the long edge from the USB-C end)
+UNOQ_HOLES = [(13.97, 2.54), (15.24, 50.8), (66.04, 7.62), (66.04, 35.56)]
+
+
+def export_mount_test(dest, which, base=2.0, bar=7.0):
+    """Cut the real standoffs (or posts) out of the electronics plate and join them with a thin frame,
+    so their positions, height and pilot holes can be checked against the board in a short print."""
+    import Part
+    doc = FreeCAD.openDocument(os.path.join(ROOT, "cad", "UnoQ_Mountingplate.FCStd"), hidden=True)
+    body = [o for o in doc.Objects if o.TypeId == "PartDesign::Body" and o.Label == "UnoQ Mountingplate Base"][0]
+    P = doc.getObject("Params")
+    top = 5.0  # plate top in the plate's frame
+    if which == UNOQ_TEST:
+        pts = [(P.UnoQ_X0 - hy, P.UnoQ_Y0 + hx) for hx, hy in UNOQ_HOLES]
+        height, post_d, screw_d = P.Standoff_H, P.Standoff_D, P.Screw_D
+    else:
+        pts = [(P.Buck_CX + sx * P.Buck_SX / 2, P.Buck_CY + sy * P.Buck_SY / 2) for sx in (-1, 1) for sy in (-1, 1)]
+        height, post_d, screw_d = P.Buck_H, P.Buck_Post_D, P.Buck_Screw_D
+    V = FreeCAD.Vector
+    # the plate's own posts, holes included
+    cutter = Part.makeCompound([Part.makeCylinder(post_d / 2 + 0.01, height + 0.01, V(x, y, top)) for x, y in pts])
+    posts = body.Shape.common(cutter)
+    posts.translate(V(0, 0, base - top))
+    # frame: bars around the hole polygon, plus round pads under each post
+    cx = sum(x for x, _ in pts) / len(pts)
+    cy = sum(y for _, y in pts) / len(pts)
+    import math
+    ring = sorted(pts, key=lambda q: math.atan2(q[1] - cy, q[0] - cx))
+    pieces = []
+    for (x1, y1), (x2, y2) in zip(ring, ring[1:] + ring[:1]):
+        length = math.hypot(x2 - x1, y2 - y1)
+        b = Part.makeBox(length, bar, base, V(0, -bar / 2, 0))
+        b.rotate(V(0, 0, 0), V(0, 0, 1), math.degrees(math.atan2(y2 - y1, x2 - x1)))
+        b.translate(V(x1, y1, 0))
+        pieces.append(b)
+    pieces += [Part.makeCylinder(max(bar, post_d) / 2 + 1, base, V(x, y, 0)) for x, y in pts]
+    frame = pieces[0].fuse(pieces[1:]).removeSplitter()
+    frame = frame.cut(Part.makeCompound([Part.makeCylinder(screw_d / 2, base + 1, V(x, y, -0.5)) for x, y in pts]))
+    shape = frame.fuse(posts).removeSplitter()
+    MeshPart.meshFromShape(Shape=shape, LinearDeflection=0.05, AngularDeflection=0.2, Relative=False).write(dest)
     FreeCAD.closeDocument(doc.Name)
 
 
@@ -127,6 +175,8 @@ def main():
         dest = os.path.join(d, name + ".stl")
         if src == PLATE:
             export_plate(dest)
+        elif src in (UNOQ_TEST, POLOLU_TEST):
+            export_mount_test(dest, src)
         else:
             Mesh.Mesh(os.path.join(REF, src)).write(dest)  # rewrite as binary STL
         to_print_position(dest, name)

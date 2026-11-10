@@ -7,6 +7,7 @@ own, applies per-part print settings, and slices every plate.
 
     python3 scripts/build_makerworld_3mf.py            # writes makerworld/SpotUnoQ_P1S.3mf
     python3 scripts/build_makerworld_3mf.py --no-orient  # keep each STL's own orientation
+    python3 scripts/build_makerworld_3mf.py --no-orient --test-prints   # fit-test parts only
 
 Printer: Bambu Lab P1S, 0.4 mm nozzle, 0.20 mm Standard. Filaments: 1 Bambu PLA Basic black,
 2 Bambu PLA Basic white, 3 Bambu TPU 95A HF. Set BAMBU_STUDIO to use another install.
@@ -101,6 +102,28 @@ PLATES = [
         ("legs/Foot_Tip.stl", 4, {}),
     ]),
 ]
+
+
+# Fit tests: one of each part that mates with something bought (board, regulator, servo, horn,
+# bearing), printed with the same settings as the real parts.
+TEST_PLATES = [
+    ("Fit tests: black", STRUCTURAL, BLACK, [
+        ("optional/test-prints/UnoQ_Mount_Test.stl", 1, {}),
+        ("optional/test-prints/Pololu_Mount_Test.stl", 1, {}),
+        ("shoulders/Shoulder_Joint_Servomount_extended_BB.stl", 1, {}),
+        ("shoulders/Shoulder_Joint_Servo_Cap_Extended.stl", 1, {}),
+        ("legs/Limb_Ball_Bearing_Mount_long_v4.stl", 1, {}),
+        ("shoulders/Shoulder_Joint_Ball_Bearing_Pin.stl", 1, {}),
+        ("shoulders/Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl", 1, {}),
+    ]),
+    ("Fit tests: white", STRUCTURAL, WHITE, [
+        ("shoulders/Shoulder_Cover.stl", 1, {}),
+    ]),
+]
+if "--test-prints" in sys.argv:
+    PLATES = TEST_PLATES
+    FILAMENTS = FILAMENTS[:2]
+    OUT = os.path.join(ROOT, "makerworld", "SpotUnoQ_P1S_test_prints.3mf")
 
 
 def preset_index():
@@ -251,7 +274,7 @@ def main():
             print(log.stdout[-3000:], log.stderr[-3000:])
             sys.exit(f"Bambu Studio failed ({log.returncode}): {result.get('error_string')}")
         shutil.copy(os.path.join(outdir, os.path.basename(OUT)), OUT)
-        json.dump(result, open(os.path.join(os.path.dirname(OUT), "slice_result.json"), "w"), indent=1)
+        json.dump(result, open(OUT.replace(".3mf", "_slice_result.json"), "w"), indent=1)
     rename_objects(OUT, names)
     total_h = total_g = 0
     problems = []

@@ -14,4 +14,4 @@ __pycache__/
 
 # Generated MakerWorld project (rebuild with scripts/build_makerworld_3mf.py)
 /makerworld/*.3mf
-/makerworld/slice_result.json
+/makerworld/*_slice_result.json

@@ -99,6 +99,12 @@ writes `makerworld/SpotUnoQ_P1S.3mf`: a sliced Bambu Studio project for the P1S 
 reports a slicing warning. Without `--no-orient` it also auto-orients every part, which lays
 `Top_Cover_Split_Rear_with_OLED` down in a position that needs supports.
 
+Add `--test-prints` for `makerworld/SpotUnoQ_P1S_test_prints.3mf`: a 2-hour, 62 g fit test to print before the robot.
+One black plate has the UNO Q standoffs and the Pololu regulator posts (cut from the electronics plate onto a thin
+frame), a shoulder servo mount, an extended servo cap, an upper-leg bearing mount and one of each bearing pin; one white
+plate has a shoulder cover. Check the board and regulator screw down, a servo and its horn fit, and a 625ZZ bearing
+fits its pockets and pins.
+
 ### Coordinate frame
 
 The plate and cover files share a body frame: +Y toward the head, +X to the robot's right, plate top at Z = 5 mm,

@@ -93,4 +93,11 @@ thing:4559827 and thing:4937631), the helper stand from Leika (stefi01, CC BY 4.
 | [Stand_Brace.stl](optional/helper-stand/Stand_Brace.stl) | 2 | - | PLA | 20% | Nova-SM2 |
 | [Stand_Feet.stl](optional/helper-stand/Stand_Feet.stl) | 4 | - | PLA | 20% | Nova-SM2 |
 
+## optional/test-prints
+
+| File | Normal | Mirrored | Material | Infill | Notes |
+| ---- | ------ | -------- | -------- | ------ | ----- |
+| [UnoQ_Mount_Test.stl](optional/test-prints/UnoQ_Mount_Test.stl) | 1 | - | PLA | 20% | UNO Q standoffs from the electronics plate, same height and pilot holes |
+| [Pololu_Mount_Test.stl](optional/test-prints/Pololu_Mount_Test.stl) | 1 | - | PLA | 20% | Pololu D24V150F6 posts from the electronics plate |
+
 Required prints: 76 parts.
