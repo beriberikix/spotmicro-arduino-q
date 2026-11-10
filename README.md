@@ -113,9 +113,48 @@ translation of (55, 0, -9.75) mm.
 
 ### Driving FreeCAD from Claude Code
 
-`.mcp.json` registers [freecad-mcp](https://github.com/neka-nat/freecad-mcp). To use it, install its FreeCAD addon in
-FreeCAD's `Mod` directory (`~/Library/Application Support/FreeCAD/v1-1/Mod/FreeCADMCP` on macOS) and start its RPC
-server from the MCP Addon workbench.
+`.mcp.json` registers the [freecad-mcp](https://github.com/neka-nat/freecad-mcp) server for this project, so Claude
+Code can open, edit and render the CAD in a running FreeCAD while you watch. It has two halves: an addon that runs
+inside FreeCAD and listens on `127.0.0.1:9875`, and an MCP server that Claude Code starts with `uvx`. Setup on macOS:
+
+1. **Install FreeCAD 1.1 and uv** (uv provides `uvx`, which runs the MCP server):
+
+   ```sh
+   brew install --cask freecad
+   brew install uv
+   ```
+
+2. **Install the FreeCAD addon.** Create the `Mod` folder first; if it doesn't exist, `cp -r` copies the addon's
+   contents into a new folder named `Mod` instead of into `Mod/FreeCADMCP`, and FreeCAD won't find it.
+
+   ```sh
+   git clone https://github.com/neka-nat/freecad-mcp.git /tmp/freecad-mcp
+   mkdir -p ~/Library/Application\ Support/FreeCAD/v1-1/Mod
+   cp -r /tmp/freecad-mcp/addon/FreeCADMCP ~/Library/Application\ Support/FreeCAD/v1-1/Mod/
+   ```
+
+   The result should be `~/Library/Application Support/FreeCAD/v1-1/Mod/FreeCADMCP/InitGui.py`. Other platforms and
+   FreeCAD versions use other folders; see the addon's
+   [installation guide](https://github.com/neka-nat/freecad-mcp/blob/main/docs/installation.md#addon-directory).
+
+3. **Start the addon's server with FreeCAD** (optional, saves a click every launch). It only listens on 127.0.0.1:
+
+   ```sh
+   echo '{"remote_enabled": false, "allowed_ips": "127.0.0.1", "auto_start_rpc": true, "auth_token": ""}' \
+     > ~/Library/Application\ Support/FreeCAD/v1-1/freecad_mcp_settings.json
+   ```
+
+   Without this, choose the **MCP Addon** workbench in FreeCAD and click **Start RPC Server** each time.
+
+4. **Open FreeCAD** (quit and reopen it if it was running when you installed the addon). The Report view should show
+   the server listening on `127.0.0.1:9875`.
+
+5. **Start Claude Code in this repository** and approve the `freecad` server from `.mcp.json` when asked. Run `/mcp`
+   to check that it's connected. If FreeCAD wasn't running when Claude Code started, reconnect it from `/mcp`.
+
+Claude Code only reaches FreeCAD while FreeCAD is open with the addon's server running. Heavy mesh operations through
+the server (for example booleans on large STLs) can crash FreeCAD; the scripts in `scripts/` run headless with
+`freecadcmd` instead and don't need the addon.
 
 ## License
 
