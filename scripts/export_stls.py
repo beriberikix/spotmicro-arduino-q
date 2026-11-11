@@ -22,8 +22,9 @@ KOOBA = "kooba/files/"
 ROBJK = "robjk/files/"
 STAND = "leika/helper_stand/"
 PLATE = "cad:UnoQ_Mountingplate"
-UNOQ_TEST = "cad:UnoQ_Mount_Test"
-POLOLU_TEST = "cad:Pololu_Mount_Test"
+SENSORMOUNT = "cad:Sensormount_DualCam"
+CARRIER_TEST = "cad:Carrier_Mount_Test"
+SZBK07_TEST = "cad:SZBK07_Mount_Test"
 
 PARTS = [
     # Chassis
@@ -35,7 +36,7 @@ PARTS = [
     ("chassis", KOOBA + "LiPo_Mountingbracket_Front.stl", "LiPo_Mountingbracket_Front", 1, 0, "PLA", "20%", ""),
     ("chassis", KOOBA + "LiPo_Mountingbracket_Middle.stl", "LiPo_Mountingbracket_Middle", 1, 0, "PLA", "20%", ""),
     ("chassis", KOOBA + "LiPo_Mountingbracket_Rear.stl", "LiPo_Mountingbracket_Rear", 1, 0, "PLA", "20%", ""),
-    ("electronics", PLATE, "UnoQ_Mountingplate", 1, 0, "PLA", "20%", "New: UNO Q, PCA9685, GY-521, Pololu D24V150F6"),
+    ("electronics", PLATE, "UnoQ_Mountingplate", 1, 0, "PLA", "20%", "New: UNO Media Carrier + UNO Q + servo shield stack, SZBK07, GY-521"),
     # Shoulder joints (robjk reinforced)
     ("shoulders", ROBJK + "Shoulder_Joint_Servomount_extended_BB.stl", "Shoulder_Joint_Servomount_extended_BB", 2, 2, "PLA", "20%", "robjk"),
     ("shoulders", ROBJK + "Shoulder_Joint_Servo_Cap_Extended.stl", "Shoulder_Joint_Servo_Cap_Extended", 4, 0, "PLA", "20%", "robjk"),
@@ -59,9 +60,7 @@ PARTS = [
     ("hull", KOOBA + "Rear_Cover_Plate.stl", "Rear_Cover_Plate", 1, 0, "PLA", "100%", ""),
     # Head
     ("head", KOOBA + "Front_Cover_Optimized.stl", "Front_Cover_Optimized", 1, 0, "PLA", "100%", ""),
-    ("head", KOOBA + "sensormount_esp32_cam.stl", "Sensormount", 1, 0, "PLA", "20%", "Holds the two HC-SR04s"),
-    ("head", KOOBA + "cameramount_esp32_cam.stl", "Cameramount_ESP32_CAM", 1, 0, "PLA", "20%", "ESP32-CAM mount, kept until a UNO Q camera mount exists"),
-    ("head", KOOBA + "cameramount_esp32_cam_counterpiece.stl", "Cameramount_ESP32_CAM_Counterpiece", 1, 0, "PLA", "20%", "As above"),
+    ("head", SENSORMOUNT, "Sensormount_DualCam", 1, 0, "PLA", "20%", "New: Kooba's sensor mount, holding two Raspberry Pi Camera Module 2s"),
     # Optional
     ("optional/servo-horns", KOOBA + "Servohorn_6_B_Star.stl", "Servohorn_6_B_Star", 12, 0, "PLA", "20%", "Only if your servos lack FSH6S-type horns"),
     ("optional/rear-cover-medium", ROBJK + "Rear_Cover_Shell_Medium.stl", "Rear_Cover_Shell_Medium", 1, 0, "PLA", "100%", "robjk; shorter alternative to Rear_Cover_Shell_Long"),
@@ -70,58 +69,65 @@ PARTS = [
     ("optional/helper-stand", STAND + "2x_stand_bottom.stl", "Stand_Bottom", 2, 0, "PLA", "20%", "Nova-SM2"),
     ("optional/helper-stand", STAND + "2x_stand_brace.stl", "Stand_Brace", 2, 0, "PLA", "20%", "Nova-SM2"),
     ("optional/helper-stand", STAND + "4x_stand_feet.stl", "Stand_Feet", 4, 0, "PLA", "20%", "Nova-SM2"),
-    # Fit tests: the UNO Q and regulator standoffs from the electronics plate, on a light frame
-    ("optional/test-prints", UNOQ_TEST, "UnoQ_Mount_Test", 1, 0, "PLA", "20%", "UNO Q standoffs from the electronics plate, same height and pilot holes"),
-    ("optional/test-prints", POLOLU_TEST, "Pololu_Mount_Test", 1, 0, "PLA", "20%", "Pololu D24V150F6 posts from the electronics plate"),
+    # Fit tests: the board-stack and regulator mounts from the electronics plate, on a light frame
+    ("optional/test-prints", CARRIER_TEST, "Carrier_Mount_Test", 1, 0, "PLA", "20%", "Media Carrier pads, hooks and snap clips from the electronics plate"),
+    ("optional/test-prints", SZBK07_TEST, "SZBK07_Mount_Test", 1, 0, "PLA", "20%", "SZBK07 posts from the electronics plate"),
 ]
 
-def export_plate(dest):
-    doc = FreeCAD.openDocument(os.path.join(ROOT, "cad", "UnoQ_Mountingplate.FCStd"), hidden=True)
-    body = [o for o in doc.Objects if o.TypeId == "PartDesign::Body" and o.Label == "UnoQ Mountingplate Base"][0]
+def export_body(dest, fcstd, label, step_dest):
+    """Mesh a PartDesign body of this project in its file's assembled position (Kooba's print
+    orientation for the head parts; flat for the plates) and write its STEP alongside."""
+    doc = FreeCAD.openDocument(os.path.join(ROOT, "cad", fcstd), hidden=True)
+    body = [o for o in doc.Objects if o.TypeId == "PartDesign::Body" and o.Label == label][0]
     shape = body.Shape.copy()
+    shape.Placement = body.getGlobalPlacement()
     MeshPart.meshFromShape(Shape=shape, LinearDeflection=0.05, AngularDeflection=0.2, Relative=False).write(dest)
-    shape.exportStep(os.path.join(ROOT, "cad", "export", "UnoQ_Mountingplate.step"))
+    os.makedirs(os.path.dirname(step_dest), exist_ok=True)
+    shape.exportStep(step_dest)
     FreeCAD.closeDocument(doc.Name)
 
 
-# UNO R3 hole pattern on the UNO Q, in board coordinates (x along the long edge from the USB-C end)
-UNOQ_HOLES = [(13.97, 2.54), (15.24, 50.8), (66.04, 7.62), (66.04, 35.56)]
-
-
 def export_mount_test(dest, which, base=2.0, bar=7.0):
-    """Cut the real standoffs (or posts) out of the electronics plate and join them with a thin frame,
-    so their positions, height and pilot holes can be checked against the board in a short print."""
+    """Cut the real carrier pads and clips (or SZBK07 posts) out of the electronics plate and join them
+    with a thin frame, so their positions, heights and pilot holes can be checked in a short print."""
+    import math
     import Part
     doc = FreeCAD.openDocument(os.path.join(ROOT, "cad", "UnoQ_Mountingplate.FCStd"), hidden=True)
     body = [o for o in doc.Objects if o.TypeId == "PartDesign::Body" and o.Label == "UnoQ Mountingplate Base"][0]
     P = doc.getObject("Params")
-    top = 5.0  # plate top in the plate's frame
-    if which == UNOQ_TEST:
-        pts = [(P.UnoQ_X0 - hy, P.UnoQ_Y0 + hx) for hx, hy in UNOQ_HOLES]
-        height, post_d, screw_d = P.Standoff_H, P.Standoff_D, P.Screw_D
+    V = FreeCAD.Vector
+    top = 5.0
+    if which == CARRIER_TEST:
+        sk = doc.getObject("UnoQ_Standoffs_Sketch")  # the carrier pads
+        pads = [(g.Center.x, g.Center.y) for g in sk.Geometry]
+        cutters = [Part.makeCylinder(P.Standoff_D / 2 + 0.01, P.Standoff_H + 0.01, V(x, y, top)) for x, y in pads]
+        clips = []
+        for o in doc.Objects:
+            if o.TypeId == "PartDesign::Pad" and o.Label.startswith(("Carrier_Hook", "Carrier_Snap")):
+                b = o.Profile[0].Shape.BoundBox
+                clips.append(((b.XMin + b.XMax) / 2, b.YMin))
+                cutters.append(Part.makeBox(b.XLength + 0.02, P.Clip_W + 0.02, b.ZMax - top + 0.01,
+                                            V(b.XMin - 0.01, b.YMin - P.Clip_W / 2 - 0.01, top)))
+        pts, holes, post_d = pads + clips, [], P.Standoff_D
     else:
         pts = [(P.Buck_CX + sx * P.Buck_SX / 2, P.Buck_CY + sy * P.Buck_SY / 2) for sx in (-1, 1) for sy in (-1, 1)]
-        height, post_d, screw_d = P.Buck_H, P.Buck_Post_D, P.Buck_Screw_D
-    V = FreeCAD.Vector
-    # the plate's own posts, holes included
-    cutter = Part.makeCompound([Part.makeCylinder(post_d / 2 + 0.01, height + 0.01, V(x, y, top)) for x, y in pts])
-    posts = body.Shape.common(cutter)
+        cutters = [Part.makeCylinder(P.Buck_Post_D / 2 + 0.01, P.Buck_H + 0.01, V(x, y, top)) for x, y in pts]
+        holes, post_d = pts, P.Buck_Post_D
+    posts = body.Shape.common(Part.makeCompound(cutters))
     posts.translate(V(0, 0, base - top))
-    # frame: bars around the hole polygon, plus round pads under each post
     cx = sum(x for x, _ in pts) / len(pts)
     cy = sum(y for _, y in pts) / len(pts)
-    import math
     ring = sorted(pts, key=lambda q: math.atan2(q[1] - cy, q[0] - cx))
     pieces = []
     for (x1, y1), (x2, y2) in zip(ring, ring[1:] + ring[:1]):
-        length = math.hypot(x2 - x1, y2 - y1)
-        b = Part.makeBox(length, bar, base, V(0, -bar / 2, 0))
+        b = Part.makeBox(math.hypot(x2 - x1, y2 - y1), bar, base, V(0, -bar / 2, 0))
         b.rotate(V(0, 0, 0), V(0, 0, 1), math.degrees(math.atan2(y2 - y1, x2 - x1)))
         b.translate(V(x1, y1, 0))
         pieces.append(b)
     pieces += [Part.makeCylinder(max(bar, post_d) / 2 + 1, base, V(x, y, 0)) for x, y in pts]
     frame = pieces[0].fuse(pieces[1:]).removeSplitter()
-    frame = frame.cut(Part.makeCompound([Part.makeCylinder(screw_d / 2, base + 1, V(x, y, -0.5)) for x, y in pts]))
+    if holes:
+        frame = frame.cut(Part.makeCompound([Part.makeCylinder(P.Buck_Screw_D / 2, base + 1, V(x, y, -0.5)) for x, y in holes]))
     shape = frame.fuse(posts).removeSplitter()
     MeshPart.meshFromShape(Shape=shape, LinearDeflection=0.05, AngularDeflection=0.2, Relative=False).write(dest)
     FreeCAD.closeDocument(doc.Name)
@@ -174,8 +180,12 @@ def main():
         os.makedirs(d, exist_ok=True)
         dest = os.path.join(d, name + ".stl")
         if src == PLATE:
-            export_plate(dest)
-        elif src in (UNOQ_TEST, POLOLU_TEST):
+            export_body(dest, "UnoQ_Mountingplate.FCStd", "UnoQ Mountingplate Base",
+                        os.path.join(ROOT, "step", "electronics", "UnoQ_Mountingplate.step"))
+        elif src == SENSORMOUNT:
+            export_body(dest, "Sensormount_DualCam.FCStd", "Sensormount_DualCam",
+                        os.path.join(ROOT, "step", "head", "Sensormount_DualCam.step"))
+        elif src in (CARRIER_TEST, SZBK07_TEST):
             export_mount_test(dest, src)
         else:
             Mesh.Mesh(os.path.join(REF, src)).write(dest)  # rewrite as binary STL
@@ -203,7 +213,8 @@ def write_readme(rows):
         "",
         "Sources and licenses: Kooba's SpotMicroESP32 and robjk's reinforced shoulders (CC BY, Thingiverse",
         "thing:4559827 and thing:4937631), the helper stand from Leika (stefi01, CC BY 4.0; Nova-SM2, MIT), and",
-        "`electronics/UnoQ_Mountingplate.stl` (this project, CC BY-SA 4.0). See ../NOTICE.md.",
+        "`electronics/UnoQ_Mountingplate.stl` and `head/Sensormount_DualCam.stl` (this project, modified from Kooba,",
+        "CC BY-SA 4.0). See ../NOTICE.md.",
         "",
     ]
     current = None

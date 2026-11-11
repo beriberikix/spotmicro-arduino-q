@@ -53,21 +53,26 @@ SPECIAL = {
     "L_Top_and_Bottom_Cover_Screws_all": (0, 0, 320),
     "L_Cover_Nuts": (0, 0, -210),
     "L_Bottom_Cover_Assembly": (0, 0, -150),
-    "L_Head": (110, 0, 0),
-    "L_Head_Cover_Screws": (140, 0, 0),
+    "L_Front_Cover": (150, 0, 0),
+    "L_Front_Cover_Screws": (180, 0, 0),
+    "L_Head_Cover_Screws": (180, 0, 0),
+    "Sensormount_DualCam": (115, 0, 0),
+    "Raspberry Pi Camera Module 2 (left, placeholder)": (75, 0, 0),
+    "Raspberry Pi Camera Module 2 (right, placeholder)": (75, 0, 0),
     "L_Rear_Cover_Assembly": (-110, 0, 0),
     "L_Rear_Cover_Screws001": (-140, 0, 0),
     "UnoQ_Mountingplate": (0, 0, 40),
+    "Arduino_UNO_Media_Carrier": (0, 0, 80),
     "Arduino_UNO_Q": (0, 0, 120),
-    "PCA9685 16ch PWM (placeholder)": (0, 0, 95),
-    "Pololu D24V150F6 6V 15A buck (placeholder)": (0, 0, 95),
+    "Adafruit 1411 servo shield + right-angle plugs (placeholder)": (0, 0, 160),
+    "SZBK07 20 A buck, 60x54x28 (placeholder)": (0, 0, 95),
 }
 LEG_OFFSET = 60                   # mm from the centre line beyond which a part belongs to a leg
 LEG_MOVE = (45, 85, -20)          # each leg moves out (x towards its end, y to its side, z)
 LEG_SPREAD = (0.25, 1.1, 0.35)    # parts spread within their leg, per axis
 BODY_SPREAD = (0.35, 0.9, 0.6)    # body parts spread from the body centre, per axis
 SHOW = ["L_Top_Cover_Assembly"]   # hidden in the saved file, shown in the animation
-HIDE = ["UnoQ_Wiring_Keepout"]    # shown in the saved file, hidden in the animation (object names)
+HIDE = ["FPC_left", "FPC_right"]  # shown in the saved file, hidden in the animation (object names)
 
 
 # ---------------------------------------------------------------- helpers

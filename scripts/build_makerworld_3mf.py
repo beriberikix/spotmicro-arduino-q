@@ -62,9 +62,7 @@ PLATES = [
         ("shoulders/Shoulder_Joint_Servo_Cap_Extended.stl", 4, {}),
         ("shoulders/Shoulder_Joint_Ball_Bearing_Pin.stl", 8, {}),
         ("shoulders/Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl", 4, {}),
-        ("head/Sensormount.stl", 1, {}),
-        ("head/Cameramount_ESP32_CAM.stl", 1, {}),
-        ("head/Cameramount_ESP32_CAM_Counterpiece.stl", 1, {}),
+        ("head/Sensormount_DualCam.stl", 1, {}),
     ]),
     ("Upper leg frames", STRUCTURAL, BLACK, [
         ("legs/Limb_Ball_Bearing_Mount_long_v4.stl", 2, {}),
@@ -104,12 +102,13 @@ PLATES = [
 ]
 
 
-# Fit tests: one of each part that mates with something bought (board, regulator, servo, horn,
-# bearing), printed with the same settings as the real parts.
+# Fit tests: one of each part that mates with something bought (board stack, regulator, cameras,
+# servo, horn, bearing), printed with the same settings as the real parts.
 TEST_PLATES = [
     ("Fit tests: black", STRUCTURAL, BLACK, [
-        ("optional/test-prints/UnoQ_Mount_Test.stl", 1, {}),
-        ("optional/test-prints/Pololu_Mount_Test.stl", 1, {}),
+        ("optional/test-prints/Carrier_Mount_Test.stl", 1, {}),
+        ("optional/test-prints/SZBK07_Mount_Test.stl", 1, {}),
+        ("head/Sensormount_DualCam.stl", 1, {}),
         ("shoulders/Shoulder_Joint_Servomount_extended_BB.stl", 1, {}),
         ("shoulders/Shoulder_Joint_Servo_Cap_Extended.stl", 1, {}),
         ("legs/Limb_Ball_Bearing_Mount_long_v4.stl", 1, {}),

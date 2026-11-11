@@ -6,7 +6,8 @@
 # Each source solid is fitted to its STL by point-cloud registration (24 axis-aligned starts,
 # refined with ICP); a part is only written when 95% of points sampled on the STL lie within
 # FIT_LIMIT of the placed STEP surface (STL facets approximate large curved covers to about 0.06 mm). Mirrored STLs get
-# mirrored STEPs. Parts that exist only as STL upstream (robjk's extended servo mount and M3
+# mirrored STEPs. This project's own parts (the electronics plate and the camera mount) are written by
+# scripts/export_stls.py. Parts that exist only as STL upstream (robjk's extended servo mount and M3
 # bearing pin) have no STEP.
 import itertools
 import os
@@ -51,9 +52,6 @@ PARTS = [
     ("hull/Rear_Cover_Shell_Long.stl", f"{KOOBA}/Rear_Cover_Shell_Long.FCStd", None, False),
     ("hull/Rear_Cover_Plate.stl", f"{KOOBA}/Rear_Cover_Plate.FCStd", None, False),
     ("head/Front_Cover_Optimized.stl", f"{KOOBA}/Front_Cover_Optimized.FCStd", None, False),
-    ("head/Sensormount.stl", f"{KOOBA}/sensormount_esp32_cam.FCStd", None, False),
-    ("head/Cameramount_ESP32_CAM.stl", f"{KOOBA}/cameramount_esp32_cam.FCStd", None, False),
-    ("head/Cameramount_ESP32_CAM_Counterpiece.stl", f"{KOOBA}/cameramount_esp32_cam_counterpiece.FCStd", None, False),
     ("optional/servo-horns/Servohorn_6_B_Star.stl", f"{KOOBA}/Servohorn_6_B_Star.FCStd", None, False),
     ("optional/rear-cover-medium/Rear_Cover_Shell_Medium.stl", f"{ROBJK}/Rear_Cover_Shell_Medium.FCStd", ["Rear_Cover_Shell_medium"], False),
     ("optional/rear-cover-medium/Rear_Cover_Plate_Medium.stl", f"{ROBJK}/Rear_Cover_Shell_Medium.FCStd", ["Rear_Cover_Plate_medium"], False),
