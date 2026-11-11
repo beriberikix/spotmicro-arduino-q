@@ -14,7 +14,7 @@ many vendors; check the specs in the notes before buying.
 | 1 | SZBK07 20 A step-down module | Servo rail at 6.0 V; set it before connecting servos. 60 x 54 x 28 mm, M3 holes 39 x 53.5 mm. About 15 A continuous. | [search](https://www.amazon.com/s?k=SZBK07+20A+buck) |
 | 2 | Raspberry Pi Camera Module 2 (IMX219) | Stereo pair in the head. | [Adafruit 3099](https://www.adafruit.com/product/3099) |
 | 2 | Raspberry Pi camera cable, Standard–Mini, 200 mm | Camera to carrier. The cable in the camera box doesn't fit the carrier. | [Adafruit 5818](https://www.adafruit.com/product/5818) |
-| 12 | Servos, 25T spline, standard size: DS3218MG (20 kg) or MG996R (11 kg) | See [Servos](#servos). | [DS3218 180°, HOOYIJ 4-pack (buy 3)](https://www.amazon.com/HOOYIJ-Digital-Waterproof-Crawler-Control/dp/B0CJ7B2MBN) · [DS3218MG search](https://www.amazon.com/s?k=DS3218MG+servo) · [MG996R search](https://www.amazon.com/s?k=MG996R+servo) |
+| 12 | DS3218 servo, 20 kg, **180°**, 25T spline | Many DS3218 listings are 270°; check the angle. See [Servos](#servos). | [Miuzei 4-pack (buy 3)](https://www.amazon.com/dp/B0FH53CKCS) · [HOOYIJ 4-pack](https://www.amazon.com/dp/B0CJ7B2MBN) |
 | 12 | 25T six-arm servo horn (FSH6S type) | Often included with the servos. `Servohorn_6_B_Star` is a printable fallback. | [search](https://www.amazon.com/s?k=25T+servo+horn+aluminum) |
 | 48 | Servo rubber dampeners | Usually included with the servos. | - |
 | 4 | Servo extension cable, 10-15 cm | Lower-leg servos. | [search](https://www.amazon.com/s?k=servo+extension+cable+15cm) |
@@ -35,17 +35,16 @@ many vendors; check the specs in the notes before buying.
 
 ### Servos
 
-| | MG996R | DS3218MG |
-| - | ------ | -------- |
-| Rated voltage | 4.8-7.2 V | 4.8-6.8 V |
-| Stall torque at 6 V | about 11 kg·cm | about 20 kg·cm |
-| Stall current | about 2.5 A at 6 V | about 1.8-2.6 A |
-| Walking | Works, with jitter and play | Smooth |
+DS3218 on all twelve joints: 20 kg·cm at 6 V, 4.8-6.8 V. MG996R (11 kg·cm) works but walks with jitter and play.
 
-- Buy the 180° version; the gait calibration assumes 180°.
-- Both need the 6 V rail: a full 2S pack (8.4 V) is above either rating.
-- To save money, use DS3218MG on the four lower legs (the most loaded joints) and MG996R elsewhere.
-- The SZBK07's 15 A continuous is enough for either; twelve servos never all stall at once.
+- Buy the 180° version (500-2500 µs for 0-180°); the gait calibration assumes 180°. The same seller often lists a
+  270° pack under a near-identical title.
+- Buy all twelve from one seller, so they centre and respond alike.
+- "Waterproof" in the title doesn't matter; nearly every DS3218 is sold that way.
+- Some DS3218s cut out after about 5 s at stall (overload protection). Standing and walking don't trigger it; a leg
+  pressed against the stand can.
+- The 6 V rail is required: a full 2S pack (8.4 V) is above the rating.
+- The SZBK07's 15 A continuous is enough; twelve servos never all stall at once.
 
 ## Hardware
 

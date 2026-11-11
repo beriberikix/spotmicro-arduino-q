@@ -38,7 +38,7 @@ Print settings match the real parts: 3 walls, 20% infill, Bambu PLA Basic, no su
 - Arduino UNO Media Carrier (and the UNO Q, to check that it presses on)
 - SZBK07 regulator
 - Two Raspberry Pi Camera Module 2s
-- One servo (DS3218MG or MG996R) with its rubber dampeners and a 25T six-arm horn
+- One DS3218 servo with its rubber dampeners and a 25T six-arm horn
 - Two 625ZZ bearings
 - Screws: 4× M3x8 (SZBK07), 8× M2x5 self-tapping (cameras), M3x20 + nuts (servo and shoulder cover), M2x8 + nuts
   (horn and Kooba pin)
