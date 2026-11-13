@@ -23,12 +23,11 @@ Each leg has three servos:
 | **Knee** | the lower leg | the lower leg (wrist and wrist counterpart) | the servohorn mount plate on the upper leg |
 
 Every joint has a 625ZZ bearing opposite the servo, so the part is held on both sides: the knee on the ball-bearing
-mount plate, the hip in robjk's shoulder cover, and the shoulder in the inner shoulder plate.
+mount plate, the hip in the shoulder cover, and the shoulder in the inner shoulder plate.
 
 ## Part names
 
-The file names in [`stl/`](https://github.com/beriberikix/spotmicro-arduino-q/tree/main/stl) are Kubina's, and this
-guide uses them too:
+The guide uses the file names in [`stl/`](https://github.com/beriberikix/spotmicro-arduino-q/tree/main/stl):
 
 | Guide says | File |
 | ---------- | ---- |
@@ -37,17 +36,17 @@ guide uses them too:
 | servohorn mount (knee plate, horn side) | `legs/Limb_Servohorn_Mount_long_v4.stl` |
 | ball-bearing mount (knee plate, bearing side) | `legs/Limb_Ball_Bearing_Mount_long_v4.stl` |
 | upper-leg bottom shell | `legs/Limb_Bottom_Shell.stl` |
-| upper-leg top shell | `legs/Limb_Top_Shell_with_BB_hole.stl` (robjk) |
-| shoulder servo mount | `shoulders/Shoulder_Joint_Servomount_extended_BB.stl` (robjk) |
-| extended servo cap | `shoulders/Shoulder_Joint_Servo_Cap_Extended.stl` (robjk) |
-| shoulder cover | `shoulders/Shoulder_Cover.stl` (robjk) |
+| upper-leg top shell | `legs/Limb_Top_Shell_with_BB_hole.stl` |
+| shoulder servo mount | `shoulders/Shoulder_Joint_Servomount_extended_BB.stl` |
+| extended servo cap | `shoulders/Shoulder_Joint_Servo_Cap_Extended.stl` |
+| shoulder cover | `shoulders/Shoulder_Cover.stl` |
 | bearing pin | `shoulders/Shoulder_Joint_Ball_Bearing_Pin.stl` (M2 bore) |
-| M3 bearing pin | `shoulders/Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl` (robjk, M3 bore) |
+| M3 bearing pin | `shoulders/Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl` (M3 bore) |
 
 ## Left and right parts
 
 Leg parts come in pairs: the normal STL is for the **left** legs and `_mirrored` is for the **right** legs. The
-shoulder servo mount is the exception, as Kubina points out: each side gets one normal and one mirrored mount, one for
+shoulder servo mount is the exception: each side gets one normal and one mirrored mount, one for
 the front leg and one for the rear, so that both shoulder servo outputs face outwards (towards the nose at the front
 and the tail at the back).
 

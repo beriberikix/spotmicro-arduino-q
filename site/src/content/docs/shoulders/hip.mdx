@@ -10,12 +10,12 @@ import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
 import Todo from '../../../components/Todo.astro';
 
-The **shoulder joint** is robjk's extended servo mount plus the extended servo cap. The cap carries the horn that the
+The **shoulder joint** is the extended servo mount plus the extended servo cap. The cap carries the horn that the
 hip servo drives, and its extension is where the shoulder cover will bolt on.
 
 <Parts per="per leg" total={4} bag="D" items={[
-	[1, 'Shoulder servo mount, extended (robjk)', 'Per side: one normal and one mirrored, see below'],
-	[1, 'Extended servo cap (robjk)'],
+	[1, 'Shoulder servo mount, extended', 'Per side: one normal and one mirrored, see below'],
+	[1, 'Extended servo cap'],
 	[1, '25T six-arm servo horn'],
 	[6, '<kbd class="hw">M2×8</kbd> with an M2 nut threaded on', 'Horn to cap'],
 	[1, 'Bearing pin, M2 bore + <kbd class="hw">M2×8</kbd> + M2 nut'],
@@ -26,8 +26,7 @@ hip servo drives, and its extension is where the shoulder cover will bolt on.
 
 <Aside type="caution" title="Which servo mount?">
 Both shoulder servos on a side face **outwards**: the front one towards the nose, the rear one towards the tail. So each
-side uses **one normal and one mirrored** mount (Kubina: "the shoulder joint uses the mirrored parts for the front or
-rear leg on both sides"). Pair them up before you start: FL with RR are the same part, and FR with RL. Hold a mount
+side uses **one normal and one mirrored** mount. Pair them up before you start: FL with RR are the same part, and FR with RL. Hold a mount
 against its leg and check that the servo pocket opens towards the correct end of the robot.
 </Aside>
 
@@ -67,7 +66,7 @@ Same as the knee: M2×8 screws with nuts threaded on as spacers, through the mid
 
 1. Plug the hip servo into the rig and send its assembly angle: **120° for left legs, 60° for right legs** (channels
    1, 4, 7, 10). Leave it powered.
-2. Kubina's alignment rule: don't line the shoulder joint up with the horn's **top** arm, but with **the next arm to the
+2. Don't line the shoulder joint up with the horn's **top** arm, but with **the next arm to the
    right on left legs, or to the left on right legs**. Each arm is 60°, and this puts the upper leg at its standing angle.
    The upper leg then deliberately swings further backwards than forwards.
 3. Push the cap's horn onto the hip servo shaft and screw it on with an <Hw>M3×8</Hw> through the horn centre.

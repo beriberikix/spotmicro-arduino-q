@@ -10,9 +10,9 @@ import Todo from '../../../components/Todo.astro';
 import AngleTable from '../../../components/AngleTable.astro';
 
 Every source agrees on this: **a servo must be at a known angle before its horn goes on.** The horn has 25 teeth and
-six arms, so it can only go on in a few positions, and fixing a joint later means taking the leg apart. Kubina's advice
-is to test every servo first and not use any that stutter, grind, click or won't turn a full 180°: "you would regret
-it afterwards".
+six arms, so it can only go on in a few positions, and fixing a joint later means taking the leg apart. Test every
+servo first, and don't use any that stutter, grind, click or won't turn a full 180°: you'd only have to take the leg apart
+again later.
 
 This page uses **servo_tool**, a small sketch for the UNO Q:
 [`firmware/servo_tool/servo_tool.ino`](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/firmware/servo_tool/servo_tool.ino).
@@ -90,14 +90,12 @@ The channel each one plugs into is fixed by this map, and the firmware will use 
 
 ## Assembly angles
 
-Each servo is fitted at a specific angle, taken from
-[Kubina's assembly guide](https://github.com/michaelkubina/SpotMicroESP32/tree/master/assembly) (whose angle notes are
-spread over several sections; this is them in one place):
+Each servo is fitted at a specific angle:
 
 <AngleTable />
 
 <Aside type="caution" title="Draft: verify on the first leg">
-The knee angles put the servo at one end of its travel, with the leg folded flat, as Kubina does. Before you fit the
+The knee angles put the servo at one end of its travel, with the leg folded flat. Before you fit the
 first knee horn, send `a 2` and `s 2 90` a few times with a loose horn on: the shaft should turn the way that unfolds
 the leg. If it turns the other way, tell us, and use the opposite end for that side.
 </Aside>
@@ -105,7 +103,6 @@ the leg. If it turns the other way, tell us, and use the opposite end for that s
 ## Keep the rig running
 
 Leave the bench rig set up while you build the legs. Before each horn goes on, plug that servo into its channel and send
-`a <ch>`, so it's powered and holding the right angle while you fit the horn. This tip comes from the mike4192 and
-moribots builds ("keep the motors powered during assembly"). Then `o <ch>` and unplug it.
+`a <ch>`, so it's powered and holding the right angle while you fit the horn. Then `o <ch>` and unplug it.
 
 <Done id="servos" label="All twelve tested and labelled" />

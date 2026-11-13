@@ -40,8 +40,7 @@ pads are which.
 
 2. **Disconnect A4/A5 from SDA/SCL.** On classic Arduinos A4/A5 *are* the I2C pins, so the shield joins them. On the
    UNO Q they are separate microcontroller pins (A4/A5 are a second I2C bus, `Wire2`), so the shield ties two pairs of
-   pins together. Adafruit's guide says to cut the traces between A4/A5 and the SDA/SCL pins next to them when using
-   other boards. Cut them, and check with the meter that A4–SDA and A5–SCL no longer beep.
+   pins together. Cut the traces between A4/A5 and the SDA/SCL pins next to them, and check with the meter that A4–SDA and A5–SCL no longer beep.
 
 3. **Check with a meter.** With nothing plugged in: the shield's VCC (the middle pad of SJ1) has continuity to the 3V
    header pin and **not** to the 5V pin.
@@ -70,7 +69,7 @@ cutting them removes the risk.
    black wire goes there.
 3. **Terminal block.** Solder the blue two-way terminal block (V+ and GND).
 4. **Capacitor.** Solder the capacitor into C2, minding polarity: the stripe (−) goes to the GND side, as marked on the
-   silkscreen. Adafruit's rule of thumb is about 100 µF per servo; 1000 µF covers twelve DS3218s at idle and in gentle
+   silkscreen. Allow about 100 µF per servo; 1000 µF covers twelve DS3218s at idle and in gentle
    moves.
 
 </Steps>
@@ -79,8 +78,8 @@ cutting them removes the risk.
 
 ## Set the SZBK07 to 6.0 V
 
-**Do this before any servo is connected.** A full 2S pack is 8.4 V, which would burn DS3218s (rated 4.8–6.8 V). A student
-team burned a servo controller's capacitor with an unchecked regulator.
+**Do this before any servo is connected.** A full 2S pack is 8.4 V, which would burn DS3218s (rated 4.8–6.8 V), and an unchecked
+regulator can also burn the shield's capacitor.
 
 <Steps>
 

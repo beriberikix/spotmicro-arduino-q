@@ -27,7 +27,7 @@ export const SERVOS: Servo[] = legs.flatMap((leg, i) => [
 		leg,
 		joint: 'hip' as const,
 		assembly: left(leg) ? 120 : 60,
-		pose: 'Upper leg at the standing angle (see Kubina’s 60° horn-arm offset), lower leg folded.',
+		pose: 'Upper leg at the standing angle (one horn arm, 60°, past the top arm), lower leg folded.',
 		route: 'Out through the hole in the upper leg’s top shell, together with the knee lead, into the shoulder.',
 	},
 	{

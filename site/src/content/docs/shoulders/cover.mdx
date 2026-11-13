@@ -1,6 +1,6 @@
 ---
 title: Shoulder cover
-description: robjk's reinforced shoulder cover with a 625ZZ bearing, bolted to the extended cap.
+description: Reinforced shoulder cover with a 625ZZ bearing, bolted to the extended cap.
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
@@ -10,12 +10,11 @@ import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
 import Todo from '../../../components/Todo.astro';
 
-In the original design the upper leg hangs on the hip servo's shaft alone, which robjk found "flimsy/wobbly". His
-shoulder cover bridges over the top of the hip and holds a second bearing on the outside of the upper leg, so the leg is
+Without it, the upper leg hangs on the hip servo's shaft alone, which wobbles. The shoulder cover bridges over the top of the hip and holds a second bearing on the outside of the upper leg, so the leg is
 supported on both sides.
 
 <Parts per="per leg" total={4} bag="D" items={[
-	[1, 'Shoulder cover (robjk)', 'Symmetric: the same part on every leg'],
+	[1, 'Shoulder cover', 'Symmetric: the same part on every leg'],
 	[1, '625ZZ bearing'],
 	['2+', '<kbd class="hw">M3×20</kbd> + M3 nuts', 'One per hole that lines up with the cap'],
 ]} tools={['2.5 mm hex', 'Vice or flat block']} />
@@ -27,14 +26,13 @@ supported on both sides.
 1. Press a 625ZZ into the cover's 16.3 mm bore, evenly, without a hammer.
 2. Slide the cover's bearing over the M3 bearing pin on the upper leg's top shell, and bring its other end against the
    extended servo cap.
-3. Bolt the cover to the cap with <Hw>M3×20</Hw> and M3 nuts. robjk hid the screw heads and nuts in recesses for a
-   smooth look.
+3. Bolt the cover to the cap with <Hw>M3×20</Hw> and M3 nuts. The screw heads and nuts sit in recesses.
 4. Move the leg through its range by hand (servo unpowered): it should swing freely, now without play.
 
 </Steps>
 
 <Aside type="caution" title="Draft: confirm the screw count">
-robjk's README says only "3×20 mm screws and M3 nuts". Count the holes that line up on the first build and update
+Count the holes that line up on the first build and update
 bag D.
 </Aside>
 

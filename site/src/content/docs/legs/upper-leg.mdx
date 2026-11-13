@@ -10,14 +10,14 @@ import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
 import Todo from '../../../components/Todo.astro';
 
-The upper leg is two shells around the **hip servo**. robjk's top shell has an extra hole for the bearing pin that the
+The upper leg is two shells around the **hip servo**. The top shell has an extra hole for the bearing pin that the
 shoulder cover will ride on. Both servo leads, the knee's and the hip's, leave through the hole in the top shell.
 
 <Parts per="per leg" total={4} bag="C" items={[
 	[1, 'Upper-leg bottom shell (<code>Limb_Bottom_Shell</code>)', 'Normal for left legs, mirrored for right'],
-	[1, 'Upper-leg top shell with BB hole (robjk)', 'Same side'],
+	[1, 'Upper-leg top shell with BB hole', 'Same side'],
 	[1, 'DS3218 labelled <code>xx-H</code> (hip), with 4 rubber dampeners'],
-	[1, 'Bearing pin, M3 bore (robjk) + <kbd class="hw">M3×8</kbd> + M3 nut'],
+	[1, 'Bearing pin, M3 bore + <kbd class="hw">M3×8</kbd> + M3 nut'],
 	[4, '<kbd class="hw">M3×20</kbd> + 4 M3 nuts', 'Hip servo and shells'],
 	[4, '<kbd class="hw">M3×20</kbd> + 4 M3 nuts', 'Shells to the knee plates'],
 	[1, 'Lower leg with knee plates, from the previous page'],
@@ -32,13 +32,13 @@ shoulder cover will ride on. Both servo leads, the knee's and the hip's, leave t
 1. Fit the four rubber dampeners to the hip servo.
 2. Put four M3 nuts in the holes by the servo pocket.
 3. Push the servo into its pocket. The two inner nuts are now held by the servo; the two outer ones can still fall out,
-   so be careful (Kubina).
+   so be careful.
 
 </Steps>
 
 ## 2. Shoulder-cover pin on the top shell
 
-robjk's top shell has a round hole on its outer face. The M3-bore bearing pin goes on the outside of it, and the
+The top shell has a round hole on its outer face. The M3-bore bearing pin goes on the outside of it, and the
 shoulder cover's bearing rides on that pin.
 
 <Steps>
@@ -50,11 +50,11 @@ shoulder cover's bearing rides on that pin.
 </Steps>
 
 <Aside type="caution" title="Draft: confirm the pin fixing">
-robjk doesn't publish step-by-step instructions, and the pin isn't in the CAD assembly. Confirm which side the screw
+The pin isn't in the CAD assembly. Confirm which side the screw
 head and nut go on during the first build.
 </Aside>
 
-<Todo id="robjk-pin">The robjk M3 bearing pin fixed to the top shell, outside and inside views.</Todo>
+<Todo id="shell-pin">The M3 bearing pin fixed to the top shell, outside and inside views.</Todo>
 
 ## 3. Route the cables and close the shells
 
@@ -74,7 +74,7 @@ This is the fiddly part: there is very little room between the shells.
 </Steps>
 
 <Aside type="tip">
-Kubina warns against thick braided sleeving here: there isn't room. Bare servo cable works; if you must sleeve it, use
+Avoid thick braided sleeving here: there isn't room. Bare servo cable works; if you must sleeve it, use
 the thinnest you can find.
 </Aside>
 
@@ -93,7 +93,7 @@ the thinnest you can find.
 
 </Steps>
 
-The leg should now fold flat: that's the robot's resting position (Kubina). Turn the knee gently by hand, servo
+The leg should now fold flat: that's the robot's resting position. Turn the knee gently by hand, servo
 unpowered: it should move without binding against the shells.
 
 <Todo id="upper-leg-done">A finished leg (lower + upper), folded flat, from the outside.</Todo>
