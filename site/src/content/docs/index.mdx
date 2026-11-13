@@ -19,6 +19,7 @@ hero:
 
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 import Progress from '../../components/Progress.astro';
+import { hideDrafts } from '../../data/actions';
 
 <div class="render-card">
 	<video autoplay muted loop playsinline poster={`${import.meta.env.BASE_URL}renders/covers-done.png`} src={`${import.meta.env.BASE_URL}spot-unoq-explode.mp4`} style="width:100%;display:block" aria-label="The robot exploding and reassembling"></video>
@@ -47,4 +48,4 @@ Check-offs are saved in this browser only.
 
 <Progress />
 
-<LinkCard title="Draft: photos, videos and checks" href="reference/media-todo/" description="This guide is a first draft. Purple boxes mark the photos and clips still to be added, and the details to confirm, on a real build." />
+{!hideDrafts && <LinkCard title="Draft: photos, videos and checks" href="reference/media-todo/" description="This guide is a first draft. Purple boxes mark the photos and clips still to be added, and the details to confirm, on a real build." />}

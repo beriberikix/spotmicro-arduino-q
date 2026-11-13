@@ -33,6 +33,9 @@ jobs:
           cache-dependency-path: site/package-lock.json
       - run: npm ci
       - run: npm run build
+        env:
+          # Hide the purple draft boxes (photos, videos, checks) on the published site; they still show in `npm run dev`.
+          PUBLIC_HIDE_TODO: '1'
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site/dist
