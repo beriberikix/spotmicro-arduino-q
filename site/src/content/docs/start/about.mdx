@@ -4,6 +4,7 @@ description: What you are building, how this guide works, and what it builds on.
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import { hideDrafts } from '../../../data/actions';
 
 This guide walks you through building **SpotMicro for Arduino UNO Q**, a 3D-printed robot dog with twelve servos, an
 [Arduino UNO Q](https://docs.arduino.cc/hardware/uno-q/) brain, an
@@ -21,8 +22,7 @@ head. Every printable part is in the [repository](https://github.com/beriberikix
   exploded view with the new parts in <span class="new-part">orange</span>, and the finished step.
 
 <Aside type="caution" title="This is a first draft">
-The renders come from the project's FreeCAD model, not from a real build yet. Steps marked with a purple **Photo to take**
-or **Video to shoot** box will get real photos and clips. If something here doesn't match your parts, trust the parts
+The renders come from the project's FreeCAD model, not from a real build yet.{!hideDrafts && ' Steps marked with a purple Photo to take or Video to shoot box will get real photos and clips.'} If something here doesn't match your parts, trust the parts
 and [open an issue](https://github.com/beriberikix/spotmicro-arduino-q/issues).
 </Aside>
 

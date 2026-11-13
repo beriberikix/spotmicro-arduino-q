@@ -3,6 +3,8 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 const repo = 'https://github.com/beriberikix/spotmicro-arduino-q';
+// PUBLIC_HIDE_TODO=1 (set by the Pages workflow) hides the draft boxes and the draft list page's link.
+const hideDrafts = process.env.PUBLIC_HIDE_TODO === '1';
 
 // https://astro.build/config
 export default defineConfig({
@@ -66,7 +68,7 @@ export default defineConfig({
 					{ label: '3D model viewer', slug: 'reference/viewer' },
 					{ label: 'Troubleshooting', slug: 'reference/troubleshooting' },
 					{ label: 'Credits and sources', slug: 'reference/credits' },
-					{ label: 'Draft: photos, videos and checks', slug: 'reference/media-todo' },
+					...(hideDrafts ? [] : [{ label: 'Draft: photos, videos and checks', slug: 'reference/media-todo' }]),
 				] },
 			],
 		}),
