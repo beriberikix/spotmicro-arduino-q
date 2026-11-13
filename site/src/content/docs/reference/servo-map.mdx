@@ -1,0 +1,16 @@
+---
+title: Servo channel map
+description: Which servo goes on which shield channel, with assembly angles.
+---
+
+import ServoMap from '../../../components/ServoMap.astro';
+import AngleTable from '../../../components/AngleTable.astro';
+
+<ServoMap />
+
+## Assembly angles
+
+<AngleTable />
+
+The same table is in [`servo_tool.ino`](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/firmware/servo_tool/servo_tool.ino)
+(`JOINTS[]`). Pulse widths assume 500 µs at 0° and 2500 µs at 180°.

@@ -1,0 +1,57 @@
+---
+title: Frame
+description: Inner shoulders with their top and bottom blocks, the chassis sides, and the electronics plate between them.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Hw from '../../../components/Hw.astro';
+import Parts from '../../../components/Parts.astro';
+import Render from '../../../components/Render.astro';
+import Todo from '../../../components/Todo.astro';
+
+The frame is two **shoulder blocks** (front and rear) joined by two **chassis sides**, with the electronics plate held
+between the sides.
+
+<Parts bag="E" items={[
+	[2, 'Inner shoulders'],
+	[2, 'Top shoulder blocks + 2 bottom shoulder blocks'],
+	[2, 'Chassis sides'],
+	[1, 'UNO Q mounting plate', 'Bare for now; the boards go on in the electronics section'],
+	[8, 'M3 nuts', '2 in each top and bottom block'],
+	[8, '<kbd class="hw">M3×8</kbd>', 'Inner shoulders to the blocks'],
+	[8, '<kbd class="hw">M3×8</kbd> + 8 M3 nuts', 'Chassis sides to the inner shoulders'],
+]} tools={['2.5 mm hex']} />
+
+<Render id="frame" caption="Inner shoulders, chassis sides and electronics plate" />
+
+## Inner shoulders
+
+<Steps>
+
+1. Put two M3 nuts into each top and each bottom shoulder block. Orient the blocks so the nut pockets that will later
+   hold the **covers face into the body** (Kubina).
+2. Screw each inner shoulder to a top and a bottom block with four <Hw>M3×8</Hw>, so the screw heads sink into their
+   pockets. The **bigger blocks go at the top**.
+
+</Steps>
+
+## Chassis
+
+<Steps>
+
+1. Put four M3 nuts into the pockets of each chassis side. The **flat side faces outwards**, and the long cut-out for
+   the mounting plate is at the **bottom**.
+2. Hold the electronics plate between the two sides, its edges in the cut-outs.
+3. Screw both inner shoulders onto the ends of the sides with four <Hw>M3×8</Hw> each, the bigger blocks at the top.
+
+</Steps>
+
+<Aside type="tip">
+Before the frame closes, check that the plate's rear-left slot (for the battery lead) is at the **rear left**, and that
+the SZBK07 posts are towards the front. The board stack sits at the rear of the plate.
+</Aside>
+
+<Todo id="frame-done">The finished frame with the bare plate, from above and from the front-left.</Todo>
+
+<Done id="frame" label="Frame built" />

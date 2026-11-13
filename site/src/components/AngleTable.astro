@@ -1,0 +1,25 @@
+---
+/** Assembly-angle table, generated from the servo map. */
+import { SERVOS, LEG_NAME } from '../data/servos';
+---
+
+<table>
+	<thead>
+		<tr><th>Joint</th><th>Left legs (FL, RL)</th><th>Right legs (FR, RR)</th><th>Pose when fitting the horn</th></tr>
+	</thead>
+	<tbody>
+		{(['shoulder', 'hip', 'knee'] as const).map((j) => {
+			const l = SERVOS.find((s) => s.joint === j && s.leg === 'FL')!;
+			const r = SERVOS.find((s) => s.joint === j && s.leg === 'FR')!;
+			const chs = (side: string[]) => SERVOS.filter((s) => s.joint === j && side.includes(s.leg)).map((s) => s.ch).join(', ');
+			return (
+				<tr>
+					<td><strong>{j[0].toUpperCase() + j.slice(1)}</strong></td>
+					<td><strong>{l.assembly}°</strong><br /><small>ch {chs(['FL', 'RL'])}</small></td>
+					<td><strong>{r.assembly}°</strong><br /><small>ch {chs(['FR', 'RR'])}</small></td>
+					<td>{l.pose}</td>
+				</tr>
+			);
+		})}
+	</tbody>
+</table>

@@ -1,0 +1,61 @@
+---
+title: Robot anatomy
+description: The names this guide uses for legs, joints, sides and parts.
+---
+
+import ServoMap from '../../../components/ServoMap.astro';
+
+## Directions
+
+- **Front** is the head end. **Left** and **right** are the robot's own left and right, as if you were standing behind
+  it.
+- **Inner** means towards the robot's centre line; **outer** means away from it.
+- Legs are named **FL**, **FR**, **RL**, **RR** (front-left, front-right, rear-left, rear-right).
+
+## Joints
+
+Each leg has three servos:
+
+| Joint | Moves | Servo sits in | Horn is fixed to |
+| ----- | ----- | ------------- | ---------------- |
+| **Shoulder** | the whole leg sideways (in and out) | the shoulder servo mount | the outer shoulder plate (chassis) |
+| **Hip** | the upper leg forwards and back | the upper-leg shells | the extended servo cap on the shoulder joint |
+| **Knee** | the lower leg | the lower leg (wrist and wrist counterpart) | the servohorn mount plate on the upper leg |
+
+Every joint has a 625ZZ bearing opposite the servo, so the part is held on both sides: the knee on the ball-bearing
+mount plate, the hip in robjk's shoulder cover, and the shoulder in the inner shoulder plate.
+
+## Part names
+
+The file names in [`stl/`](https://github.com/beriberikix/spotmicro-arduino-q/tree/main/stl) are Kubina's, and this
+guide uses them too:
+
+| Guide says | File |
+| ---------- | ---- |
+| wrist | `legs/Wrist.stl` (the lower leg's main part) |
+| wrist counterpart | `legs/Wrist_Counterpart.stl` |
+| servohorn mount (knee plate, horn side) | `legs/Limb_Servohorn_Mount_long_v4.stl` |
+| ball-bearing mount (knee plate, bearing side) | `legs/Limb_Ball_Bearing_Mount_long_v4.stl` |
+| upper-leg bottom shell | `legs/Limb_Bottom_Shell.stl` |
+| upper-leg top shell | `legs/Limb_Top_Shell_with_BB_hole.stl` (robjk) |
+| shoulder servo mount | `shoulders/Shoulder_Joint_Servomount_extended_BB.stl` (robjk) |
+| extended servo cap | `shoulders/Shoulder_Joint_Servo_Cap_Extended.stl` (robjk) |
+| shoulder cover | `shoulders/Shoulder_Cover.stl` (robjk) |
+| bearing pin | `shoulders/Shoulder_Joint_Ball_Bearing_Pin.stl` (M2 bore) |
+| M3 bearing pin | `shoulders/Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl` (robjk, M3 bore) |
+
+## Left and right parts
+
+Leg parts come in pairs: the normal STL is for the **left** legs and `_mirrored` is for the **right** legs. The
+shoulder servo mount is the exception, as Kubina points out: each side gets one normal and one mirrored mount, one for
+the front leg and one for the rear, so that both shoulder servo outputs face outwards (towards the nose at the front
+and the tail at the back).
+
+Mark every part with a pencil or a dot of paint marker as soon as it comes off the printer: **FL**, **FR**, **RL**,
+**RR**. Mixed-up mirrored parts are the most common way to lose an afternoon.
+
+## Servo map
+
+Twelve servos plug into channels 0–11 of the servo shield. Click a joint:
+
+<ServoMap />

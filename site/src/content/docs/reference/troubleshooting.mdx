@@ -1,0 +1,34 @@
+---
+title: Troubleshooting
+description: Common problems when building a Spot Micro, and fixes.
+---
+
+Gathered from Kubina's guide, the community sources in [Credits](../credits/), and this build. Each entry says where
+it came from.
+
+## Mechanical
+
+| Problem | Fix |
+| ------- | --- |
+| Nuts fall out of their pockets while closing parts | A dab of Blu-Tack on each nut. Kubina warns about the two outer nuts by the upper-leg servo pocket in particular. |
+| A bearing won't go in | Press, don't hammer: a student team cracked a leg cover by hammering. Scrape or sand the seat lightly and press again. (Senior tech project) |
+| A bearing is loose | Check the printer's X-Y hole compensation. As a last resort, a drop of CA glue on the outer race only, never the inside. (SpotMicroAI docs) |
+| Leg doesn't fold flat, or there's a gap at rest | The horn is a tooth off. Refit the horn on its plate at a different arm until the plate sits square. (Kubina) |
+| A joint can't reach its reference pose | Refit that horn one spline tooth over. (Leika assembly notes) |
+| Upper leg wobbles on the hip | The shoulder cover's bearing isn't on its pin, or the cover screws are loose. (robjk) |
+| Cables won't pull through the top shell | Open the shells slightly; avoid sleeving. (Kubina) |
+| Horn screws poke through and rub the servo | Thread an M2 nut onto each M2×8 as a spacer, or use M2×6. (Kubina) |
+| A part snapped at a thin point | Reprint with more walls (3–4) and check the infill matches the [stl list](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/stl/README.md). |
+
+## Servos and power
+
+| Problem | Fix |
+| ------- | --- |
+| A servo stutters or buzzes while holding still | It's pushing against a mechanical stop: check its horn alignment. If it does it on the bench with no load, replace it. (Kubina) |
+| A servo turns ¾ of a turn for `s ch 0` → `s ch 180` | It's a 270° servo. Replace it with a 180° one. |
+| A servo cuts out after a few seconds of pushing | DS3218 overload protection at stall. Normal standing and walking don't trigger it. (BOM notes) |
+| Servo got hot or died | Check the SZBK07 output is 6.0 V with a meter, and look for plastic blocking the joint: a stalled servo blocked by a part burns out. (Senior tech project) |
+| `PCA9685 not found at 0x40` | Shield not seated, SJ1 not bridged (VCC floating), or a solder bridge on the address pads. |
+| Servos twitch when another moves | Add or enlarge the capacitor on C2 (Adafruit: about 100 µF per servo); shorten the SZBK07 → V+ lead. |
+| UNO Q resets when servos move | VIN dipping: check the battery charge, and that the UNO Q's VIN lead is taken before the SZBK07, not from the servo rail. |
+| Nothing in the Serial Monitor | Use App Lab's **Console → Serial Monitor**; `Serial` goes through the UNO Q's Linux side, not the STM32's USB. |

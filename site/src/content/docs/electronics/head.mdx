@@ -1,0 +1,45 @@
+---
+title: Head and cameras
+description: Two Camera Module 2s on the sensor mount, the mount in the front cover, and the head on the body.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Hw from '../../../components/Hw.astro';
+import Parts from '../../../components/Parts.astro';
+import Render from '../../../components/Render.astro';
+import Todo from '../../../components/Todo.astro';
+
+<Parts bag="G" items={[
+	[2, 'Raspberry Pi Camera Module 2'],
+	[1, 'Dual-camera sensor mount'],
+	[1, 'Front cover (optimized)'],
+	[8, '<kbd class="hw">M2×5</kbd> self-tapping', 'Cameras to the mount'],
+	[4, '<kbd class="hw">M3×8</kbd> + 4 M3 nuts', 'Mount into the front cover'],
+	[4, '<kbd class="hw">M3×8</kbd> + 4 M3 nuts', 'Head onto the body (nuts in the front shoulder blocks)'],
+]} tools={['Small Phillips or hex for the M2×5', '2.5 mm hex']} />
+
+<Render id="head" caption="Cameras onto the sensor mount, the mount into the front cover" />
+
+<Steps>
+
+1. Fit each camera to the **back** of the sensor mount with four <Hw>M2×5</Hw> self-tapping screws. Snug them gently:
+   they cut their own thread in the plastic. The two cameras sit 47 mm apart and face the same way, for stereo.
+2. Plug the camera cables' **Standard** ends into the cameras: the cable marked `R` into the right camera (the robot's
+   right).
+3. Put four M3 nuts into the front cover's pockets, set the sensor mount in, and screw it with four <Hw>M3×8</Hw>.
+4. Put M3 nuts into the front top and bottom shoulder blocks (the pockets facing the head). Fold the spare cable length
+   flat, slide the head onto the front shoulder plate, and screw it on from above and below
+   with four <Hw>M3×8</Hw>.
+
+</Steps>
+
+<Aside type="caution" title="Draft: check the lens position">
+The lens window position comes from published camera figures, not an official drawing. If a lens isn't centred in its
+window, the parameter is `Cam_Lens_From_Top` in `cad/Sensormount_DualCam.FCStd`.
+</Aside>
+
+<Todo id="head-cameras">Back of the sensor mount with both cameras screwed on and cables connected.</Todo>
+<Todo id="head-fold" kind="video">Folding the spare camera cable and fitting the head to the body (20 s).</Todo>
+
+<Done id="head" label="Head on" />

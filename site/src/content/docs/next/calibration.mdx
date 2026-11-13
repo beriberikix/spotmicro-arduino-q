@@ -1,0 +1,22 @@
+---
+title: Calibration
+description: Placeholder — servo and IMU calibration.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="Coming soon">
+Calibration depends on the firmware port of Leika, which isn't written yet.
+</Aside>
+
+Planned contents, drawing on the best calibration write-ups found while researching this guide:
+
+- **Per-joint servo centres** against a reference pose, like Leika's app: match each joint to an on-screen
+  "expected pose" and nudge its pulse width until the leg matches.
+- **Two reference angles per joint**, as in mike4192's
+  [servo calibration guide](https://github.com/mike4192/spotMicro/blob/master/docs/servo_calibration.md): judge angles
+  by the joint axes, not by the printed parts, and favour consistency over accuracy.
+- **PWM per degree:** a 180° DS3218 on 500–2500 µs is about 11.1 µs per degree (2.28 PCA9685 counts at 50 Hz). Leika's
+  model assumes 2.0 counts per degree, so angles would come out about 12% short unless measured.
+- **IMU levelling** with the robot propped level on the helper stand, legs hanging (Leika: "a robot lying limp on its
+  folded legs is not" level).

@@ -1,0 +1,107 @@
+---
+title: Sort the hardware
+description: Pre-sort screws, nuts, bearings and horns into one bag per step.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+
+Sorting the hardware first turns a 250-screw build into a series of small, countable kits, and you'll see straight away
+if anything is missing. Use small zip bags, cups or an egg carton, and label each one with its letter.
+
+The counts below come from Kubina's assembly guide and the project's CAD model, step by step. Bags A–D are **per leg**:
+make four of each.
+
+<Aside type="tip" title="Pre-thread the horn screws">
+For bags B, D and E, screw an M2 nut all the way onto each M2×8 now. Kubina uses the nut as a spacer: a bare M2×8
+pokes through the horn and rubs on the servo. If you have M2×6 screws, use those instead and skip the nuts. Kubina also
+notes that two screws per horn are enough, if you're short.
+</Aside>
+
+## Bag A — Lower leg (×4)
+
+| Qty | Item | Step |
+| --- | ---- | ---- |
+| 2 | M3×8 + 2 M3 nuts | Foot tip |
+| 1 | M2×8 + 1 M2 nut | Knee bearing pin |
+| 1 | Bearing pin, M2 bore (`Shoulder_Joint_Ball_Bearing_Pin`) | Knee bearing pin |
+| 4 | M3×20 + 4 M3 nuts | Knee servo |
+| 4 | Rubber dampeners | Knee servo |
+| 1 | Servo extension cable, 10–15 cm | Knee servo |
+
+## Bag B — Knee (×4)
+
+| Qty | Item | Step |
+| --- | ---- | ---- |
+| 1 | 25T six-arm horn | Servohorn mount |
+| 6 | M2×8 with M2 nuts threaded on | Horn to servohorn mount |
+| 1 | M3×8 | Servohorn mount to the knee servo shaft |
+| 1 | 625ZZ bearing | Ball-bearing mount |
+
+## Bag C — Upper leg (×4)
+
+| Qty | Item | Step |
+| --- | ---- | ---- |
+| 4 | M3 nuts + 4 M3×20 | Hip servo and shells |
+| 4 | Rubber dampeners | Hip servo |
+| 1 | Bearing pin, M3 bore (`…Pin_M3x8`) + M3×8 + M3 nut | Shoulder-cover pin on the top shell |
+| 4 | M3 nuts + 4 M3×20 | Shells to the knee plates |
+
+## Bag D — Shoulder joint (×4)
+
+| Qty | Item | Step |
+| --- | ---- | ---- |
+| 1 | 25T six-arm horn | Extended servo cap |
+| 6 | M2×8 with M2 nuts threaded on | Horn to cap |
+| 1 | Bearing pin, M2 bore + M2×8 + M2 nut | Pin on the shoulder servo mount |
+| 4 | M3×8 + 4 M3 nuts | Cap to servo mount |
+| 1 | M3×8 | Cap to the hip servo shaft |
+| 4 | M3×20 + 4 M3 nuts | Shoulder servo |
+| 4 | Rubber dampeners | Shoulder servo |
+| 1 | 625ZZ bearing | Shoulder cover |
+| 2+ | M3×20 + M3 nuts | Shoulder cover to cap (one per matching hole) |
+
+## Bag E — Body (×1)
+
+| Qty | Item | Step |
+| --- | ---- | ---- |
+| 4 | 25T six-arm horns | Outer shoulder plates |
+| 24 | M2×8 with M2 nuts threaded on | Horns to outer shoulders |
+| 4 | M3×8 | Outer shoulders to the shoulder servo shafts |
+| 8 | M3 nuts | Top and bottom shoulder blocks (2 each) |
+| 8 | M3×8 | Inner shoulders to the blocks |
+| 8 + 8 | M3 nuts + M3×8 | Chassis sides to the inner shoulders |
+| 8 + 8 | M3 nuts + M3×8 | Outer shoulders to the blocks |
+| 4 | 625ZZ bearings | Shoulder bearings in the inner shoulders |
+
+## Bag F — Electronics (×1)
+
+| Qty | Item | Step |
+| --- | ---- | ---- |
+| 4 | M3×8 | SZBK07 to its posts (they thread into pilot holes, no nuts) |
+
+## Bag G — Head and covers (×1)
+
+| Qty | Item | Step |
+| --- | ---- | ---- |
+| 8 | M2×5 self-tapping | Cameras to the sensor mount |
+| 4 + 4 | M3×8 + M3 nuts | Sensor mount into the front cover |
+| 8 + 8 | M3×8 + M3 nuts | Joining the top and bottom cover halves |
+| 16 + 16 | M3×8 + M3 nuts | Head, rear cover, bottom cover and top cover to the body |
+
+## Totals
+
+| Item | Counted | In [BOM.md](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/BOM.md) |
+| ---- | ------- | ---- |
+| M2×8 | 80 | 84 |
+| M3×8 | 96 | 88 |
+| M3×20 | 64 + shoulder covers | 64 + extras |
+| M3 nuts | about 148 | 148 |
+| 625ZZ | 12 | 12 |
+
+<Aside type="caution">
+The M3×8 count here is higher than the BOM's, and the shoulder-cover screw count is still to be confirmed on a real
+build. Buy a 100-pack of M3×8 and a few extra M3×20. Draft note: to be confirmed during the first build.
+</Aside>
+
+<Done id="hardware" label="Bags A–G sorted" />

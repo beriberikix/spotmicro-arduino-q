@@ -1,0 +1,57 @@
+---
+title: Battery and covers
+description: LiPo brackets and battery, the rear cover with the switch, and the bottom and top covers.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Hw from '../../../components/Hw.astro';
+import Parts from '../../../components/Parts.astro';
+import Render from '../../../components/Render.astro';
+import Todo from '../../../components/Todo.astro';
+
+<Parts bag="G" items={[
+	[3, 'LiPo brackets (front, middle, rear)'],
+	[1, '2S LiPo'],
+	[1, 'Rear cover shell (long) + rear cover plate'],
+	[2, 'Top cover halves + 2 bottom cover halves'],
+	[8, '<kbd class="hw">M3×8</kbd> + 8 M3 nuts', 'Joining the cover halves'],
+	[12, '<kbd class="hw">M3×8</kbd> + 12 M3 nuts', 'Rear, bottom and top covers to the body'],
+]} tools={['2.5 mm hex']} />
+
+<Render id="covers" caption="Bottom, rear and top covers" />
+
+## Battery
+
+<Steps>
+
+1. Fit the three LiPo brackets under the plate.
+2. Slide the battery into the brackets, its lead towards the **rear-left slot**.
+
+</Steps>
+
+<Aside type="caution" title="Draft: LiPo brackets">
+The brackets aren't in the CAD assembly yet. Document how they fix to the plate, and the battery size that fits, on the
+first build.
+</Aside>
+
+<Todo id="battery">The battery in its brackets under the plate, lead coming up through the rear-left slot.</Todo>
+
+## Covers
+
+<Steps>
+
+1. **Join the halves.** Screw the front and rear top cover halves together with four <Hw>M3×8</Hw> and nuts; same for
+   the bottom cover.
+2. **Nuts.** Put M3 nuts into the remaining pockets of the top and bottom shoulder blocks, front and rear.
+3. **Rear cover.** Fit the switch into its 19 mm hole, slide the rear cover onto the rear shoulder plate, and screw it on
+   with four <Hw>M3×8</Hw>.
+4. **Bottom cover.** Place it under the body and screw it on with four <Hw>M3×8</Hw>.
+5. **Top cover.** Check no cable sits on top of the servo plugs (1.8 mm clearance), then screw the top cover on with four
+   <Hw>M3×8</Hw>.
+
+</Steps>
+
+<Todo id="finished">The finished robot on its stand, from the front-left, plus one from the side (the guide's new hero image).</Todo>
+
+<Done id="covers" label="Closed up" />

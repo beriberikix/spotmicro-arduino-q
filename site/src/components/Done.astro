@@ -1,0 +1,68 @@
+---
+/**
+ * Check-off for a step, stored in this browser's localStorage under "spot-guide:<id>[:<item>]".
+ * With `legs`, shows one box per leg (or per `items`).
+ */
+interface Props {
+	id: string;
+	legs?: boolean;
+	items?: string[];
+	label?: string;
+}
+const { id, legs = false, items, label = 'Done' } = Astro.props;
+const boxes = items ?? (legs ? ['Front left', 'Front right', 'Rear left', 'Rear right'] : [label]);
+---
+
+<div class="done not-content" data-step={id}>
+	<span class="title">✓ Check off</span>
+	{boxes.map((b) => (
+		<label>
+			<input type="checkbox" data-key={`spot-guide:${id}${boxes.length > 1 ? ':' + b.toLowerCase().replace(/\s+/g, '-') : ''}`} />
+			{b}
+		</label>
+	))}
+</div>
+
+<style>
+	.done {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.4rem 1rem;
+		padding: 0.6rem 0.9rem;
+		margin: 1.25rem 0;
+		border-radius: 0.4rem;
+		border: 1px dashed var(--sl-color-gray-4);
+		font-size: var(--sl-text-sm);
+	}
+	.title {
+		font-weight: 600;
+		color: var(--sl-color-accent-high);
+	}
+	label {
+		display: inline-flex;
+		gap: 0.35rem;
+		align-items: center;
+		cursor: pointer;
+	}
+	input {
+		accent-color: var(--sl-color-accent);
+		width: 1.05rem;
+		height: 1.05rem;
+	}
+</style>
+
+<script>
+	document.querySelectorAll<HTMLInputElement>('.done input[data-key]').forEach((box) => {
+		const key = box.dataset.key!;
+		try {
+			box.checked = localStorage.getItem(key) === '1';
+		} catch {}
+		box.addEventListener('change', () => {
+			try {
+				box.checked ? localStorage.setItem(key, '1') : localStorage.removeItem(key);
+			} catch {}
+			document.dispatchEvent(new CustomEvent('spot-guide-progress'));
+		});
+	});
+</script>

@@ -1,0 +1,52 @@
+---
+/** Rotatable 3D model (glTF) using Google's <model-viewer> web component. */
+interface Props {
+	src: string;
+	alt: string;
+	poster?: string;
+}
+const { src, alt, poster } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<script is:inline type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<div class="render-card mv not-content">
+	<model-viewer
+		src={`${base}/${src}`}
+		alt={alt}
+		poster={poster ? `${base}/${poster}` : undefined}
+		camera-controls
+		touch-action="pan-y"
+		auto-rotate
+		auto-rotate-delay="2000"
+		shadow-intensity="0.9"
+		exposure="0.85"
+		environment-image="neutral"
+		loading="lazy"
+		reveal="interaction"
+		style="width:100%;height:min(70vh,560px);background:#fff"
+	>
+		<button slot="poster" class="load">Load the 3D model</button>
+	</model-viewer>
+</div>
+<p class="hint">Drag to rotate, scroll or pinch to zoom, right-drag or two fingers to pan.</p>
+
+<style>
+	.load {
+		position: absolute;
+		left: 50%;
+		bottom: 1.5rem;
+		transform: translateX(-50%);
+		font: inherit;
+		padding: 0.5rem 1.2rem;
+		border-radius: 999px;
+		border: none;
+		background: var(--sl-color-accent);
+		color: #000;
+		cursor: pointer;
+	}
+	.hint {
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+	}
+</style>

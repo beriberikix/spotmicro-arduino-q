@@ -1,0 +1,80 @@
+---
+title: Lower leg
+description: Foot tip, knee bearing pin, and the knee servo sandwiched between the wrist and its counterpart.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Hw from '../../../components/Hw.astro';
+import Parts from '../../../components/Parts.astro';
+import Render from '../../../components/Render.astro';
+import Todo from '../../../components/Todo.astro';
+
+The lower leg (Kubina calls it the **wrist**) holds the knee servo. Build all four the same way, using normal parts for
+the left legs and `_mirrored` parts for the right legs.
+
+<Parts per="per leg" total={4} bag="A" items={[
+	[1, 'Wrist', 'Normal for FL/RL, mirrored for FR/RR'],
+	[1, 'Wrist counterpart', 'Same side as the wrist'],
+	[1, 'Foot tip (TPU)'],
+	[1, 'Bearing pin, M2 bore'],
+	[1, 'DS3218 labelled <code>xx-K</code> (knee), with 4 rubber dampeners'],
+	[1, 'Servo extension cable, 10–15 cm'],
+	[2, '<kbd class="hw">M3×8</kbd> + 2 M3 nuts', 'Foot tip'],
+	[1, '<kbd class="hw">M2×8</kbd> + 1 M2 nut', 'Bearing pin'],
+	[4, '<kbd class="hw">M3×20</kbd> + 4 M3 nuts', 'Servo sandwich'],
+]} tools={['2.5 mm hex', '1.5 mm hex', 'Tweezers']} />
+
+## 1. Foot tip
+
+<Render id="leg-foot" caption="Foot tip onto the wrist" />
+
+<Steps>
+
+1. Push two M3 nuts into the pockets at the bottom of the wrist.
+2. Hold the TPU foot tip in place and screw it on with two <Hw>M3×8</Hw>.
+
+</Steps>
+
+Don't over-tighten: TPU squashes, and the screws only need to hold it snug.
+
+## 2. Knee bearing pin
+
+<Render id="leg-knee-pin" caption="Bearing pin onto the wrist counterpart" />
+
+<Steps>
+
+1. Push one M2 nut into the small pocket in the wrist counterpart.
+2. Put an <Hw>M2×8</Hw> through the bearing pin (the M2-bore one) and screw it into the nut, so the pin sticks out
+   of the counterpart's outer face.
+
+</Steps>
+
+## 3. Knee servo sandwich
+
+<Render id="leg-knee-servo" caption="Knee servo between the wrist and its counterpart" />
+
+<Steps>
+
+1. Fit the four rubber dampeners to the servo's mounting ears (Kubina: add all of them, or the M3×20 won't line up).
+2. Plug the **extension cable** onto the servo lead now, and put a strip of tape around the joint so it can't pull
+   apart inside the leg.
+3. Push four M3 nuts into the small pockets in the wrist counterpart.
+4. Slide the servo into its pocket in the counterpart from above. The output shaft and the bearing pin end up on
+   **opposite sides** of the knee: shaft on the inner side (towards the robot's centre line), pin on the outer side.
+   Compare with the render.
+5. Bring the wrist (with its foot) up against the other side and push the halves together until there are no gaps.
+   Keep a finger over the nuts so none fall out.
+6. Screw them together with four <Hw>M3×20</Hw>.
+
+</Steps>
+
+<Aside type="tip">
+Nuts falling out of their pockets is the classic Spot Micro annoyance. A tiny dab of Blu-Tack on each nut holds it
+while you close the parts.
+</Aside>
+
+<Todo id="lower-leg-done">A finished lower leg from both sides, showing the servo shaft, bearing pin and extension lead.</Todo>
+<Todo id="lower-leg-sandwich" kind="video">Closing the wrist sandwich: servo into the counterpart, wrist on, four screws (30 s).</Todo>
+
+<Done id="lower-leg" legs />

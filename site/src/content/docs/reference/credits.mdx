@@ -1,0 +1,42 @@
+---
+title: Credits and sources
+description: The designs, guides and build logs this guide learned from, with their licences.
+---
+
+This guide stands on a lot of community work. Where a step or tip comes from one of these, the page says so.
+
+## Designs used in this robot
+
+| Work | Author | Licence | Used for |
+| ---- | ------ | ------- | -------- |
+| [Spotmicro – robot dog](https://www.thingiverse.com/thing:3445283) | Deok-yeon Kim (KDY0523) | CC BY | The original design every Spot Micro derives from |
+| [SpotMicroESP32 (prints without supports)](https://www.thingiverse.com/thing:4559827) and [repository](https://github.com/michaelkubina/SpotMicroESP32) | Michael Kubina (Kooba) | CC BY (parts), GPL-3.0 (repository) | The frame, legs and covers; the base of the electronics plate and camera mount |
+| [Reinforced shoulder remix](https://www.thingiverse.com/thing:4937631) | robjk | CC BY 4.0 | Extended shoulder servo mount and cap, shoulder cover, top shell with bearing hole |
+| [Parametric shoulder joint](https://www.thingiverse.com/thing:4817676) | projunk | — | Inspiration for robjk's shoulder cover |
+| [SpotMicroESP32-Leika](https://github.com/runeharlyk/SpotMicroESP32-Leika) | Rune Harlyk | MIT | Kinematics, electronics, helper-stand selection; the firmware to be ported |
+| [Stronger microspot stand top](https://www.thingiverse.com/thing:4814187) | stefi01 | CC BY 4.0 | Helper stand top |
+| [Nova-SM2 stand parts](https://github.com/cguweb-com/Arduino-Projects/tree/main/Nova-SM2) | Chris Locke (cguweb) | MIT | Helper stand bottom, brace and feet |
+
+See also [NOTICE.md](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/NOTICE.md).
+
+## Guides this one learned from
+
+| Source | Author | What this guide took from it |
+| ------ | ------ | ---------------------------- |
+| [SpotMicroESP32 assembly guide](https://github.com/michaelkubina/SpotMicroESP32/tree/master/assembly) | Michael Kubina | The build order, hardware per step, servo angles, horn alignment, nut and cable-routing tips. This guide follows it closely. |
+| [Leika docs](https://github.com/runeharlyk/SpotMicroESP32-Leika/tree/master/docs) | Rune Harlyk | Refitting a horn one tooth over; calibration and IMU-levelling ideas; the PWM-per-degree caveat |
+| [SpotMicroAI documentation](https://spotmicroai.readthedocs.io/en/latest/) | SpotMicroAI community (CC BY 3.0) | The original leg assembly and the "test-fit before committing" approach |
+| [Servo calibration](https://github.com/mike4192/spotMicro/blob/master/docs/servo_calibration.md) | mike4192 | Installing servos powered at a known angle; two reference angles per joint |
+| [spot_mini_mini calibration](https://github.com/moribots/spot_mini_mini/blob/spot/spot_real/Calibration.md) | Maurice Rahme (moribots) | "Keep the motors powered during assembly" |
+| [Senior tech project build logs](https://sites.google.com/view/senior-tech-project/assembly-process-overview) | Student team | Real failure logs: hammered bearings, unchecked regulators, stalled servos |
+| [Nova SpotMicro](https://novaspotmicro.com/) | Chris Locke | Blue threadlocker, an interactive 3D viewer, labelled parts |
+| [SpotMicro: Full Build playlist](https://www.youtube.com/playlist?list=PLAPTbzQ9K5TCaQBTw4c2F2jYY1ZrWi0pl) | Advanced Hobby Lab | Video build reference: servo zeroing, power with a servo HAT |
+| [KDY's assembly videos, part 1](https://youtu.be/03RR-mz2hwA) and [part 2](https://youtu.be/LV5vvmhwtxM) | Deok-yeon Kim | The original build |
+| [Adafruit PWM/Servo Shield guide](https://learn.adafruit.com/adafruit-16-channel-pwm-slash-servo-shield) | Adafruit | V+ supply, capacitor sizing, A4/A5 traces |
+| [UNO Q documentation](https://docs.arduino.cc/hardware/uno-q/) and [App Lab](https://docs.arduino.cc/software/app-lab/) | Arduino | I2C buses, power, Serial Monitor, libraries |
+
+## This guide
+
+Text, renders and diagrams are CC BY-SA 4.0, like the rest of the project's documentation; `servo_tool` is MIT. The
+renders are generated from `cad/SpotUnoQ.FCStd` by
+[`scripts/render_guide.FCMacro`](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/scripts/render_guide.FCMacro).

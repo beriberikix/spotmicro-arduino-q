@@ -1,0 +1,163 @@
+# -*- coding: utf-8 -*-
+# Renders the assembly-guide images and animations from cad/SpotUnoQ.FCStd.
+#
+# Run inside the FreeCAD GUI (needs a 3D view), from the Python console:
+#   exec(open("/path/to/spotmicro-arduino-q/scripts/render_guide.FCMacro").read())
+# Optional before running:
+#   GUIDE_ONLY = ["leg-foot"]     # render only these step ids
+#   GUIDE_NO_VIDEO = True         # stills only
+# Writes site/public/renders/<step>.png (exploded, new parts orange), <step>-done.png (assembled)
+# and <step>.mp4 (assembling loop). Every part is put back afterwards and the document is not saved.
+import importlib
+import math
+import os
+import sys
+import tempfile
+import shutil
+
+import FreeCAD
+
+if "__file__" in globals():
+    _SCRIPTS = os.path.dirname(os.path.abspath(__file__))
+else:
+    _SCRIPTS = os.path.join(os.environ.get("SPOT_ROOT", os.getcwd()), "scripts")
+if not os.path.exists(os.path.join(_SCRIPTS, "guide_steps.py")):
+    _SCRIPTS = "/Users/jberi/code/robotics/spot-unoq/scripts"
+sys.path.insert(0, _SCRIPTS)
+import guide_render_lib as G  # noqa: E402
+import guide_steps  # noqa: E402
+
+importlib.reload(G)
+importlib.reload(guide_steps)
+
+REPO = os.path.dirname(_SCRIPTS)
+OUT = os.path.join(REPO, "site", "public", "renders")
+W, H = 1280, 960            # stills
+VW, VH = 960, 720           # video
+FPS = 24
+# loop timeline (s): hold exploded, assemble, hold assembled, take apart
+T_HOLD0, T_IN, T_HOLD1, T_OUT = 0.8, 1.8, 1.4, 1.0
+SWAY = 8.0                  # degrees of camera yaw swing over the loop
+
+
+def resolve(S, sels):
+    if callable(sels) or isinstance(sels, str):
+        sels = [sels]
+    out = []
+    for s in sels:
+        if callable(s):
+            out += s(S)
+        elif s.startswith("re:"):
+            out += S.select(labels=s[3:])
+        else:
+            o = S.doc.getObject(s) or (S.doc.getObjectsByLabel(s) or [None])[0]
+            if o is None:
+                FreeCAD.Console.PrintWarning(f"guide: no object {s}\n")
+            else:
+                out.append(o)
+    seen, uniq = set(), []
+    for o in out:
+        if o.Name not in seen:
+            seen.add(o.Name)
+            uniq.append(o)
+    return uniq
+
+
+def yaw(direction, deg):
+    a = math.radians(deg)
+    x, y, z = direction
+    return (x * math.cos(a) - y * math.sin(a), x * math.sin(a) + y * math.cos(a), z)
+
+
+def render_step(S, st, video=True):
+    ctx = resolve(S, st.get("context", []))
+    new = resolve(S, st["new"])
+    names = {o.Name for o in ctx}
+    allp = ctx + [o for o in new if o.Name not in names]
+    S.show_only(allp)
+    for o in allp:
+        S.colour(o, S.default_colour(o))
+    for o in new:
+        c = S.default_colour(o)
+        if c == G.C_PRINT:
+            S.colour(o, G.C_NEW)
+    disp = {}
+    for sels, d in st.get("explode", []):
+        for o in resolve(S, sels):
+            disp[o.Name] = d
+
+    def pose(t):  # t = 1 exploded, 0 assembled
+        for o in allp:
+            S.move(o, [v * t for v in disp.get(o.Name, (0, 0, 0))])
+
+    focus = resolve(S, st["focus"]) if st.get("focus") else allp
+    # frame on the union of assembled and exploded poses
+    pts = []
+    for t in (0.0, 1.0):
+        pose(t)
+        for o in focus:
+            b = S._bbox(o)
+            if b:
+                pts += [(b.XMin, b.YMin, b.ZMin), (b.XMax, b.YMax, b.ZMax),
+                        (b.XMin, b.YMax, b.ZMin), (b.XMax, b.YMin, b.ZMax),
+                        (b.XMin, b.YMin, b.ZMax), (b.XMax, b.YMax, b.ZMin),
+                        (b.XMin, b.YMax, b.ZMax), (b.XMax, b.YMin, b.ZMin)]
+    view = st.get("view", (1, 1, -1))
+
+    def frame(t, deg=0.0):
+        pose(t)
+        S.camera(yaw(view, deg), objs=[], extra=pts, margin=1.1)
+
+    os.makedirs(OUT, exist_ok=True)
+    frame(1.0)
+    S.snap(os.path.join(OUT, st["id"] + ".png"), W, H)
+    frame(0.0)
+    # assembled: new parts back to their normal colours
+    for o in new:
+        S.colour(o, S.default_colour(o))
+    S.snap(os.path.join(OUT, st["id"] + "-done.png"), W, H)
+    for o in new:
+        if S.default_colour(o) == G.C_PRINT:
+            S.colour(o, G.C_NEW)
+
+    if video:
+        tmp = tempfile.mkdtemp(prefix="guide_")
+        total = T_HOLD0 + T_IN + T_HOLD1 + T_OUT
+        n = int(round(total * FPS))
+        for i in range(n):
+            s = i / FPS
+            if s < T_HOLD0:
+                t = 1.0
+            elif s < T_HOLD0 + T_IN:
+                t = 1.0 - G.smootherstep((s - T_HOLD0) / T_IN)
+            elif s < T_HOLD0 + T_IN + T_HOLD1:
+                t = 0.0
+            else:
+                t = G.smootherstep((s - T_HOLD0 - T_IN - T_HOLD1) / T_OUT)
+            deg = SWAY * math.sin(2 * math.pi * i / n)
+            frame(t, deg)
+            S.snap(os.path.join(tmp, f"f{i:04d}.png"), VW, VH, ss=2)
+        G._ffmpeg(["-framerate", str(FPS), "-i", os.path.join(tmp, "f%04d.png"),
+                   "-c:v", "libx264", "-preset", "slow", "-crf", "24", "-pix_fmt", "yuv420p",
+                   "-movflags", "+faststart", os.path.join(OUT, st["id"] + ".mp4")])
+        shutil.rmtree(tmp, ignore_errors=True)
+    pose(0.0)
+
+
+def main():
+    only = globals().get("GUIDE_ONLY")
+    video = not globals().get("GUIDE_NO_VIDEO", False)
+    S = G.Scene(os.path.join(REPO, "cad", "SpotUnoQ.FCStd"))
+    try:
+        for st in guide_steps.STEPS:
+            if only and st["id"] not in only:
+                continue
+            FreeCAD.Console.PrintMessage(f"guide: {st['id']}\n")
+            render_step(S, st, video)
+    finally:
+        S.reset()
+        S.view.viewIsometric()
+        S.view.fitAll()
+
+
+main()

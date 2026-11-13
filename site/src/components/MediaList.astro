@@ -1,0 +1,37 @@
+---
+import { CHECKS } from '../data/checks';
+/** Collects every <Todo> placeholder from the guide pages into one shot list. */
+const pages = import.meta.glob('../content/docs/**/*.mdx', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const rows: { page: string; slug: string; kind: string; id: string; text: string }[] = [];
+for (const [file, raw] of Object.entries(pages)) {
+	const slug = file.replace('../content/docs/', '').replace(/\.mdx$/, '').replace(/index$/, '');
+	const title = /^title:\s*(.+)$/m.exec(raw)?.[1]?.replace(/^['"]|['"]$/g, '') ?? slug;
+	for (const m of raw.matchAll(/<Todo([^>]*)>([\s\S]*?)<\/Todo>/g)) {
+		const attrs = m[1];
+		const kind = /kind="(\w+)"/.exec(attrs)?.[1] ?? 'photo';
+		const id = /id="([^"]+)"/.exec(attrs)?.[1] ?? '';
+		const text = m[2].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+		rows.push({ page: title, slug, kind, id, text });
+	}
+}
+const order = CHECKS.map((c) => c.slug);
+const rank = (slug: string) => (order.indexOf(slug) + 1 || 999);
+rows.sort((a, b) => rank(a.slug) - rank(b.slug));
+const photos = rows.filter((r) => r.kind === 'photo').length;
+---
+
+<p><strong>{photos}</strong> photos and <strong>{rows.length - photos}</strong> videos requested.</p>
+<table>
+	<thead><tr><th></th><th>ID</th><th>Page</th><th>What to capture</th></tr></thead>
+	<tbody>
+		{rows.map((r) => (
+			<tr>
+				<td>{r.kind === 'video' ? '🎥' : '📷'}</td>
+				<td><code>{r.id}</code></td>
+				<td><a href={`${base}/${r.slug}/#${r.id}`}>{r.page}</a></td>
+				<td>{r.text}</td>
+			</tr>
+		))}
+	</tbody>
+</table>

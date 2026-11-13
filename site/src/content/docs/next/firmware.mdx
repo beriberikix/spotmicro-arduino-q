@@ -1,0 +1,21 @@
+---
+title: Firmware
+description: Placeholder — the UNO Q port of Leika.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="Coming soon">
+The firmware is not started yet. See [firmware/README.md](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/firmware/README.md)
+for the plan.
+</Aside>
+
+The plan is to port [Leika](https://github.com/runeharlyk/SpotMicroESP32-Leika) to the UNO Q's two processors:
+
+- **STM32U585 MCU** (Arduino sketch): the real-time loop, with PCA9685 output on `Wire`, IMU reads and gait timing.
+- **QRB2210 MPU** (Debian Linux): Wi-Fi, the web app, the two cameras through the Media Carrier, and higher-level
+  planning.
+
+The servo channel map and assembly angles in this guide are the ones the firmware will use; see
+[servo_tool](https://github.com/beriberikix/spotmicro-arduino-q/tree/main/firmware/servo_tool) for the same table in
+code.

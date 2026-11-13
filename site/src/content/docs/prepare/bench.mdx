@@ -1,0 +1,115 @@
+---
+title: Servo shield and power
+description: Solder the servo shield for the UNO Q's 3.3 V logic, set the SZBK07 to 6.0 V, and wire a bench test rig.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Parts from '../../../components/Parts.astro';
+import PowerDiagram from '../../../components/PowerDiagram.astro';
+import Todo from '../../../components/Todo.astro';
+
+Before any servo goes into a leg, you'll test it and set it to its assembly angle. That needs a small bench rig: the
+UNO Q with the servo shield on top, and the SZBK07 feeding the servos 6.0 V. The same boards go into the robot later,
+so the soldering here is done once.
+
+<Parts items={[
+	[1, 'Adafruit 16-channel PWM/Servo Shield (1411), with its header strip'],
+	[3, 'right-angle 3×4 headers (Adafruit 816), a 4th is optional', 'For channels 0–11. The plugs then point sideways, so they fit 1.8 mm under the top cover.'],
+	[1, 'electrolytic capacitor, 1000 µF or more, 10 V or more', 'Recommended for C2. Adafruit: about 100 µF per servo.'],
+	[1, 'SZBK07'],
+	[1, 'UNO Q and USB-C cable'],
+	['', 'Bench supply 7–12 V (≥3 A) or a charged 2S LiPo with XT60; 16 AWG wire'],
+]} tools={['Soldering iron', 'Multimeter', 'Craft knife']} />
+
+## The shield on a 3.3 V board
+
+The UNO Q's microcontroller runs at **3.3 V**, while the shield ships set up for 5 V Arduinos. Two changes make it safe,
+both on the shield's solder side. Check the
+[Adafruit guide](https://learn.adafruit.com/adafruit-16-channel-pwm-slash-servo-shield) photos if you're unsure which
+pads are which.
+
+<Steps>
+
+1. **Logic voltage jumper (SJ1): 5V → 3V.** SJ1 is a three-pad solder jumper. Its middle pad is the shield's logic
+   supply (VCC): it powers the PCA9685 and pulls the I2C lines up through two 10 kΩ resistors. From the factory the
+   middle pad is joined to the **5V** pad. Remove that solder (or cut the trace) and bridge the middle pad to the
+   **3V** pad instead.
+
+   With VCC at 3.3 V the I2C lines stay at 3.3 V and the servo signal is 3.3 V, which DS3218s accept.
+
+2. **Disconnect A4/A5 from SDA/SCL.** On classic Arduinos A4/A5 *are* the I2C pins, so the shield joins them. On the
+   UNO Q they are separate microcontroller pins (A4/A5 are a second I2C bus, `Wire2`), so the shield ties two pairs of
+   pins together. Adafruit's guide says to cut the traces between A4/A5 and the SDA/SCL pins next to them when using
+   other boards. Cut them, and check with the meter that A4–SDA and A5–SCL no longer beep.
+
+3. **Check with a meter.** With nothing plugged in: the shield's VCC (the middle pad of SJ1) has continuity to the 3V
+   header pin and **not** to the 5V pin.
+
+</Steps>
+
+<Aside type="caution" title="Draft: confirm on the real board">
+Adafruit doesn't document SJ1's factory setting in words. Look at your board: the blob should be on the 5V side, and
+it's the one you move. Leaving A4/A5 joined to SDA/SCL is harmless as long as no sketch uses A4/A5 or `Wire2`, but
+cutting them removes the risk.
+</Aside>
+
+<Todo id="shield-sj1">Close-up of SJ1 before and after moving the jumper to 3V, and of the cut A4/A5 traces.</Todo>
+
+## Solder the shield
+
+<Steps>
+
+1. **Header strip.** Solder the **plain male header strip** that comes with the shield (not stacking headers): the
+   UNO Q's headers are female, and the Media Carrier goes underneath, not on top. Put the strips into the UNO Q, lay
+   the shield on, and solder one pin at each end first, so they come out straight.
+2. **Right-angle servo headers.** Solder the 3×4 right-angle headers on channels 0–11 (and 12–15 if you have a fourth),
+   all pointing the same way, out over the edge of the shield where the servo headers sit. In the robot that edge faces
+   the front, so the plugs point towards the SZBK07 (see [Electronics plate](../../electronics/plate/)). The
+   silkscreen marks the three rows (PWM signal, V+, GND); note which row is GND, because the servo plug's brown or
+   black wire goes there.
+3. **Terminal block.** Solder the blue two-way terminal block (V+ and GND).
+4. **Capacitor.** Solder the capacitor into C2, minding polarity: the stripe (−) goes to the GND side, as marked on the
+   silkscreen. Adafruit's rule of thumb is about 100 µF per servo; 1000 µF covers twelve DS3218s at idle and in gentle
+   moves.
+
+</Steps>
+
+<Todo id="shield-soldered">Finished shield: right-angle headers, terminal block and capacitor, from the side and from above.</Todo>
+
+## Set the SZBK07 to 6.0 V
+
+**Do this before any servo is connected.** A full 2S pack is 8.4 V, which would burn DS3218s (rated 4.8–6.8 V). A student
+team burned a servo controller's capacitor with an unchecked regulator.
+
+<Steps>
+
+1. Wire the bench supply (or LiPo) to the SZBK07's **IN+ / IN−** with 16 AWG. Check polarity with the meter.
+2. Switch on. With nothing on the output, measure **OUT+ / OUT−** with the multimeter.
+3. Turn the **voltage (CV)** potentiometer until the meter reads **6.0 V**. It can take many turns.
+4. If your module has a **current limit (CC)** pot, turn it to maximum for now.
+5. Switch off.
+
+</Steps>
+
+<Todo id="szbk07-set" kind="video">Setting the SZBK07: meter on the output, turning the CV pot to 6.0 V (15–20 s).</Todo>
+
+## Wire the bench rig
+
+<PowerDiagram mode="bench" />
+
+<Steps>
+
+1. Press the shield onto the UNO Q.
+2. Run 16 AWG from the SZBK07 **OUT+** to the shield's **V+** terminal, and **OUT−** to **GND**. The terminal block has
+   reverse-polarity protection, but don't rely on it.
+3. Connect the UNO Q to your computer with USB-C.
+
+</Steps>
+
+<Aside type="danger" title="Two separate supplies">
+The servo rail (V+) is isolated from the UNO Q's VIN and 5V on the shield, and only the grounds are shared. Never
+connect V+ to the UNO Q's 5V or VIN pins, and never take servo current from the UNO Q.
+</Aside>
+
+<Done id="bench" label="Shield soldered, SZBK07 at 6.0 V, rig wired" />

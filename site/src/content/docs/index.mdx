@@ -1,0 +1,50 @@
+---
+title: Build your SpotMicro for Arduino UNO Q
+description: Step-by-step assembly guide for a 3D-printed SpotMicro robot dog with an Arduino UNO Q brain and two cameras.
+template: splash
+hero:
+  tagline: A step-by-step guide to assembling a 3D-printed quadruped with twelve DS3218 servos, an Arduino UNO Q, a Media Carrier and a stereo camera head.
+  actions:
+    - text: Start building
+      link: start/about/
+      icon: right-arrow
+    - text: Parts checklist
+      link: start/parts/
+      variant: minimal
+    - text: GitHub
+      link: https://github.com/beriberikix/spotmicro-arduino-q
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import Progress from '../../components/Progress.astro';
+
+<div class="render-card">
+	<video autoplay muted loop playsinline poster={`${import.meta.env.BASE_URL}renders/covers-done.png`} src={`${import.meta.env.BASE_URL}spot-unoq-explode.mp4`} style="width:100%;display:block" aria-label="The robot exploding and reassembling"></video>
+</div>
+
+## The build at a glance
+
+<CardGrid>
+	<Card title="1 · Prepare" icon="setting">
+		Check the fit-test prints, clean up the parts, solder the servo shield, set the regulator to 6.0 V, then test and pre-position all twelve servos.
+	</Card>
+	<Card title="2–3 · Legs and shoulders" icon="puzzle">
+		Build four legs from the foot up: lower leg, knee, upper leg, hip and shoulder joint, then add robjk's reinforced shoulder cover.
+	</Card>
+	<Card title="4 · Body" icon="seti:config">
+		Build the frame around the electronics plate and fit the front and rear leg pairs.
+	</Card>
+	<Card title="5–6 · Electronics and covers" icon="laptop">
+		Fit the board stack, power wiring, servo leads, camera head and covers.
+	</Card>
+</CardGrid>
+
+## Your progress
+
+Check-offs are saved in this browser only.
+
+<Progress />
+
+<LinkCard title="Draft: photos and videos to shoot" href="reference/media-todo/" description="This guide is a first draft. Purple boxes mark the photos and clips still to be added from a real build." />

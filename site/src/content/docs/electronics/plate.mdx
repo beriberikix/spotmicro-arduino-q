@@ -1,0 +1,83 @@
+---
+title: Electronics plate
+description: GY-521, camera cables, Media Carrier, UNO Q, servo shield and SZBK07 onto the plate.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Hw from '../../../components/Hw.astro';
+import Parts from '../../../components/Parts.astro';
+import Render from '../../../components/Render.astro';
+import Todo from '../../../components/Todo.astro';
+
+One board stack sits at the rear of the plate: **Media Carrier** at the bottom, **UNO Q** in the middle, **servo
+shield** on top. The **SZBK07** sits in front of it, over the camera cables.
+
+<Parts bag="F" items={[
+	[1, 'GY-521 (MPU-6050)'],
+	[2, 'Camera cables, Standard–Mini, 200 mm'],
+	[1, 'UNO Media Carrier'],
+	[1, 'UNO Q'],
+	[1, 'Servo shield, soldered (from the bench rig)'],
+	[1, 'SZBK07, set to 6.0 V (from the bench rig)'],
+	[4, '<kbd class="hw">M3×8</kbd>', 'SZBK07 to its posts'],
+]} tools={['2.5 mm hex']} />
+
+<Render id="plate-boards" caption="Media Carrier, UNO Q, servo shield and SZBK07 onto the plate" start="exploded" />
+
+## 1. IMU
+
+Fit the GY-521 onto its posts on the plate (the posts come from Kooba's plate design), chip side up. Solder four leads
+to it first (VCC, GND, SCL, SDA, about 10 cm), since it's hard to reach once the boards are in.
+
+<Aside type="caution" title="Draft: confirm the GY-521 fixing">
+Check how the GY-521 sits on its posts on the first build: a press fit, or melted over, or held with a small screw.
+</Aside>
+
+## 2. Camera cables onto the carrier
+
+Do this before the carrier goes in: the connectors are on the carrier, and the cables run forwards **under** the
+SZBK07.
+
+<Steps>
+
+1. Open each camera connector's latch on the carrier, push in the **Mini** end of a 200 mm cable (contacts facing the
+   right way, see the carrier's marking) and close the latch.
+2. The connector **nearer the carrier's USB-C edge** goes to the **right** camera. Mark that cable `R`.
+
+</Steps>
+
+## 3. Carrier, UNO Q and shield
+
+<Steps>
+
+1. Hook the carrier's edge **opposite its USB-C** under the plate's two fixed hooks.
+2. Press the USB-C edge down past the two snap clips until they click. The carrier has no mounting holes; the four pads,
+   two hooks and two clips hold it.
+3. Press the UNO Q onto the carrier's bottom connectors. Push over the pads, not in the middle of the board.
+4. Press the servo shield onto the UNO Q, servo plugs pointing forwards.
+
+</Steps>
+
+The UNO Q's USB-C port faces the right side rail, 20 mm away: use a right-angle USB-C plug or program it over Wi-Fi
+once it's in.
+
+## 4. SZBK07
+
+<Steps>
+
+1. Lay the two camera cables flat along the plate towards the front.
+2. Screw the SZBK07 onto its four posts over them with four <Hw>M3×8</Hw>. The screws thread into the pilot holes; no
+   nuts.
+
+</Steps>
+
+<Render id="camera-cables" caption="Camera cable routes: under the SZBK07, through the front shoulder plates" start="exploded" />
+
+The cables run under the SZBK07 and out through the front shoulder plates to the head. The modelled route uses about
+172 mm of each 200 mm cable, leaving about 28 mm to fold flat inside the shoulder box.
+
+<Todo id="plate-stack">The populated plate in the frame, from above: board stack, SZBK07, camera cables leaving at the front.</Todo>
+<Todo id="plate-carrier" kind="video">Hooking the carrier in, clicking the clips, pressing on the UNO Q and the shield (30 s).</Todo>
+
+<Done id="plate" label="Boards on the plate" />
