@@ -1,0 +1,32 @@
+---
+title: Clean up the prints
+description: Deburr, test nut pockets and bearing seats, and label every printed part.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Todo from '../../../components/Todo.astro';
+
+Ten minutes per plate here saves an hour of fighting parts later.
+
+1. **Remove brims and elephant's foot.** Run a deburring tool or knife along the first-layer edge of every part,
+   especially faces that meet another part (the shell halves, the wrist and its counterpart, the knee plates).
+2. **Clear the holes.** Push an M3 screw through every M3 hole and an M2 through every M2 hole. A screw should slide
+   or turn in easily; if it binds, twist it through or chase the hole with a tap. Don't force a drill bit through.
+3. **Test the nut pockets.** Drop an M3 nut into each pocket. It should seat flat and stay put when you tip the part
+   over gently. If a pocket is tight, warm the nut with a soldering iron for a second and press it in. Loose ones get a
+   tiny dab of Blu-Tack during assembly.
+4. **Bearing seats.** Bearings are a really tight press fit. Press them in with a vice or with
+   your thumb and a flat block. **Never hammer them**: that cracks the part. If a seat is
+   too tight, scrape or sand the bore slightly and try again.
+5. **Label everything.** Mark each leg part **FL**, **FR**, **RL** or **RR** in pencil on a hidden face. Normal STLs are
+   for the left legs, `_mirrored` for the right.
+
+<Aside type="tip">
+Lay each leg's parts out in its own tray, with its hardware bags from [Sort the hardware](../../start/hardware/). The
+build then becomes: take a tray, empty it.
+</Aside>
+
+<Todo id="prints-trays">All parts for one leg laid out in a tray with bags A–D, labelled FL.</Todo>
+
+<Done id="prints" label="Prints cleaned and labelled" />

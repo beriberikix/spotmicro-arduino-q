@@ -1,0 +1,20 @@
+---
+title: First power-on
+description: Placeholder — first power-on checks once the firmware exists.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="Coming soon">
+This page will cover the first power-on of the finished robot, once the firmware is ready.
+</Aside>
+
+Planned contents:
+
+- Pre-flight checks: meter checks on VIN and the servo rail, no cables over the servo plugs, legs free on the stand.
+- Power the UNO Q alone first (servo switch off or XT60 to the SZBK07 unplugged), confirm it boots and joins Wi-Fi.
+- Check the I2C bus sees the PCA9685 (0x40) and the GY-521 (0x68).
+- Bring up the servo rail with all outputs off, then enable joints one at a time.
+- Current draw at idle and while standing.
+
+Until then, [servo_tool](../../prepare/servos/) is the way to move the joints.

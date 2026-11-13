@@ -1,0 +1,79 @@
+---
+title: Hip joint
+description: Horn onto the extended servo cap, cap onto the shoulder servo mount, and the shoulder joint onto the hip servo.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Hw from '../../../components/Hw.astro';
+import Parts from '../../../components/Parts.astro';
+import Render from '../../../components/Render.astro';
+import Todo from '../../../components/Todo.astro';
+
+The **shoulder joint** is the extended servo mount plus the extended servo cap. The cap carries the horn that the
+hip servo drives, and its extension is where the shoulder cover will bolt on.
+
+<Parts per="per leg" total={4} bag="D" items={[
+	[1, 'Shoulder servo mount, extended', 'Per side: one normal and one mirrored, see below'],
+	[1, 'Extended servo cap'],
+	[1, '25T six-arm servo horn'],
+	[6, '<kbd class="hw">M2×8</kbd> with an M2 nut threaded on', 'Horn to cap'],
+	[1, 'Bearing pin, M2 bore + <kbd class="hw">M2×8</kbd> + M2 nut'],
+	[4, '<kbd class="hw">M3×8</kbd> + 4 M3 nuts', 'Cap to servo mount'],
+	[1, '<kbd class="hw">M3×8</kbd>', 'Cap to the hip servo shaft'],
+	[1, 'Leg from the previous pages'],
+]} tools={['1.5 mm hex', '2.5 mm hex', 'Bench rig with servo_tool']} />
+
+<Aside type="caution" title="Which servo mount?">
+Both shoulder servos on a side face **outwards**: the front one towards the nose, the rear one towards the tail. So each
+side uses **one normal and one mirrored** mount. Pair them up before you start: FL with RR are the same part, and FR with RL. Hold a mount
+against its leg and check that the servo pocket opens towards the correct end of the robot.
+</Aside>
+
+## 1. Horn onto the extended cap
+
+<Render id="hip-horn-cap" caption="Horn onto the extended servo cap" />
+
+Same as the knee: M2×8 screws with nuts threaded on as spacers, through the middle hole of each arm.
+
+## 2. Bearing pin onto the servo mount
+
+<Render id="shoulder-pin" caption="Bearing pin on the back of the shoulder servo mount" />
+
+<Steps>
+
+1. Put one M2 nut in the small pocket in the servo mount.
+2. Screw an <Hw>M2×8</Hw> through the bearing pin into it. This pin will turn in the bearing in the inner shoulder plate.
+
+</Steps>
+
+## 3. Cap onto the servo mount
+
+<Render id="cap-to-mount" caption="Extended cap with horn onto the shoulder servo mount" />
+
+<Steps>
+
+1. Put four M3 nuts into the pockets in the base of the servo mount.
+2. Screw the cap on with four <Hw>M3×8</Hw>.
+
+</Steps>
+
+## 4. Shoulder joint onto the hip servo
+
+<Render id="shoulder-to-leg" caption="Shoulder joint onto the upper leg's hip servo" />
+
+<Steps>
+
+1. Plug the hip servo into the rig and send its assembly angle: **120° for left legs, 60° for right legs** (channels
+   1, 4, 7, 10). Leave it powered.
+2. Don't line the shoulder joint up with the horn's **top** arm, but with **the next arm to the
+   right on left legs, or to the left on right legs**. Each arm is 60°, and this puts the upper leg at its standing angle.
+   The upper leg then deliberately swings further backwards than forwards.
+3. Push the cap's horn onto the hip servo shaft and screw it on with an <Hw>M3×8</Hw> through the horn centre.
+4. Send `o <ch>` and unplug.
+
+</Steps>
+
+<Todo id="hip-angle">The shoulder joint on the upper leg at the assembly angle, side view, so the 60° offset is visible.</Todo>
+
+<Done id="hip" legs />

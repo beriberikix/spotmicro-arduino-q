@@ -1,0 +1,65 @@
+---
+title: Parts checklist
+description: Everything to have on the bench before you start, with checkboxes.
+---
+
+import Done from '../../../components/Done.astro';
+import Checklist from '../../../components/Checklist.astro';
+
+Tick parts off as you unpack them. The full bill of materials, with links and buying notes, is in
+[BOM.md](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/BOM.md).
+
+## Electronics
+
+<Checklist id="parts-electronics" items={[
+	'1× Arduino UNO Q (2 GB or 4 GB)',
+	'1× Arduino UNO Media Carrier (ASX00083)',
+	'1× Adafruit 16-channel PWM/Servo Shield (1411), with its plain male header strip',
+	'4× right-angle 3×4 male headers (Adafruit 816)',
+	'1× SZBK07 20 A step-down module',
+	'12× DS3218 servo, 180°, 25T spline (check the angle on the label)',
+	'12× 25T six-arm servo horn (FSH6S type; usually in the servo box)',
+	'48× servo rubber dampeners (usually in the servo box)',
+	'4× servo extension cable, 10–15 cm',
+	'1× GY-521 (MPU-6050) IMU',
+	'2× Raspberry Pi Camera Module 2',
+	'2× camera cable, Standard–Mini, 200 mm',
+	'1× 2S LiPo, 5200–6200 mAh, 30C+, with XT60',
+	'1× XT60 connector pair',
+	'1× main power switch (19 mm latching push button)',
+	'1× USB-C PD power supply, 5 V 3 A',
+	'Capacitor for the shield\'s C2 footprint: 1000 µF or more, 10 V or more, 10 mm diameter, 3.5 mm pitch (recommended)',
+]} />
+
+## Hardware
+
+<Checklist id="parts-hardware" items={[
+	'84× M2×8 cylinder-head screws + 84× M2 nuts',
+	'80× M3×8 cylinder-head screws + 80× M3 nuts',
+	'64× M3×20 cylinder-head screws + 64× M3 nuts, plus extras for the shoulder covers',
+	'8× M2×5 self-tapping screws (cameras)',
+	'12× 625ZZ bearings, unflanged',
+]} />
+
+The design uses just three screw sizes, so buy bulk packs: a few spare M3 nuts will save you when one rolls under
+the bench.
+
+## Printed parts
+
+The [`stl/` list](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/stl/README.md) has every file and
+quantity (74 required parts). Lay them out by group and check:
+
+<Checklist id="parts-printed" items={[
+	'Legs: 4 wrists, 4 wrist counterparts, 4 foot tips (TPU) — 2 normal + 2 mirrored of each pair',
+	'Legs: 4 servohorn mounts, 4 ball-bearing mounts (long v4) — 2 + 2 mirrored',
+	'Legs: 4 upper-leg bottom shells, 4 top shells with BB hole — 2 + 2 mirrored',
+	'Shoulders: 4 extended servo mounts (2 + 2 mirrored), 4 extended servo caps, 4 shoulder covers',
+	'Shoulders: 8 bearing pins (M2 bore), 4 bearing pins (M3 bore)',
+	'Chassis: 2 inner shoulders, 2 outer shoulders, 2 top shoulders, 2 bottom shoulders, 2 chassis sides',
+	'Chassis: 3 LiPo brackets (front, middle, rear)',
+	'Electronics: 1 UNO Q mounting plate',
+	'Hull: top cover front + rear, bottom cover front + rear, rear cover shell + plate',
+	'Head: front cover, dual-camera sensor mount',
+]} />
+
+<Done id="parts" label="Everything is here" />

@@ -1,0 +1,56 @@
+---
+title: Fit check
+description: Check the printed parts against the boards, servo, horn and bearings before building.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Checklist from '../../../components/Checklist.astro';
+import Todo from '../../../components/Todo.astro';
+
+Before you build, check every place where a printed part has to fit something you bought. If you printed the
+[fit-test project](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/docs/test-prints.md) (about 3 hours),
+use those parts. If you printed the full robot straight away, do the same checks with the real parts. Either way,
+nothing gets screwed together for good yet.
+
+## What you need
+
+- UNO Media Carrier, UNO Q, SZBK07
+- Two Camera Module 2s
+- One DS3218 with its dampeners and a 25T six-arm horn
+- Two 625ZZ bearings
+- 4× M3×8, 8× M2×5 self-tapping, a few M3×20 + nuts, a few M2×8 + nuts
+
+## Checks
+
+<Checklist id="fit" items={[
+	'<strong>Carrier mount</strong>: hook the carrier edge opposite its USB-C under the two fixed hooks, then press the USB-C edge down past the two snap clips. The clips flex and click without cracking, the carrier sits flat on the four pads without rocking, and nothing underneath touches the plate. Press the UNO Q onto the carrier: the pads take the force.',
+	'<strong>SZBK07 posts</strong>: all four holes line up and 4× M3×8 bite into the pilot holes and hold.',
+	'<strong>Camera mount</strong>: each camera sits flat on the back face with 4× M2×5, the lens is centred in its window, and the ribbon connector on the bottom edge is free.',
+	'<strong>Shoulder servo mount</strong>: the servo with dampeners slides in without filing, and M3×20 screws line up.',
+	'<strong>Extended servo cap</strong>: the horn sits flat in its recess and the M2 holes line up with the horn arms.',
+	'<strong>Ball-bearing mount</strong>: a 625ZZ presses in by hand or with light, even pressure and stays put.',
+	'<strong>Shoulder cover</strong>: a 625ZZ seats in the 16.3 mm bore; the cover holes line up with the cap.',
+	'<strong>Bearing pins</strong> (M2 and M3 bore): the 5 mm pin goes into a bearing snugly, without wobble.',
+]} />
+
+<Aside type="caution" title="Measured SZBK07 is smaller than modelled">
+The SZBK07 listing linked in the BOM measures 66 × 48 × 21 mm; the plate was modelled for 60 × 54 × 28 mm. Check its
+four mounting holes against the posts before anything else. If they don't line up, the post spacing is set by
+`Buck_SX` / `Buck_SY` in the plate's Params spreadsheet.
+</Aside>
+
+<Todo id="fit-carrier" kind="video">Carrier snapping into the plate's hooks and clips, then the UNO Q pressed on (10–15 s, top-down, close).</Todo>
+<Todo id="fit-szbk07">Your SZBK07 sitting on its four posts, from above, with a ruler for scale.</Todo>
+<Todo id="fit-camera">Camera Module 2 screwed to the back of the sensor mount, lens centred in its window.</Todo>
+
+## If something doesn't fit
+
+The [fit-test page](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/docs/test-prints.md#if-something-doesnt-fit)
+lists the parameter for each problem. In short:
+
+- **This project's parts** (plate, camera mount): change the `Params` spreadsheet and re-export.
+- **Frame and shoulder parts** (servo, horn, bearing, pin fits): these have been printed by many builders, so check
+  the printer first: flow calibration, then X-Y hole compensation (about +0.1 mm) for tight holes and bores.
+
+<Done id="fit-check" label="Everything fits" />

@@ -1,0 +1,188 @@
+---
+/** Interactive top view of the robot: click a joint to see its shield channel, assembly angle and cable route. */
+import { SERVOS, LEG_NAME } from '../data/servos';
+
+// Layout (SVG units): body centred, head to the top.
+const W = 360, H = 460;
+const body = { x: 120, y: 90, w: 120, h: 280 };
+const legPos = {
+	FL: { x: 70, y: 120, side: -1 },
+	FR: { x: 290, y: 120, side: 1 },
+	RL: { x: 70, y: 340, side: -1 },
+	RR: { x: 290, y: 340, side: 1 },
+} as const;
+const jointOffset = { shoulder: 0, hip: 1, knee: 2 } as const;
+const pts = SERVOS.map((s) => {
+	const p = legPos[s.leg];
+	const off = jointOffset[s.joint];
+	return { ...s, x: p.x - p.side * (34 - off * 34), y: p.y };
+});
+---
+
+<div class="servo-map not-content">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Top view of the robot with its twelve servos">
+		<text x={W / 2} y="28" text-anchor="middle" class="lbl">▲ head (front)</text>
+		<rect x={body.x} y={body.y} width={body.w} height={body.h} rx="14" class="body" />
+		<rect x={body.x + 18} y={body.y + 150} width={body.w - 36} height="90" rx="6" class="bay" />
+		<text x={W / 2} y={body.y + 200} text-anchor="middle" class="small">board stack</text>
+		<rect x={body.x + 22} y={body.y + 70} width={body.w - 44} height="60" rx="6" class="bay" />
+		<text x={W / 2} y={body.y + 104} text-anchor="middle" class="small">SZBK07</text>
+		{(['FL', 'FR', 'RL', 'RR'] as const).map((l) => {
+			const p = legPos[l];
+			return (
+				<>
+					<line x1={p.x + p.side * 34} y1={p.y} x2={p.x - p.side * 34} y2={p.y} class="limb" />
+					<text x={p.x} y={p.y + (l[0] === 'F' ? -34 : 44)} text-anchor="middle" class="lbl">{LEG_NAME[l]}</text>
+				</>
+			);
+		})}
+		{pts.map((s) => (
+			<g class="joint" tabindex="0" role="button" data-ch={s.ch} aria-label={`${LEG_NAME[s.leg]} ${s.joint}, channel ${s.ch}`}>
+				<circle cx={s.x} cy={s.y} r="15" class={`j-${s.joint}`} />
+				<text x={s.x} y={s.y + 5} text-anchor="middle" class="ch">{s.ch}</text>
+			</g>
+		))}
+	</svg>
+	<div class="info" aria-live="polite">
+		<p class="hint">Click or tab to a joint.</p>
+		{SERVOS.map((s) => (
+			<div class="card" data-card={s.ch} hidden>
+				<h4>Channel {s.ch}: {LEG_NAME[s.leg]} {s.joint}</h4>
+				<dl>
+					<dt>Assembly angle</dt>
+					<dd><strong>{s.assembly}°</strong> ({500 + Math.round((s.assembly * 2000) / 180)} µs) · <code>a {s.ch}</code> in servo_tool</dd>
+					<dt>Pose when fitting the horn</dt>
+					<dd>{s.pose}</dd>
+					<dt>Cable</dt>
+					<dd>{s.route}</dd>
+					<dt>Label</dt>
+					<dd><code>{s.leg}-{s.joint[0].toUpperCase()}</code> (e.g. masking tape on the plug)</dd>
+				</dl>
+			</div>
+		))}
+		<div class="legend">
+			<span><i class="j-shoulder"></i>shoulder</span><span><i class="j-hip"></i>hip</span><span><i class="j-knee"></i>knee</span>
+		</div>
+	</div>
+</div>
+
+<style>
+	.servo-map {
+		display: grid;
+		grid-template-columns: minmax(220px, 360px) 1fr;
+		gap: 1rem;
+		align-items: start;
+		margin: 1rem 0;
+	}
+	@media (max-width: 640px) {
+		.servo-map {
+			grid-template-columns: 1fr;
+		}
+	}
+	svg {
+		width: 100%;
+		height: auto;
+	}
+	.body {
+		fill: var(--sl-color-gray-6);
+		stroke: var(--sl-color-gray-3);
+		stroke-width: 2;
+	}
+	.bay {
+		fill: none;
+		stroke: var(--sl-color-gray-4);
+		stroke-dasharray: 4 3;
+	}
+	.limb {
+		stroke: var(--sl-color-gray-4);
+		stroke-width: 10;
+		stroke-linecap: round;
+	}
+	.lbl {
+		fill: var(--sl-color-gray-2);
+		font-size: 14px;
+	}
+	.small {
+		fill: var(--sl-color-gray-3);
+		font-size: 11px;
+	}
+	.ch {
+		fill: #111;
+		font-size: 13px;
+		font-weight: 700;
+		pointer-events: none;
+	}
+	.joint {
+		cursor: pointer;
+		outline: none;
+	}
+	.joint circle {
+		stroke: var(--sl-color-white);
+		stroke-width: 2;
+		transition: r 0.15s;
+	}
+	.joint:hover circle,
+	.joint:focus-visible circle,
+	.joint.active circle {
+		stroke: var(--sl-color-accent);
+		stroke-width: 4;
+	}
+	.j-shoulder {
+		fill: #7cc4ff;
+		background: #7cc4ff;
+	}
+	.j-hip {
+		fill: #ffc56b;
+		background: #ffc56b;
+	}
+	.j-knee {
+		fill: #9be59b;
+		background: #9be59b;
+	}
+	.info {
+		font-size: var(--sl-text-sm);
+	}
+	.card h4 {
+		margin: 0 0 0.4rem;
+	}
+	dt {
+		color: var(--sl-color-gray-3);
+		margin-top: 0.4rem;
+	}
+	dd {
+		margin: 0;
+	}
+	.legend {
+		display: flex;
+		gap: 1rem;
+		margin-top: 1rem;
+		color: var(--sl-color-gray-2);
+	}
+	.legend i {
+		display: inline-block;
+		width: 0.8rem;
+		height: 0.8rem;
+		border-radius: 50%;
+		margin-right: 0.3rem;
+		vertical-align: -0.1rem;
+	}
+</style>
+
+<script>
+	document.querySelectorAll<HTMLElement>('.servo-map').forEach((map) => {
+		const pick = (ch: string) => {
+			map.querySelector<HTMLElement>('.hint')!.hidden = true;
+			map.querySelectorAll<HTMLElement>('.card').forEach((c) => (c.hidden = c.dataset.card !== ch));
+			map.querySelectorAll<SVGGElement>('.joint').forEach((j) => j.classList.toggle('active', j.dataset.ch === ch));
+		};
+		map.querySelectorAll<SVGGElement>('.joint').forEach((j) => {
+			j.addEventListener('click', () => pick(j.dataset.ch!));
+			j.addEventListener('keydown', (e) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					pick(j.dataset.ch!);
+				}
+			});
+		});
+	});
+</script>

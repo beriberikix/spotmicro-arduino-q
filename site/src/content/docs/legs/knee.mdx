@@ -1,0 +1,85 @@
+---
+title: Knee joint
+description: Horn onto the servohorn mount, the mount onto the knee servo, and the bearing mount onto the pin.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Hw from '../../../components/Hw.astro';
+import Parts from '../../../components/Parts.astro';
+import Render from '../../../components/Render.astro';
+import Todo from '../../../components/Todo.astro';
+
+The two knee plates straddle the lower leg: the **servohorn mount** grips the knee servo's shaft on the inner side, and
+the **ball-bearing mount** rides on the bearing pin on the outer side. The upper leg is bolted between them on the next
+page.
+
+<Parts per="per leg" total={4} bag="B" items={[
+	[1, 'Servohorn mount (long v4)', 'Normal for left legs, mirrored for right'],
+	[1, 'Ball-bearing mount (long v4)', 'Same side'],
+	[1, '25T six-arm servo horn'],
+	[6, '<kbd class="hw">M2×8</kbd> with an M2 nut threaded on', 'Or M2×6 without nuts; two are enough'],
+	[1, '<kbd class="hw">M3×8</kbd>', 'Horn to servo shaft'],
+	[1, '625ZZ bearing'],
+	[1, 'Lower leg from the previous page'],
+]} tools={['1.5 mm hex', '2.5 mm hex', 'Bench rig with servo_tool']} />
+
+<Aside type="note" title="The renders show the standing pose">
+The CAD model stands the robot up, so the renders show the knee bent. You assemble it **folded flat**, as described
+below.
+</Aside>
+
+## 1. Horn onto the servohorn mount
+
+<Render id="knee-horn" caption="Six-arm horn onto the servohorn mount" />
+
+<Steps>
+
+1. Thread an M2 nut all the way onto each <Hw>M2×8</Hw> (if you didn't when sorting). The nut is a spacer: a bare M2×8
+   would poke through and rub on the servo.
+2. Lay the horn in the recess on the mount's inner face, splined boss facing out.
+3. Screw it on through the **middle hole of each arm** into the mount.
+
+</Steps>
+
+## 2. Mount onto the knee servo
+
+<Render id="knee-horn-plate" caption="Servohorn mount onto the knee servo's shaft" />
+
+<Steps>
+
+1. Plug the knee servo into its channel on the bench rig and send `a <ch>`: **180° for left legs, 0° for right legs**
+   (channels 2, 5, 8, 11; see the [angle table](../../prepare/servos/#assembly-angles)). Leave it powered.
+2. Hold the servohorn mount against the knee, with the long part of the mount lying **folded flat along the lower leg** (the rest position).
+3. Push the horn onto the shaft. The plate's arms should be **perfectly perpendicular** to the wrist.
+   The horn has 25 teeth, so it isn't symmetrical: if the plate sits a little off, pull it off, unscrew the horn from
+   the mount, turn the horn to a different arm, and try again until it lines up.
+4. Screw the mount to the shaft with an <Hw>M3×8</Hw> through the centre of the horn.
+5. Send `o <ch>` and unplug the servo.
+
+</Steps>
+
+<Aside type="caution">
+Getting this right matters. If the plate is a tooth off, the leg either won't fold flat at rest, or the servo will
+push against the stop at 0°/180° and stutter, drawing current all the time. If the servo can't reach a
+reference pose later, refit the horn one tooth over.
+</Aside>
+
+<Todo id="knee-horn-align">The servohorn mount on the knee servo, folded flat, showing the plate's arms square to the wrist.</Todo>
+
+## 3. Ball-bearing mount
+
+<Render id="knee-bearing-plate" caption="Bearing into the ball-bearing mount, then onto the pin" />
+
+<Steps>
+
+1. Press a 625ZZ bearing into the ball-bearing mount. It's a **really tight** fit: press it in evenly with a vice or a
+   flat block, never with a hammer.
+2. Push the mount onto the bearing pin on the outer side of the lower leg, lined up with the servohorn mount on the
+   other side.
+
+</Steps>
+
+<Todo id="knee-bearing-press" kind="video">Pressing a 625ZZ into the ball-bearing mount with a vice or block (10 s).</Todo>
+
+<Done id="knee" legs />

@@ -1,0 +1,109 @@
+---
+title: Test and centre the servos
+description: Run the servo tool sketch, reject bad servos, label all twelve and move each to its assembly angle.
+---
+
+import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import ServoMap from '../../../components/ServoMap.astro';
+import Todo from '../../../components/Todo.astro';
+import AngleTable from '../../../components/AngleTable.astro';
+import Check from '../../../components/Check.astro';
+
+Every source agrees on this: **a servo must be at a known angle before its horn goes on.** The horn has 25 teeth and
+six arms, so it can only go on in a few positions, and fixing a joint later means taking the leg apart. Test every
+servo first, and don't use any that stutter, grind, click or won't turn a full 180°: you'd only have to take the leg apart
+again later.
+
+This page uses **servo_tool**, a small sketch for the UNO Q:
+[`firmware/servo_tool/servo_tool.ino`](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/firmware/servo_tool/servo_tool.ino).
+
+## Load servo_tool
+
+<Tabs>
+<TabItem label="Arduino App Lab">
+
+<Steps>
+
+1. Set up the UNO Q in [Arduino App Lab](https://docs.arduino.cc/software/app-lab/) if you haven't yet (first boot,
+   Wi-Fi, updates).
+2. Create a new app, name it `servo_tool`, and replace the contents of `sketch/sketch.ino` with
+   [servo_tool.ino](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/firmware/servo_tool/servo_tool.ino).
+3. Click **Add sketch library** (the book icon with a +), search for **Adafruit PWM Servo Driver Library** and install
+   it. It brings Adafruit BusIO with it. The board needs internet access to download it.
+4. Click **Run**, then open **Console → Serial Monitor**. You should see `servo_tool ready. All outputs off.` and the
+   channel map.
+
+</Steps>
+
+</TabItem>
+<TabItem label="arduino-cli">
+
+```sh
+arduino-cli core install arduino:zephyr
+arduino-cli lib install "Adafruit PWM Servo Driver Library"
+arduino-cli compile -b arduino:zephyr:unoq firmware/servo_tool
+arduino-cli upload  -b arduino:zephyr:unoq firmware/servo_tool -p <port>
+```
+
+`Serial` on the UNO Q goes through the Linux side (the Bridge), so use App Lab's Serial Monitor to talk to the sketch.
+
+</TabItem>
+</Tabs>
+
+At power-up every output is **off**, so nothing moves until you type a command. Type a command in the Serial Monitor
+and press Enter:
+
+| Command | Does |
+| ------- | ---- |
+| `h` | Help and the channel map |
+| `t 0` | Test: sweep channel 0 between 45° and 135° twice, then stop at 90° |
+| `c` | Centre every channel (90°, 1500 µs) |
+| `a` | Move every channel to its **assembly angle** (table below) |
+| `a 4` | Assembly angle for channel 4 only |
+| `s 4 120` | Channel 4 to 120° |
+| `u 4 1600` | Channel 4 to a 1600 µs pulse |
+| `o` / `o 4` | Outputs off (all / one): the servo goes limp |
+
+## Test each servo
+
+<Steps>
+
+1. Switch on the servo supply.
+2. Plug one servo into **channel 0**: brown or black wire to the GND row. Push a horn loosely onto the shaft so you
+   can see it turn.
+3. Type `t 0`. The horn should sweep smoothly and quietly, twice, then stop and hold.
+4. Type `s 0 0`, then `s 0 180`. The horn should turn about **half a turn** between the two. If it turns about
+   three-quarters of a turn, it's a **270° servo**: the gait assumes 180°, so return it. (Many DS3218 listings are 270°.)
+5. Reject any servo that stutters, grinds, clicks, buzzes when holding still, or gets hot.
+6. Type `o`, unplug it, and put a ✓ on its case. Repeat for all twelve.
+
+</Steps>
+
+<Todo id="servo-test" kind="video">One servo on channel 0 running <code>t 0</code>, then <code>s 0 0</code> and <code>s 0 180</code>, with a horn on so the half-turn is visible (20 s).</Todo>
+
+## Label and assign
+
+Write each servo's job on a piece of masking tape on its **case** and its **plug**: `FL-S`, `FL-H`, `FL-K`, `FR-S`, and so on.
+The channel each one plugs into is fixed by this map, and the firmware will use the same one:
+
+<ServoMap />
+
+## Assembly angles
+
+Each servo is fitted at a specific angle:
+
+<AngleTable />
+
+<Check id="knee-direction" title="Which way the knee turns">
+The knee angles put the servo at one end of its travel, with the leg folded flat. Before you fit the
+first knee horn, send `a 2` and `s 2 90` a few times with a loose horn on: the shaft should turn the way that unfolds
+the leg. If it turns the other way, tell us, and use the opposite end for that side.
+</Check>
+
+## Keep the rig running
+
+Leave the bench rig set up while you build the legs. Before each horn goes on, plug that servo into its channel and send
+`a <ch>`, so it's powered and holding the right angle while you fit the horn. Then `o <ch>` and unplug it.
+
+<Done id="servos" label="All twelve tested and labelled" />

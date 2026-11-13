@@ -1,0 +1,179 @@
+---
+/**
+ * Power wiring diagram. mode="bench": bench supply -> SZBK07 -> shield, UNO Q on USB-C.
+ * mode="robot": LiPo -> XT60 -> switch -> SZBK07 -> shield V+, and -> UNO Q VIN.
+ * Hover or tap a wire to see its gauge and notes.
+ */
+interface Props {
+	mode?: 'bench' | 'robot';
+}
+const { mode = 'robot' } = Astro.props;
+const bench = mode === 'bench';
+---
+
+<figure class="power not-content" data-mode={mode}>
+	<svg viewBox="0 0 720 330" role="img" aria-label={bench ? 'Bench power wiring' : 'Robot power wiring'}>
+		<defs>
+			<marker id={`arr-${mode}`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+				<path d="M0,0 L10,5 L0,10 z" class="arrowhead" />
+			</marker>
+		</defs>
+
+		<!-- source -->
+		<g class="box src">
+			<rect x="20" y="40" width="140" height="70" rx="8" />
+			<text x="90" y="70">{bench ? 'Bench supply' : '2S LiPo'}</text>
+			<text x="90" y="92" class="sub">{bench ? '7–12 V, ≥3 A' : '6.6–8.4 V'}</text>
+		</g>
+		{!bench && (
+			<g class="box">
+				<rect x="200" y="45" width="90" height="60" rx="8" />
+				<text x="245" y="72">Switch</text>
+				<text x="245" y="92" class="sub">see note</text>
+			</g>
+		)}
+		<g class="box buck">
+			<rect x="340" y="40" width="150" height="70" rx="8" />
+			<text x="415" y="70">SZBK07</text>
+			<text x="415" y="92" class="sub">set to 6.0 V</text>
+		</g>
+		<g class="box shield">
+			<rect x="550" y="30" width="150" height="90" rx="8" />
+			<text x="625" y="62">Servo shield</text>
+			<text x="625" y="84" class="sub">V+ terminal block</text>
+			<text x="625" y="102" class="sub">→ 12 servos</text>
+		</g>
+		<g class="box unoq">
+			<rect x="550" y="200" width="150" height="90" rx="8" />
+			<text x="625" y="232">UNO Q</text>
+			<text x="625" y="254" class="sub">{bench ? 'USB-C to computer' : 'VIN (7–24 V)'}</text>
+			<text x="625" y="272" class="sub">shield sits on top</text>
+		</g>
+		{bench && (
+			<g class="box">
+				<rect x="300" y="210" width="150" height="70" rx="8" />
+				<text x="375" y="240">Computer</text>
+				<text x="375" y="262" class="sub">App Lab</text>
+			</g>
+		)}
+
+		<!-- wires -->
+		{bench ? (
+			<g class="wire" tabindex="0" data-info="Bench supply to SZBK07 input: 16 AWG. Check polarity with the meter before switching on.">
+				<path d="M160,75 L340,75" marker-end={`url(#arr-${mode})`} />
+				<text x="250" y="66" class="w">16 AWG</text>
+			</g>
+		) : (
+			<>
+				<g class="wire" tabindex="0" data-info="Battery to switch through the XT60: 16 AWG. The battery lead runs under the plate and up through the slot at the rear-left corner.">
+					<path d="M160,75 L200,75" marker-end={`url(#arr-${mode})`} />
+					<text x="180" y="66" class="w">XT60</text>
+				</g>
+				<g class="wire" tabindex="0" data-info="Switch to SZBK07 input: 16 AWG. This carries all the servo current (several amps when walking).">
+					<path d="M290,75 L340,75" marker-end={`url(#arr-${mode})`} />
+				</g>
+				<g class="wire" tabindex="0" data-info="Switched battery to UNO Q VIN: 22 AWG is enough (the UNO Q, Media Carrier and cameras draw well under 2 A). VIN takes 7–24 V.">
+					<path d="M310,75 L310,245 L550,245" marker-end={`url(#arr-${mode})`} />
+					<text x="420" y="236" class="w">22 AWG → VIN</text>
+				</g>
+			</>
+		)}
+		<g class="wire servo" tabindex="0" data-info="SZBK07 output to the shield's V+ terminal: 16 AWG, as short as possible. Red to V+, black to GND. Set and measure 6.0 V before connecting.">
+			<path d="M490,75 L550,75" marker-end={`url(#arr-${mode})`} />
+			<text x="520" y="66" class="w">6.0 V</text>
+		</g>
+		{bench && (
+			<g class="wire usb" tabindex="0" data-info="USB-C from the computer powers the UNO Q and connects App Lab. The servo rail never powers the UNO Q.">
+				<path d="M450,245 L550,245" marker-end={`url(#arr-${mode})`} />
+				<text x="500" y="236" class="w">USB-C</text>
+			</g>
+		)}
+		<g class="wire gnd" tabindex="0" data-info="Ground is shared through the shield's header pins. The shield's V+ is isolated from the UNO Q's VIN and 5V.">
+			<path d="M625,120 L625,200" stroke-dasharray="6 4" />
+			<text x="635" y="165" class="w" text-anchor="start">I2C + GND</text>
+		</g>
+	</svg>
+	<figcaption class="info">Hover or tap a wire for details.</figcaption>
+</figure>
+
+<style>
+	.power {
+		margin: 1rem 0 1.5rem;
+	}
+	svg {
+		width: 100%;
+		height: auto;
+		background: var(--sl-color-gray-7, var(--sl-color-gray-6));
+		border-radius: 0.5rem;
+		border: 1px solid var(--sl-color-gray-5);
+	}
+	.box rect {
+		fill: var(--sl-color-bg);
+		stroke: var(--sl-color-gray-3);
+		stroke-width: 2;
+	}
+	.buck rect {
+		stroke: #e5484d;
+	}
+	.shield rect,
+	.unoq rect {
+		stroke: #30a46c;
+	}
+	text {
+		fill: var(--sl-color-white);
+		font-size: 16px;
+		text-anchor: middle;
+		font-weight: 600;
+	}
+	.sub,
+	.w {
+		font-size: 12px;
+		font-weight: 400;
+		fill: var(--sl-color-gray-2);
+	}
+	.wire path {
+		fill: none;
+		stroke: #e5484d;
+		stroke-width: 4;
+	}
+	.wire.usb path {
+		stroke: #3e63dd;
+	}
+	.wire.gnd path {
+		stroke: var(--sl-color-gray-3);
+		stroke-width: 3;
+	}
+	.arrowhead {
+		fill: var(--sl-color-gray-2);
+	}
+	.wire {
+		cursor: help;
+		outline: none;
+	}
+	.wire:hover path,
+	.wire:focus path,
+	.wire.active path {
+		stroke-width: 7;
+	}
+	.info {
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-2);
+		margin-top: 0.4rem;
+		min-height: 2.6em;
+	}
+</style>
+
+<script>
+	document.querySelectorAll<HTMLElement>('figure.power').forEach((fig) => {
+		const info = fig.querySelector<HTMLElement>('.info')!;
+		fig.querySelectorAll<SVGGElement>('.wire').forEach((w) => {
+			const show = () => {
+				fig.querySelectorAll('.wire').forEach((x) => x.classList.toggle('active', x === w));
+				info.textContent = w.dataset.info ?? '';
+			};
+			w.addEventListener('mouseenter', show);
+			w.addEventListener('focus', show);
+			w.addEventListener('click', show);
+		});
+	});
+</script>

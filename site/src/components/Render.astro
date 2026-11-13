@@ -1,0 +1,127 @@
+---
+/**
+ * A CAD render for one assembly step, with three views: an assembling animation, the exploded still
+ * (new parts in orange) and the finished state. Files come from scripts/render_guide.FCMacro:
+ * public/renders/<id>.mp4, <id>.png and <id>-done.png.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+	id: string;
+	caption?: string;
+	/** Which view opens first. */
+	start?: 'animate' | 'exploded' | 'done';
+}
+const { id, caption, start = 'animate' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const dir = path.join(process.cwd(), 'public', 'renders');
+const has = (f: string) => fs.existsSync(path.join(dir, f));
+const hasVideo = has(`${id}.mp4`);
+const hasDone = has(`${id}-done.png`);
+const first = start === 'animate' && !hasVideo ? 'exploded' : start;
+const src = (f: string) => `${base}/renders/${f}`;
+---
+
+<figure class="render not-content" data-first={first}>
+	<div class="render-card stage">
+		{hasVideo && (
+			<video
+				class="view"
+				data-view="animate"
+				muted
+				loop
+				playsinline
+				preload="none"
+				poster={src(`${id}.png`)}
+				src={src(`${id}.mp4`)}
+				aria-label={`Animation: ${caption ?? id}`}
+				hidden={first !== 'animate'}
+			/>
+		)}
+		<img class="view" data-view="exploded" src={src(`${id}.png`)} alt={`Exploded view: ${caption ?? id}`} loading="lazy" hidden={first !== 'exploded'} />
+		{hasDone && (
+			<img class="view" data-view="done" src={src(`${id}-done.png`)} alt={`Assembled: ${caption ?? id}`} loading="lazy" hidden={first !== 'done'} />
+		)}
+	</div>
+	<div class="controls" role="tablist">
+		{hasVideo && <button type="button" data-show="animate" aria-pressed={first === 'animate'}>▶ Animate</button>}
+		<button type="button" data-show="exploded" aria-pressed={first === 'exploded'}>Exploded</button>
+		{hasDone && <button type="button" data-show="done" aria-pressed={first === 'done'}>Assembled</button>}
+		{caption && <figcaption>{caption}</figcaption>}
+	</div>
+</figure>
+
+<style>
+	.render {
+		margin: 1rem 0 1.5rem;
+	}
+	.stage {
+		aspect-ratio: 4 / 3;
+		display: grid;
+	}
+	/* Starlight's content styles set display:block on images and videos, which beats the hidden attribute. */
+	.view[hidden] {
+		display: none !important;
+	}
+	.view {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		grid-area: 1 / 1;
+		margin: 0 !important;
+	}
+	.controls {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		align-items: center;
+		margin-top: 0.5rem !important;
+	}
+	button {
+		font: inherit;
+		font-size: var(--sl-text-sm);
+		padding: 0.2rem 0.7rem;
+		border-radius: 999px;
+		border: 1px solid var(--sl-color-gray-4);
+		background: transparent;
+		color: var(--sl-color-gray-2);
+		cursor: pointer;
+	}
+	button[aria-pressed='true'] {
+		background: var(--sl-color-accent);
+		border-color: var(--sl-color-accent);
+		color: var(--sl-color-black);
+	}
+	figcaption {
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+		margin-left: 0.4rem;
+	}
+</style>
+
+<script>
+	function setup(fig: HTMLElement) {
+		const views = fig.querySelectorAll<HTMLElement>('.view');
+		const buttons = fig.querySelectorAll<HTMLButtonElement>('button[data-show]');
+		const video = fig.querySelector('video');
+		const show = (name: string) => {
+			views.forEach((v) => (v.hidden = v.dataset.view !== name));
+			buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.show === name)));
+			if (video) name === 'animate' ? video.play().catch(() => {}) : video.pause();
+		};
+		buttons.forEach((b) => b.addEventListener('click', () => show(b.dataset.show!)));
+		if (video) {
+			// Play only while on screen, and not at all for people who prefer reduced motion.
+			const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+			if (reduce && fig.dataset.first === 'animate') show('exploded');
+			new IntersectionObserver((entries) => {
+				for (const e of entries) {
+					if (video.hidden || reduce) continue;
+					e.isIntersecting ? video.play().catch(() => {}) : video.pause();
+				}
+			}, { threshold: 0.4 }).observe(video);
+		}
+	}
+	document.querySelectorAll<HTMLElement>('figure.render').forEach(setup);
+</script>

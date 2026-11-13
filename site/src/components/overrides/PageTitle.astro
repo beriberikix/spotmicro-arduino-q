@@ -1,0 +1,61 @@
+---
+/** Starlight's page title, followed by a purple summary of the draft actions (photos, videos, checks) on the page. */
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+import { actionsFor, hideDrafts, ICON } from '../../data/actions';
+
+const items = hideDrafts ? [] : actionsFor(Astro.locals.starlightRoute.entry.id);
+const count = (t: string) => items.filter((a) => a.type === t).length;
+const parts = [
+	[count('photo'), 'photo'],
+	[count('video'), 'video'],
+	[count('check'), 'thing to check', 'things to check'],
+]
+	.filter(([n]) => n)
+	.map(([n, one, many]) => `${n} ${n === 1 ? one : (many ?? `${one}s`)}`);
+---
+
+<Default />
+{items.length > 0 && (
+	<aside class="actions not-content" aria-label="Your actions on this page">
+		<p class="head">For you on this page: {parts.join(', ')}</p>
+		<ul>
+			{items.map((a) => (
+				<li><a href={`#${a.id}`}><span aria-hidden="true">{ICON[a.type]}</span> {a.text}</a></li>
+			))}
+		</ul>
+	</aside>
+)}
+
+<style>
+	.actions {
+		margin-top: 1rem;
+		padding: 0.7rem 1rem;
+		border-radius: 0.5rem;
+		border-left: 4px solid #a45ee5;
+		background: color-mix(in srgb, #c58af9 14%, transparent);
+		font-size: var(--sl-text-sm);
+	}
+	.head {
+		font-weight: 600;
+		color: #8a3fd1;
+		margin: 0 0 0.3rem;
+	}
+	:global([data-theme='dark']) .head {
+		color: #d7b0ff;
+	}
+	ul {
+		margin: 0;
+		padding-left: 0;
+		list-style: none;
+	}
+	li + li {
+		margin-top: 0.15rem;
+	}
+	a {
+		color: var(--sl-color-white);
+		text-decoration: none;
+	}
+	a:hover {
+		text-decoration: underline;
+	}
+</style>

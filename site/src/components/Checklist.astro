@@ -1,0 +1,60 @@
+---
+/** A list of checkboxes saved in this browser's localStorage under "spot-guide:<id>:<n>". */
+interface Props {
+	id: string;
+	items: string[];
+}
+const { id, items } = Astro.props;
+---
+
+<ul class="checklist not-content" data-list={id}>
+	{items.map((item, i) => (
+		<li>
+			<label>
+				<input type="checkbox" data-key={`spot-guide:${id}:${i}`} />
+				<span set:html={item} />
+			</label>
+		</li>
+	))}
+</ul>
+
+<style>
+	.checklist {
+		list-style: none;
+		padding: 0;
+		margin: 0.75rem 0 1.25rem;
+		display: grid;
+		gap: 0.25rem;
+	}
+	label {
+		display: flex;
+		gap: 0.55rem;
+		align-items: baseline;
+		cursor: pointer;
+	}
+	input {
+		accent-color: var(--sl-color-accent);
+		width: 1rem;
+		height: 1rem;
+		flex: none;
+		transform: translateY(0.15rem);
+	}
+	input:checked + span {
+		color: var(--sl-color-gray-3);
+		text-decoration: line-through;
+	}
+</style>
+
+<script>
+	document.querySelectorAll<HTMLInputElement>('.checklist input[data-key]').forEach((box) => {
+		const key = box.dataset.key!;
+		try {
+			box.checked = localStorage.getItem(key) === '1';
+		} catch {}
+		box.addEventListener('change', () => {
+			try {
+				box.checked ? localStorage.setItem(key, '1') : localStorage.removeItem(key);
+			} catch {}
+		});
+	});
+</script>

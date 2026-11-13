@@ -1,0 +1,33 @@
+---
+title: Shoulder servo
+description: Shoulder servo into its mount, at 90°.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Hw from '../../../components/Hw.astro';
+import Parts from '../../../components/Parts.astro';
+import Render from '../../../components/Render.astro';
+
+<Parts per="per leg" total={4} bag="D" items={[
+	[1, 'DS3218 labelled <code>xx-S</code> (shoulder), with 4 rubber dampeners'],
+	[4, '<kbd class="hw">M3×20</kbd> + 4 M3 nuts'],
+]} tools={['2.5 mm hex', 'Bench rig with servo_tool']} />
+
+<Render id="shoulder-servo" caption="Shoulder servo into the shoulder servo mount" />
+
+<Steps>
+
+1. Plug the shoulder servo into the rig and send `a <ch>` (channels 0, 3, 6, 9): **90°** for all four.
+2. Fit its four rubber dampeners.
+3. Put four M3 nuts into the servo pockets of the mount.
+4. Drop the servo into its pocket, output shaft facing **out of the end of the robot** (towards the nose for front legs,
+   the tail for rear legs), and screw it in with four <Hw>M3×20</Hw>.
+5. `o <ch>`, unplug.
+
+</Steps>
+
+The shoulder servo's horn isn't fitted here; it sits on the outer shoulder plate and goes on in the
+[body section](../../body/install-shoulders/).
+
+<Done id="shoulder-servo" legs />

@@ -1,0 +1,40 @@
+---
+/**
+ * Draft placeholder for a photo or video the builder will shoot. Listed on reference/media-todo.
+ * Set PUBLIC_HIDE_TODO=1 at build time to hide them.
+ */
+interface Props {
+	kind?: 'photo' | 'video';
+	id: string;
+}
+const { kind = 'photo', id } = Astro.props;
+const hide = import.meta.env.PUBLIC_HIDE_TODO === '1';
+---
+
+{!hide && (
+	<div class="todo not-content" id={id} data-media-id={id}>
+		<span class="tag">{kind === 'video' ? '🎥 Video to shoot' : '📷 Photo to take'} · <code>{id}</code></span>
+		<div class="body"><slot /></div>
+	</div>
+)}
+
+<style>
+	.todo {
+		border: 2px dashed #c58af9;
+		border-radius: 0.5rem;
+		padding: 0.6rem 0.9rem;
+		margin: 1rem 0;
+		font-size: var(--sl-text-sm);
+		background: color-mix(in srgb, #c58af9 8%, transparent);
+	}
+	.tag {
+		font-weight: 600;
+		color: #a45ee5;
+	}
+	:global([data-theme='dark']) .tag {
+		color: #d7b0ff;
+	}
+	.body {
+		margin-top: 0.2rem;
+	}
+</style>

@@ -1,0 +1,34 @@
+---
+title: Servo wiring
+description: Plug the twelve servo leads into the shield and dress the cables.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import ServoMap from '../../../components/ServoMap.astro';
+import Todo from '../../../components/Todo.astro';
+
+<ServoMap />
+
+<Steps>
+
+1. Bring each leg's three leads (shoulder, hip, knee) in through its shoulder block.
+2. Run them sideways into the channels beside the SZBK07: there's about **23 mm** of room on the left and **19 mm** on
+   the right.
+3. Plug each into its channel on the shield's right-angle headers, **brown/black wire to the GND row**. Use the labels
+   from [Test and centre the servos](../../prepare/servos/).
+4. Fold the extra length into the shoulder boxes, not over the board stack: the top cover clears the servo plugs by only
+   1.8 mm.
+5. Connect the GY-521: VCC to **3.3 V**, GND, SDA and SCL to the shield's I2C pins (it shares the bus with the PCA9685,
+   at address 0x68).
+
+</Steps>
+
+<Aside type="tip">
+Check every joint once wired: put the robot on its stand, power the servos and the UNO Q, run servo_tool and send `t`
+for each channel. Each joint should move the leg you expect. If not, two plugs are swapped.
+</Aside>
+
+<Todo id="servo-wiring">The shield with all twelve servo plugs in, cables dressed down both sides.</Todo>
+
+<Done id="servo-wiring" label="Twelve servos plugged in and checked" />

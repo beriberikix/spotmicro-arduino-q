@@ -1,0 +1,107 @@
+---
+/** Overall progress, counted from the Done check-offs saved in this browser. */
+import { CHECKS } from '../data/checks';
+const total = CHECKS.reduce((n, c) => n + c.keys.length, 0);
+---
+
+<div class="progress not-content" data-checks={JSON.stringify(CHECKS)} data-total={total}>
+	<div class="bar"><div class="fill"></div></div>
+	<div class="label"><span class="count">0</span> of {total} check-offs done · <button type="button" class="reset">Reset</button></div>
+	<ul class="list">
+		{CHECKS.map((c) => (
+			<li data-keys={c.keys.join(',')}>
+				<a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/${c.slug}/`}>{c.title}</a>
+				<span class="n"></span>
+			</li>
+		))}
+	</ul>
+</div>
+
+<style>
+	.progress {
+		margin: 1rem 0;
+	}
+	.bar {
+		height: 0.6rem;
+		border-radius: 999px;
+		background: var(--sl-color-gray-5);
+		overflow: hidden;
+	}
+	.fill {
+		height: 100%;
+		width: 0;
+		background: var(--sl-color-accent);
+		transition: width 0.3s;
+	}
+	.label {
+		font-size: var(--sl-text-sm);
+		margin: 0.4rem 0;
+		color: var(--sl-color-gray-2);
+	}
+	.reset {
+		font: inherit;
+		background: none;
+		border: none;
+		color: var(--sl-color-accent);
+		cursor: pointer;
+		text-decoration: underline;
+		padding: 0;
+	}
+	.list {
+		columns: 2 16rem;
+		padding: 0;
+		list-style: none;
+		font-size: var(--sl-text-sm);
+	}
+	.list li {
+		break-inside: avoid;
+		display: flex;
+		justify-content: space-between;
+		gap: 0.5rem;
+		padding: 0.1rem 0;
+	}
+	.n {
+		font-family: var(--sl-font-system-mono);
+		color: var(--sl-color-gray-3);
+	}
+	li.complete .n {
+		color: var(--sl-color-accent-high);
+	}
+</style>
+
+<script>
+	const get = (k: string) => {
+		try {
+			return localStorage.getItem(k) === '1';
+		} catch {
+			return false;
+		}
+	};
+	function update() {
+		document.querySelectorAll<HTMLElement>('.progress').forEach((p) => {
+			let done = 0;
+			p.querySelectorAll<HTMLElement>('li[data-keys]').forEach((li) => {
+				const keys = li.dataset.keys!.split(',');
+				const n = keys.filter(get).length;
+				done += n;
+				li.querySelector('.n')!.textContent = `${n}/${keys.length}`;
+				li.classList.toggle('complete', n === keys.length);
+			});
+			const total = Number(p.dataset.total);
+			p.querySelector('.count')!.textContent = String(done);
+			(p.querySelector('.fill') as HTMLElement).style.width = `${(100 * done) / total}%`;
+		});
+	}
+	document.querySelectorAll<HTMLElement>('.progress .reset').forEach((b) =>
+		b.addEventListener('click', () => {
+			try {
+				Object.keys(localStorage)
+					.filter((k) => k.startsWith('spot-guide:'))
+					.forEach((k) => localStorage.removeItem(k));
+			} catch {}
+			update();
+		}),
+	);
+	document.addEventListener('spot-guide-progress', update);
+	update();
+</script>

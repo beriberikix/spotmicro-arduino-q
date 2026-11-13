@@ -1,0 +1,21 @@
+---
+title: Calibration
+description: Placeholder — servo and IMU calibration.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="Coming soon">
+Calibration depends on the firmware, which isn't written yet.
+</Aside>
+
+Planned contents:
+
+- **Per-joint servo centres** against a reference pose: match each joint to an on-screen
+  "expected pose" and nudge its pulse width until the leg matches.
+- **Two reference angles per joint**: judge angles
+  by the joint axes, not by the printed parts, and favour consistency over accuracy.
+- **PWM per degree:** a 180° DS3218 on 500–2500 µs is about 11.1 µs per degree (2.28 PCA9685 counts at 50 Hz). Measure it
+  rather than assuming a round number, or angles come out short.
+- **IMU levelling** with the robot propped level on the helper stand, legs hanging: a robot resting on its folded legs
+  isn't level.

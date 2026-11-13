@@ -1,0 +1,33 @@
+/* Accent matches the orange used for new parts in the renders. */
+:root {
+	--sl-color-accent-low: #3d2306;
+	--sl-color-accent: #e07a10;
+	--sl-color-accent-high: #ffd8ad;
+	--new-part: #f28c1f;
+}
+:root[data-theme='light'] {
+	--sl-color-accent-low: #ffe6cc;
+	--sl-color-accent: #c0620a;
+	--sl-color-accent-high: #5a2c02;
+}
+
+/* Renders have white backgrounds; keep them on a white card in dark mode too. */
+.render-card {
+	background: #fff;
+	border-radius: 0.5rem;
+	border: 1px solid var(--sl-color-gray-5);
+	overflow: hidden;
+}
+.new-part {
+	color: var(--new-part);
+	font-weight: 600;
+}
+kbd.hw {
+	font-family: var(--sl-font-system-mono);
+	font-size: 0.85em;
+	padding: 0.05em 0.4em;
+	border-radius: 0.3em;
+	border: 1px solid var(--sl-color-gray-4);
+	background: var(--sl-color-gray-6);
+	white-space: nowrap;
+}

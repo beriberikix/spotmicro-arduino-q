@@ -1,0 +1,49 @@
+---
+title: Power wiring
+description: Battery, XT60, main switch, SZBK07 and UNO Q VIN.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import PowerDiagram from '../../../components/PowerDiagram.astro';
+import Todo from '../../../components/Todo.astro';
+import Check from '../../../components/Check.astro';
+
+Power comes from a 2S LiPo (6.6–8.4 V) and splits in two after the main switch:
+
+- **Servos:** the SZBK07 drops it to 6.0 V for the shield's V+ terminal. It holds 6.0 V down to about 7.5 V of battery,
+  then follows the battery down, still within the servos' rating.
+- **Brains:** the battery goes straight into the UNO Q's **VIN** (7–24 V), which also powers the Media Carrier and
+  cameras. The GY-521 and the shield's logic run from the UNO Q's 3.3 V.
+
+<PowerDiagram mode="robot" />
+
+<Steps>
+
+1. Solder the female XT60 to a 16 AWG lead for the battery side. The battery lead runs **under the plate**, beside the
+   battery, and up through the **slot at the rear-left corner**.
+2. Wire the switch in the positive lead.
+3. From the switch, run 16 AWG to the SZBK07's **IN+**, and the ground to **IN−**.
+4. From the switch output, run a thinner lead (22 AWG) to the UNO Q's **VIN**, for example the VIN pin on the shield's
+   power header, which passes straight through to the UNO Q. Its ground goes to GND on the same header.
+5. Keep the SZBK07 → shield V+ lead from the bench rig, shortened to length.
+6. Before plugging in the battery: meter **between VIN and GND**, and **between the SZBK07 input terminals**, to
+   check there's no short and the polarity is right.
+
+</Steps>
+
+<Check id="main-switch" title="Main switch current rating">
+The BOM's 19 mm latching push button fits the covers' cutout, but these buttons are usually rated for 3–5 A, and the
+servo rail can draw several amps while walking and more at stall. Options to decide before this step is final:
+a switch rated for 15 A or more, switching only the UNO Q and keeping the XT60 as the servo disconnect, or the button
+driving a MOSFET or relay (see [ideas.md](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/docs/ideas.md#power)).
+</Check>
+
+<Aside type="tip">
+Below about 3.5 V per cell (7.0 V for the pack) the UNO Q's VIN drops below its minimum. Stop and charge at that point;
+it also protects the LiPo.
+</Aside>
+
+<Todo id="power-wiring">The power wiring in the body: XT60 lead coming up through the rear-left slot, switch, SZBK07 input and VIN lead.</Todo>
+
+<Done id="power" label="Power wired and checked with the meter" />

@@ -1,0 +1,14 @@
+---
+title: 3D model viewer
+description: Rotate and zoom the full robot model in your browser.
+---
+
+import ModelViewer from '../../../components/ModelViewer.astro';
+
+The whole robot, exported from the project's FreeCAD assembly (`cad/SpotUnoQ.FCStd`). Use it to check how parts sit
+before you build them.
+
+<ModelViewer src="models/spot-unoq.glb" poster="renders/covers-done.png" alt="SpotMicro for Arduino UNO Q, full assembly" />
+
+The covers are hidden in the model so you can see inside. To get editable CAD, see
+[Working with the CAD](https://github.com/beriberikix/spotmicro-arduino-q#working-with-the-cad).

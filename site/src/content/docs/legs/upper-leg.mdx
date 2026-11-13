@@ -1,0 +1,102 @@
+---
+title: Upper leg
+description: Hip servo into the upper-leg shells, cable routing, and the shells bolted between the knee plates.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Hw from '../../../components/Hw.astro';
+import Parts from '../../../components/Parts.astro';
+import Render from '../../../components/Render.astro';
+import Todo from '../../../components/Todo.astro';
+import Check from '../../../components/Check.astro';
+
+The upper leg is two shells around the **hip servo**. The top shell has an extra hole for the bearing pin that the
+shoulder cover will ride on. Both servo leads, the knee's and the hip's, leave through the hole in the top shell.
+
+<Parts per="per leg" total={4} bag="C" items={[
+	[1, 'Upper-leg bottom shell (<code>Limb_Bottom_Shell</code>)', 'Normal for left legs, mirrored for right'],
+	[1, 'Upper-leg top shell with BB hole', 'Same side'],
+	[1, 'DS3218 labelled <code>xx-H</code> (hip), with 4 rubber dampeners'],
+	[1, 'Bearing pin, M3 bore + <kbd class="hw">M3×8</kbd> + M3 nut'],
+	[4, '<kbd class="hw">M3×20</kbd> + 4 M3 nuts', 'Hip servo and shells'],
+	[4, '<kbd class="hw">M3×20</kbd> + 4 M3 nuts', 'Shells to the knee plates'],
+	[1, 'Lower leg with knee plates, from the previous page'],
+]} tools={['2.5 mm hex', 'Tweezers']} />
+
+## 1. Hip servo into the bottom shell
+
+<Render id="upper-servo" caption="Hip servo and nuts into the bottom shell" />
+
+<Steps>
+
+1. Fit the four rubber dampeners to the hip servo.
+2. Put four M3 nuts in the holes by the servo pocket.
+3. Push the servo into its pocket. The two inner nuts are now held by the servo; the two outer ones can still fall out,
+   so be careful.
+
+</Steps>
+
+## 2. Shoulder-cover pin on the top shell
+
+The top shell has a round hole on its outer face. The M3-bore bearing pin goes on the outside of it, and the
+shoulder cover's bearing rides on that pin.
+
+<Steps>
+
+1. Put an <Hw>M3×8</Hw> through the hole from the inside of the top shell and screw it into the pin on the outside,
+   with an M3 nut if your pin's bore doesn't grip the thread.
+2. Tighten it so the pin sits square and doesn't wobble.
+
+</Steps>
+
+<Check id="pin-fixing" title="Which side the pin screw goes">
+The pin isn't in the CAD assembly. Confirm which side the screw
+head and nut go on during the first build.
+</Check>
+
+<Todo id="shell-pin">The M3 bearing pin fixed to the top shell, outside and inside views.</Todo>
+
+## 3. Route the cables and close the shells
+
+<Render id="upper-shells" caption="Top shell onto the bottom shell, four M3×20 through the servo" />
+
+This is the fiddly part: there is very little room between the shells.
+
+<Steps>
+
+1. Feed the **knee servo's extension cable** (from the lower leg) through the **front hole** of the top shell.
+2. Feed the **hip servo's lead** through the same hole.
+3. Bring the shells together while gently pulling both cables through the hole. The knee cable goes into the shells
+   through the gap between them, and runs in the **groove under the top shell**, which is made for it.
+4. With the shells closed, check the cables still slide back and forth through the hole.
+5. Screw the servo and both shells together with four <Hw>M3×20</Hw>.
+
+</Steps>
+
+<Aside type="tip">
+Avoid thick braided sleeving here: there isn't room. Bare servo cable works; if you must sleeve it, use
+the thinnest you can find.
+</Aside>
+
+<Todo id="upper-cables" kind="video">Routing both servo cables through the top shell and closing the shells (30–45 s), the hardest step to explain in text.</Todo>
+
+## 4. Bolt the shells between the knee plates
+
+<Render id="upper-to-knee" caption="Upper leg between the servohorn mount and the ball-bearing mount" />
+
+<Steps>
+
+1. Put four M3 nuts into the four rear-facing pockets of the shells.
+2. Slide the knee end of the shells between the two knee plates, so the holes in the plates line up with the holes in
+   the shells.
+3. Screw everything together with four <Hw>M3×20</Hw>.
+
+</Steps>
+
+The leg should now fold flat: that's the robot's resting position. Turn the knee gently by hand, servo
+unpowered: it should move without binding against the shells.
+
+<Todo id="upper-leg-done">A finished leg (lower + upper), folded flat, from the outside.</Todo>
+
+<Done id="upper-leg" legs />

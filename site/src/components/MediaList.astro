@@ -1,0 +1,31 @@
+---
+import { CHECKS } from '../data/checks';
+import { ACTIONS, ICON } from '../data/actions';
+/** Collects every <Todo> and <Check> from the guide pages into one list, in build order. */
+interface Props {
+	type: 'media' | 'check';
+}
+const { type } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const order = CHECKS.map((c) => c.slug);
+const rank = (slug: string) => order.indexOf(slug) + 1 || 999;
+const rows = ACTIONS.filter((a) => (type === 'check') === (a.type === 'check')).sort((a, b) => rank(a.slug) - rank(b.slug));
+const photos = rows.filter((r) => r.type === 'photo').length;
+---
+
+{type === 'media'
+	? <p><strong>{photos}</strong> photos and <strong>{rows.length - photos}</strong> videos requested.</p>
+	: <p><strong>{rows.length}</strong> things to confirm on the first build.</p>}
+<table>
+	<thead><tr><th></th><th>ID</th><th>Page</th><th>{type === 'media' ? 'What to capture' : 'What to check'}</th></tr></thead>
+	<tbody>
+		{rows.map((r) => (
+			<tr>
+				<td>{ICON[r.type]}</td>
+				<td><code>{r.id}</code></td>
+				<td><a href={`${base}/${r.slug}/#${r.id}`}>{r.page}</a></td>
+				<td>{r.text}</td>
+			</tr>
+		))}
+	</tbody>
+</table>

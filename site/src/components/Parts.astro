@@ -1,0 +1,89 @@
+---
+/**
+ * "You need" box for a step. items: [qty, name, note?]. `per` says what the quantities are for
+ * (e.g. "per leg"), `total` is the multiplier shown next to it (e.g. 4).
+ */
+interface Props {
+	items: [number | string, string, string?][];
+	per?: string;
+	total?: number;
+	bag?: string;
+	tools?: string[];
+}
+const { items, per, total, bag, tools } = Astro.props;
+---
+
+<aside class="parts not-content">
+	<div class="head">
+		<strong>You need</strong>
+		{per && <span class="per">{per}{total ? ` · ×${total} in total` : ''}</span>}
+		{bag && <span class="bag">Bag {bag}</span>}
+	</div>
+	<ul>
+		{items.map(([qty, name, note]) => (
+			<li>
+				<span class="qty">{typeof qty === 'number' ? `${qty}×` : qty}</span>
+				<span class="name"><Fragment set:html={name} /></span>
+				{note && <span class="note"><Fragment set:html={note} /></span>}
+			</li>
+		))}
+	</ul>
+	{tools && tools.length > 0 && <div class="tools"><strong>Tools:</strong> {tools.join(' · ')}</div>}
+</aside>
+
+<style>
+	.parts {
+		border: 1px solid var(--sl-color-gray-5);
+		border-left: 4px solid var(--sl-color-accent);
+		border-radius: 0.4rem;
+		padding: 0.75rem 1rem;
+		margin: 1rem 0;
+		background: var(--sl-color-gray-7, var(--sl-color-gray-6));
+		font-size: var(--sl-text-sm);
+	}
+	.head {
+		display: flex;
+		gap: 0.75rem;
+		align-items: baseline;
+		flex-wrap: wrap;
+		margin-bottom: 0.4rem;
+	}
+	.per {
+		color: var(--sl-color-gray-3);
+	}
+	.bag {
+		margin-left: auto;
+		font-family: var(--sl-font-system-mono);
+		border: 1px dashed var(--sl-color-accent);
+		border-radius: 0.3rem;
+		padding: 0 0.4rem;
+		color: var(--sl-color-accent-high);
+	}
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: 0.2rem;
+	}
+	li {
+		display: grid;
+		grid-template-columns: 3rem 1fr;
+		column-gap: 0.25rem;
+	}
+	.qty {
+		font-family: var(--sl-font-system-mono);
+		color: var(--sl-color-accent-high);
+		text-align: right;
+		padding-right: 0.4rem;
+	}
+	.note {
+		grid-column: 2;
+		color: var(--sl-color-gray-3);
+		font-size: 0.92em;
+	}
+	.tools {
+		margin-top: 0.5rem;
+		color: var(--sl-color-gray-2);
+	}
+</style>

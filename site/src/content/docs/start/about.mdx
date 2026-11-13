@@ -1,0 +1,51 @@
+---
+title: About this guide
+description: What you are building, how this guide works, and what it builds on.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+This guide walks you through building **SpotMicro for Arduino UNO Q**, a 3D-printed robot dog with twelve servos, an
+[Arduino UNO Q](https://docs.arduino.cc/hardware/uno-q/) brain, an
+[UNO Media Carrier](https://docs.arduino.cc/hardware/uno-media-carrier/) and two Raspberry Pi Camera Module 2s in the
+head. Every printable part is in the [repository](https://github.com/beriberikix/spotmicro-arduino-q/tree/main/stl).
+
+## How to use it
+
+- **Read each section once before you start it.** Several steps depend on the servo being at the right angle *before*
+  a horn goes on.
+- **Build the front-left leg first, end to end, then the other three.** The first leg teaches you the parts; the next
+  three go much faster. Pages show the front-left leg; the others are the same or mirrored, and the page says which.
+- **Check things off.** The ✓ boxes save your progress in this browser, and the [home page](../../) adds them up.
+- **Watch the animation.** Each step has a CAD render with three views: an animation of the parts going together, an
+  exploded view with the new parts in <span class="new-part">orange</span>, and the finished step.
+
+<Aside type="caution" title="This is a first draft">
+The renders come from the project's FreeCAD model, not from a real build yet. Steps marked with a purple **Photo to take**
+or **Video to shoot** box will get real photos and clips. If something here doesn't match your parts, trust the parts
+and [open an issue](https://github.com/beriberikix/spotmicro-arduino-q/issues).
+</Aside>
+
+## What it builds on
+
+The frame is Michael Kubina's [SpotMicroESP32](https://github.com/michaelkubina/SpotMicroESP32), published on
+Thingiverse as "Kooba", a support-free remix of Deok-yeon Kim's original
+[Spot Micro](https://www.thingiverse.com/thing:3445283). The shoulders are robjk's
+[reinforced shoulder remix](https://www.thingiverse.com/thing:4937631). The electronics plate and camera head are this
+project's own. The firmware will be a port of Rune Harlyk's
+[Leika](https://github.com/runeharlyk/SpotMicroESP32-Leika).
+
+The leg, shoulder and body steps follow the order of Kubina's
+[assembly guide](https://github.com/michaelkubina/SpotMicroESP32/tree/master/assembly). This guide adds robjk's
+shoulder covers, the UNO Q electronics, per-step hardware counts, a servo tool sketch and a single table of servo angles.
+See [Credits and sources](../../reference/credits/) for everything this guide learned from.
+
+## Time
+
+| Stage | Time |
+| ----- | ---- |
+| Printing (full robot, P1S) | about 32 h |
+| Fit check, cleanup, sorting hardware | 2–3 h |
+| Shield soldering, servo testing | 2 h |
+| Four legs with shoulders | 4–6 h (the first leg is the slowest) |
+| Body, electronics, covers | 3–4 h |
