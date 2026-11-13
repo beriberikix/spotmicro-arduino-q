@@ -9,6 +9,7 @@ import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
 import Todo from '../../../components/Todo.astro';
+import Check from '../../../components/Check.astro';
 
 <Parts bag="G" items={[
 	[3, 'LiPo brackets (front, middle, rear)'],
@@ -30,10 +31,10 @@ import Todo from '../../../components/Todo.astro';
 
 </Steps>
 
-<Aside type="caution" title="Draft: LiPo brackets">
+<Check id="lipo-brackets" title="How the LiPo brackets fix">
 The brackets aren't in the CAD assembly yet. Document how they fix to the plate, and the battery size that fits, on the
 first build.
-</Aside>
+</Check>
 
 <Todo id="battery">The battery in its brackets under the plate, lead coming up through the rear-left slot.</Todo>
 

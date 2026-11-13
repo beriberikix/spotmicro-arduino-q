@@ -8,6 +8,7 @@ import Done from '../../../components/Done.astro';
 import Parts from '../../../components/Parts.astro';
 import PowerDiagram from '../../../components/PowerDiagram.astro';
 import Todo from '../../../components/Todo.astro';
+import Check from '../../../components/Check.astro';
 
 Before any servo goes into a leg, you'll test it and set it to its assembly angle. That needs a small bench rig: the
 UNO Q with the servo shield on top, and the SZBK07 feeding the servos 6.0 V. The same boards go into the robot later,
@@ -47,11 +48,11 @@ pads are which.
 
 </Steps>
 
-<Aside type="caution" title="Draft: confirm on the real board">
+<Check id="shield-sj1-default" title="SJ1 factory setting">
 Adafruit doesn't document SJ1's factory setting in words. Look at your board: the blob should be on the 5V side, and
 it's the one you move. Leaving A4/A5 joined to SDA/SCL is harmless as long as no sketch uses A4/A5 or `Wire2`, but
 cutting them removes the risk.
-</Aside>
+</Check>
 
 <Todo id="shield-sj1">Close-up of SJ1 before and after moving the jumper to 3V, and of the cut A4/A5 traces.</Todo>
 

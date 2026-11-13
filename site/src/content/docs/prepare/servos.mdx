@@ -8,6 +8,7 @@ import Done from '../../../components/Done.astro';
 import ServoMap from '../../../components/ServoMap.astro';
 import Todo from '../../../components/Todo.astro';
 import AngleTable from '../../../components/AngleTable.astro';
+import Check from '../../../components/Check.astro';
 
 Every source agrees on this: **a servo must be at a known angle before its horn goes on.** The horn has 25 teeth and
 six arms, so it can only go on in a few positions, and fixing a joint later means taking the leg apart. Test every
@@ -94,11 +95,11 @@ Each servo is fitted at a specific angle:
 
 <AngleTable />
 
-<Aside type="caution" title="Draft: verify on the first leg">
+<Check id="knee-direction" title="Which way the knee turns">
 The knee angles put the servo at one end of its travel, with the leg folded flat. Before you fit the
 first knee horn, send `a 2` and `s 2 90` a few times with a loose horn on: the shaft should turn the way that unfolds
 the leg. If it turns the other way, tell us, and use the opposite end for that side.
-</Aside>
+</Check>
 
 ## Keep the rig running
 

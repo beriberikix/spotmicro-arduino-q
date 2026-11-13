@@ -7,6 +7,7 @@ import { Aside, Steps } from '@astrojs/starlight/components';
 import Done from '../../../components/Done.astro';
 import PowerDiagram from '../../../components/PowerDiagram.astro';
 import Todo from '../../../components/Todo.astro';
+import Check from '../../../components/Check.astro';
 
 Power comes from a 2S LiPo (6.6–8.4 V) and splits in two after the main switch:
 
@@ -31,12 +32,12 @@ Power comes from a 2S LiPo (6.6–8.4 V) and splits in two after the main switch
 
 </Steps>
 
-<Aside type="caution" title="Open question: the main switch">
+<Check id="main-switch" title="Main switch current rating">
 The BOM's 19 mm latching push button fits the covers' cutout, but these buttons are usually rated for 3–5 A, and the
 servo rail can draw several amps while walking and more at stall. Options to decide before this step is final:
 a switch rated for 15 A or more, switching only the UNO Q and keeping the XT60 as the servo disconnect, or the button
 driving a MOSFET or relay (see [ideas.md](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/docs/ideas.md#power)).
-</Aside>
+</Check>
 
 <Aside type="tip">
 Below about 3.5 V per cell (7.0 V for the pack) the UNO Q's VIN drops below its minimum. Stop and charge at that point;

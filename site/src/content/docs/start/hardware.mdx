@@ -5,6 +5,7 @@ description: Pre-sort screws, nuts, bearings and horns into one bag per step.
 
 import { Aside } from '@astrojs/starlight/components';
 import Done from '../../../components/Done.astro';
+import Check from '../../../components/Check.astro';
 
 Sorting the hardware first turns a 250-screw build into a series of small, countable kits, and you'll see straight away
 if anything is missing. Use small zip bags, cups or an egg carton, and label each one with its letter.
@@ -99,9 +100,9 @@ horn are enough, if you're short.
 | M3 nuts | about 148 | 148 |
 | 625ZZ | 12 | 12 |
 
-<Aside type="caution">
+<Check id="hardware-counts" title="M3×8 and cover screw counts">
 The M3×8 count here is higher than the BOM's, and the shoulder-cover screw count is still to be confirmed on a real
-build. Buy a 100-pack of M3×8 and a few extra M3×20. Draft note: to be confirmed during the first build.
-</Aside>
+build. Buy a 100-pack of M3×8 and a few extra M3×20.
+</Check>
 
 <Done id="hardware" label="Bags A–G sorted" />

@@ -1,0 +1,43 @@
+---
+/**
+ * Something to confirm on the first real build (an open question in the draft). Purple like <Todo>, collected in the
+ * page's summary box and on reference/media-todo. Hidden when PUBLIC_HIDE_TODO=1.
+ */
+import { hideDrafts } from '../data/actions';
+interface Props {
+	id: string;
+	title: string;
+}
+const { id, title } = Astro.props;
+---
+
+{!hideDrafts && (
+	<div class="check not-content" id={id}>
+		<span class="tag">🔍 Check on your build · {title}</span>
+		<div class="body"><slot /></div>
+	</div>
+)}
+
+<style>
+	.check {
+		border: 2px solid #c58af9;
+		border-radius: 0.5rem;
+		padding: 0.6rem 0.9rem;
+		margin: 1rem 0;
+		font-size: var(--sl-text-sm);
+		background: color-mix(in srgb, #c58af9 8%, transparent);
+	}
+	.tag {
+		font-weight: 600;
+		color: #a45ee5;
+	}
+	:global([data-theme='dark']) .tag {
+		color: #d7b0ff;
+	}
+	.body {
+		margin-top: 0.2rem;
+	}
+	.body :global(p) {
+		margin: 0;
+	}
+</style>

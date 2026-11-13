@@ -9,6 +9,7 @@ import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
 import Todo from '../../../components/Todo.astro';
+import Check from '../../../components/Check.astro';
 
 <Parts bag="G" items={[
 	[2, 'Raspberry Pi Camera Module 2'],
@@ -34,10 +35,10 @@ import Todo from '../../../components/Todo.astro';
 
 </Steps>
 
-<Aside type="caution" title="Draft: check the lens position">
+<Check id="lens-position" title="Lens position in the head">
 The lens window position comes from published camera figures, not an official drawing. If a lens isn't centred in its
 window, the parameter is `Cam_Lens_From_Top` in `cad/Sensormount_DualCam.FCStd`.
-</Aside>
+</Check>
 
 <Todo id="head-cameras">Back of the sensor mount with both cameras screwed on and cables connected.</Todo>
 <Todo id="head-fold" kind="video">Folding the spare camera cable and fitting the head to the body (20 s).</Todo>

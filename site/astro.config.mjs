@@ -17,6 +17,7 @@ export default defineConfig({
 			social: [{ icon: 'github', label: 'GitHub', href: repo }],
 			editLink: { baseUrl: `${repo}/edit/main/site/` },
 			customCss: ['./src/styles/custom.css'],
+			components: { PageTitle: './src/components/overrides/PageTitle.astro' },
 			lastUpdated: true,
 			sidebar: [
 				{ label: 'Start here', items: [
@@ -65,7 +66,7 @@ export default defineConfig({
 					{ label: '3D model viewer', slug: 'reference/viewer' },
 					{ label: 'Troubleshooting', slug: 'reference/troubleshooting' },
 					{ label: 'Credits and sources', slug: 'reference/credits' },
-					{ label: 'Draft: photos and videos to shoot', slug: 'reference/media-todo' },
+					{ label: 'Draft: photos, videos and checks', slug: 'reference/media-todo' },
 				] },
 			],
 		}),
