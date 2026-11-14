@@ -1,0 +1,60 @@
+---
+/**
+ * Photos of every plate from the MakerWorld print profile, printed and laid out, so a builder can check they have
+ * every part. Files in public/photos/prints, cropped and stripped of metadata.
+ */
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const PLATES: [file: string, name: string, parts: string][] = [
+	['01-chassis', 'Chassis plates and rails', '2 inner and 2 outer shoulder plates, 2 chassis sides'],
+	['02-electronics', 'Electronics plate and chassis blocks', 'UNO Q mounting plate, 2 top and 2 bottom shoulder blocks, 3 LiPo brackets'],
+	['03-shoulders', 'Shoulder joints and head mounts', '4 servo mounts (2 normal, 2 mirrored), 4 servo caps, 12 bearing pins, camera mount'],
+	['04-upper-leg-frames', 'Upper leg frames', '4 ball-bearing mounts and 4 servo-horn mounts, half of each mirrored'],
+	['05-lower-legs', 'Lower legs', '4 wrists and 4 wrist counterparts, half of each mirrored'],
+	['06-top-shells', 'Upper leg top shells', '4 top shells, 2 mirrored'],
+	['07-bottom-shells', 'Upper leg bottom shells and shoulder covers', '4 bottom shells (2 mirrored), 4 shoulder covers'],
+	['08-body-covers', 'Body covers', 'Top front, top rear (OLED), bottom front and bottom rear covers'],
+	['09-head-rear-covers', 'Head and rear covers', 'Front (head) cover, rear cover shell, rear cover plate'],
+	['10-feet', 'Feet (TPU)', '4 foot tips'],
+];
+---
+
+<div class="plates not-content">
+	{PLATES.map(([file, name, parts], i) => (
+		<figure>
+			<a href={`${base}/photos/prints/${file}.jpg`}>
+				<img src={`${base}/photos/prints/${file}.jpg`} alt={`Plate ${i + 1}, ${name}: ${parts}`} loading="lazy" width="1400" height="1050" />
+			</a>
+			<figcaption><strong>{i + 1} · {name}</strong><br />{parts}</figcaption>
+		</figure>
+	))}
+</div>
+
+<style>
+	.plates {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+		gap: 1rem;
+		margin: 1rem 0 1.5rem;
+	}
+	figure {
+		margin: 0;
+	}
+	img {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		border-radius: 0.4rem;
+		display: block;
+	}
+	figcaption {
+		font-size: var(--sl-text-xs);
+		color: var(--sl-color-gray-3);
+		margin-top: 0.35rem;
+		line-height: 1.4;
+	}
+	figcaption strong {
+		color: var(--sl-color-white);
+		font-size: var(--sl-text-sm);
+	}
+</style>
