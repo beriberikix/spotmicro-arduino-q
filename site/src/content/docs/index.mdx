@@ -21,8 +21,10 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 import Progress from '../../components/Progress.astro';
 import { hideDrafts } from '../../data/actions';
 
+export const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 <div class="render-card">
-	<video autoplay muted loop playsinline poster={`${import.meta.env.BASE_URL}renders/covers-done.png`} src={`${import.meta.env.BASE_URL}spot-unoq-explode.mp4`} style="width:100%;display:block" aria-label="The robot exploding and reassembling"></video>
+	<video autoplay muted loop playsinline poster={`${base}/renders/covers-done.png`} src={`${base}/spot-unoq-explode.mp4`} style="width:100%;display:block" aria-label="The robot exploding and reassembling"></video>
 </div>
 
 ## The build at a glance
