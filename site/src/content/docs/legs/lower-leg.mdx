@@ -9,6 +9,7 @@ import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
 import Todo from '../../../components/Todo.astro';
+import WhichSide from '../../../components/WhichSide.astro';
 
 The lower leg (the **wrist**) holds the knee servo. Build all four the same way, using normal parts for
 the left legs and `_mirrored` parts for the right legs.
@@ -24,6 +25,13 @@ the left legs and `_mirrored` parts for the right legs.
 	[1, '<kbd class="hw">M2×8</kbd> + 1 M2 nut', 'Bearing pin'],
 	[4, '<kbd class="hw">M3×20</kbd> + 4 M3 nuts', 'Servo sandwich'],
 ]} tools={['2.5 mm hex', '1.5 mm hex', 'Tweezers']} />
+
+## Which one?
+
+Parts printed from this repository's current files have their side engraved on a face that ends up hidden: **L** or **R**, and **FL RR** or **FR RL** on the shoulder servo mount. For parts without it, put each one down as described and pick your leg: the green check marks the version that leg takes.
+
+<WhichSide part="wrist" />
+<WhichSide part="wrist-counterpart" />
 
 ## 1. Foot tip
 

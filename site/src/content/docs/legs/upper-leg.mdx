@@ -10,6 +10,7 @@ import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
 import Todo from '../../../components/Todo.astro';
 import Check from '../../../components/Check.astro';
+import WhichSide from '../../../components/WhichSide.astro';
 
 The upper leg is two shells around the **hip servo**. The top shell has an extra hole for the bearing pin that the
 shoulder cover will ride on. Both servo leads, the knee's and the hip's, leave through the hole in the top shell.
@@ -23,6 +24,13 @@ shoulder cover will ride on. Both servo leads, the knee's and the hip's, leave t
 	[4, '<kbd class="hw">M3×20</kbd> + 4 M3 nuts', 'Shells to the knee plates'],
 	[1, 'Lower leg with knee plates, from the previous page'],
 ]} tools={['2.5 mm hex', 'Tweezers']} />
+
+## Which one?
+
+Parts printed from this repository's current files have their side engraved on a face that ends up hidden: **L** or **R**, and **FL RR** or **FR RL** on the shoulder servo mount. For parts without it, put each one down as described and pick your leg: the green check marks the version that leg takes.
+
+<WhichSide part="bottom-shell" />
+<WhichSide part="top-shell" />
 
 ## 1. Hip servo into the bottom shell
 
