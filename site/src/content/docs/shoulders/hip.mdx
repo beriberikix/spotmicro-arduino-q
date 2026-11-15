@@ -9,6 +9,7 @@ import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
 import Todo from '../../../components/Todo.astro';
+import WhichSide from '../../../components/WhichSide.astro';
 
 The **shoulder joint** is the extended servo mount plus the extended servo cap. The cap carries the horn that the
 hip servo drives, and its extension is where the shoulder cover will bolt on.
@@ -24,11 +25,13 @@ hip servo drives, and its extension is where the shoulder cover will bolt on.
 	[1, 'Leg from the previous pages'],
 ]} tools={['1.5 mm hex', '2.5 mm hex', 'Bench rig with servo_tool']} />
 
-<Aside type="caution" title="Which servo mount?">
+## Which servo mount?
+
 Both shoulder servos on a side face **outwards**: the front one towards the nose, the rear one towards the tail. So each
-side uses **one normal and one mirrored** mount. Pair them up before you start: FL with RR are the same part, and FR with RL. Hold a mount
-against its leg and check that the servo pocket opens towards the correct end of the robot.
-</Aside>
+side uses **one normal and one mirrored** mount: FL and RR take the same version, FR and RL the other. Mounts printed
+from the current files have **FL RR** or **FR RL** engraved on a face that ends up hidden.
+
+<WhichSide part="shoulder-mount" />
 
 ## 1. Horn onto the extended cap
 

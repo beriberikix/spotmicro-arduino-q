@@ -1,0 +1,226 @@
+---
+/**
+ * IKEA-style "which one?" card for a part that comes in normal and mirrored versions. Pick a leg and the card puts a
+ * green check on the version that leg takes and a red cross on the other, both drawn in the same pose with a zoom on
+ * the feature that tells them apart. The chosen leg is shared by every card on the site (localStorage).
+ * Images: public/renders/sides/<part>-{normal,mirrored}[-zoom].png from scripts/render_sides.FCMacro.
+ */
+import { SIDES, LEGS, type Leg } from '../data/sides';
+
+interface Props {
+	part: keyof typeof SIDES;
+}
+const { part } = Astro.props;
+const p = SIDES[part];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const img = (v: string, zoom = false) => `${base}/renders/sides/${part}-${v}${zoom ? '-zoom' : ''}.png`;
+const first: Leg = 'FL';
+---
+
+<figure class="which not-content" data-part={part} data-map={JSON.stringify(p.legs)}>
+	<figcaption class="head">
+		<strong>{p.name}: which one?</strong>
+		<span class="legs" role="group" aria-label="Leg you are building">
+			{LEGS.map((l) => (
+				<button type="button" data-leg={l} aria-pressed={l === first}>{l}</button>
+			))}
+		</span>
+	</figcaption>
+	<div class="pair">
+		{(['normal', 'mirrored'] as const).map((v) => {
+			const ok = p.legs[first] === v;
+			return (
+				<div class="card" data-version={v} data-ok={String(ok)}>
+					<img class="part" src={img(v)} alt={`${p.name}, ${v === 'normal' ? 'normal' : 'mirrored'} version, ${p.pose}`} loading="lazy" />
+					<img class="zoom" src={img(v, true)} alt="" loading="lazy" />
+					<span class="mark" aria-hidden="true">
+						<svg class="yes" viewBox="0 0 40 40"><circle cx="20" cy="20" r="19" /><path d="M11 21l6 6 12-14" /></svg>
+						<svg class="no" viewBox="0 0 40 40"><circle cx="20" cy="20" r="19" /><path d="M13 13l14 14M27 13L13 27" /></svg>
+					</span>
+					<span class="file">
+						<span class="sr verdict">{ok ? 'Correct' : 'Wrong'} for <span class="leg">{first}</span>: </span>
+						<code>{p.file}{v === 'mirrored' ? '_mirrored' : ''}</code>
+						<span class="who">{LEGS.filter((l) => p.legs[l] === v).join(' · ')}</span>
+					</span>
+				</div>
+			);
+		})}
+	</div>
+	<p class="tell">{p.tell}</p>
+</figure>
+
+<style>
+	.which {
+		margin: 1.25rem 0 1.5rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+		padding: 0.75rem;
+	}
+	.head {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.6rem;
+	}
+	.legs {
+		display: inline-flex;
+		gap: 0.3rem;
+	}
+	button {
+		font: inherit;
+		font-size: var(--sl-text-xs);
+		font-weight: 600;
+		padding: 0.15rem 0.6rem;
+		border-radius: 999px;
+		border: 1px solid var(--sl-color-gray-4);
+		background: transparent;
+		color: var(--sl-color-gray-2);
+		cursor: pointer;
+	}
+	button[aria-pressed='true'] {
+		background: var(--sl-color-accent);
+		border-color: var(--sl-color-accent);
+		color: var(--sl-color-black);
+	}
+	.pair {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.6rem;
+	}
+	.card {
+		position: relative;
+		background: #fff;
+		border-radius: 0.4rem;
+		border: 3px solid transparent;
+		padding-bottom: 2.6rem;
+		transition: border-color 0.15s, opacity 0.15s;
+	}
+	.card[data-ok='true'] {
+		border-color: #1f9d55;
+	}
+	.card[data-ok='false'] {
+		border-color: #d33;
+	}
+	.card[data-ok='false'] .part,
+	.card[data-ok='false'] .zoom {
+		opacity: 0.55;
+	}
+	.part {
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		object-fit: contain;
+		display: block;
+	}
+	.zoom {
+		position: absolute;
+		left: 0.4rem;
+		bottom: 2.9rem;
+		width: 36%;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		border: 2px solid #333;
+		background: #fff;
+		object-fit: cover;
+	}
+	.mark {
+		position: absolute;
+		top: 0.4rem;
+		right: 0.4rem;
+		width: 2.6rem;
+		height: 2.6rem;
+	}
+	.mark svg {
+		width: 100%;
+		height: 100%;
+		display: none;
+	}
+	.mark circle {
+		stroke: none;
+	}
+	.mark path {
+		fill: none;
+		stroke: #fff;
+		stroke-width: 4.5;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.yes circle {
+		fill: #1f9d55;
+	}
+	.no circle {
+		fill: #d33;
+	}
+	.card[data-ok='true'] .yes,
+	.card[data-ok='false'] .no {
+		display: block;
+	}
+	.file {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		padding: 0.3rem 0.5rem;
+		font-size: var(--sl-text-xs);
+		color: #333;
+		line-height: 1.3;
+	}
+	.file code {
+		color: #111;
+		background: none;
+		padding: 0;
+		word-break: break-all;
+	}
+	.who {
+		display: block;
+		color: #666;
+	}
+	.sr {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+	}
+	.tell {
+		margin: 0.6rem 0 0;
+		font-size: var(--sl-text-sm);
+	}
+	@media (max-width: 30rem) {
+		.zoom {
+			width: 42%;
+		}
+	}
+</style>
+
+<script>
+	const KEY = 'spot-guide:which-leg';
+	const figs = document.querySelectorAll<HTMLElement>('figure.which');
+	function apply(leg: string) {
+		figs.forEach((fig) => {
+			const map = JSON.parse(fig.dataset.map!);
+			fig.querySelectorAll<HTMLButtonElement>('button[data-leg]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.leg === leg)));
+			fig.querySelectorAll<HTMLElement>('.card').forEach((c) => {
+				const ok = map[leg] === c.dataset.version;
+				c.dataset.ok = String(ok);
+				c.querySelector('.verdict')!.firstChild!.textContent = `${ok ? 'Correct' : 'Wrong'} for `;
+				c.querySelector('.leg')!.textContent = leg;
+			});
+		});
+	}
+	figs.forEach((fig) =>
+		fig.querySelectorAll<HTMLButtonElement>('button[data-leg]').forEach((b) =>
+			b.addEventListener('click', () => {
+				apply(b.dataset.leg!);
+				try {
+					localStorage.setItem(KEY, b.dataset.leg!);
+				} catch {}
+			}),
+		),
+	);
+	try {
+		const saved = localStorage.getItem(KEY);
+		if (saved) apply(saved);
+	} catch {}
+</script>

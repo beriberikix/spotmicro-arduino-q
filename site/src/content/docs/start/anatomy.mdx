@@ -4,6 +4,7 @@ description: The names this guide uses for legs, joints, sides and parts.
 ---
 
 import ServoMap from '../../../components/ServoMap.astro';
+import WhichSide from '../../../components/WhichSide.astro';
 
 ## Directions
 
@@ -50,8 +51,21 @@ shoulder servo mount is the exception: each side gets one normal and one mirrore
 the front leg and one for the rear, so that both shoulder servo outputs face outwards (towards the nose at the front
 and the tail at the back).
 
-Mark every part with a pencil or a dot of paint marker as soon as it comes off the printer: **FL**, **FR**, **RL**,
-**RR**. Mixed-up mirrored parts are the most common way to lose an afternoon.
+Mixed-up mirrored parts are the most common way to lose an afternoon. Parts printed from this repository's current
+files say which they are: **L** or **R** (**FL RR** or **FR RL** on the shoulder servo mount) is engraved on a face that
+ends up hidden in the assembled robot. Parts printed from older files, or by a print service, have no label: use the
+cards below, then mark each part in pencil on a hidden face as you sort it.
+
+Each card shows both versions lying the way you'll put them down. Pick the leg you're building: the green check marks
+the version it takes, and the orange area is the feature to look at.
+
+<WhichSide part="wrist" />
+<WhichSide part="wrist-counterpart" />
+<WhichSide part="horn-plate" />
+<WhichSide part="bearing-plate" />
+<WhichSide part="bottom-shell" />
+<WhichSide part="top-shell" />
+<WhichSide part="shoulder-mount" />
 
 ## Servo map
 
