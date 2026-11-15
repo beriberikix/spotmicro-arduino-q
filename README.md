@@ -10,7 +10,7 @@ robjk's reinforced shoulders and KDY0523's original Spot Micro. See [docs/backgr
 ![Exploding and reassembling the robot](docs/images/spot-unoq-explode.gif)
 
 **Print it:** [MakerWorld](https://makerworld.com/en/models/3584508-spotmicro-robot-dog-for-arduino-uno-q) (sliced
-projects for the Bambu Lab P1S) · **Buy the parts:** [BOM.md](BOM.md) · **Check fits first:**
+projects for the Bambu Lab P1S, plus an optional but recommended helper stand) · **Buy the parts:** [BOM.md](BOM.md) · **Check fits first:**
 [docs/test-prints.md](docs/test-prints.md) · 1080p video: [spot-unoq-explode.mp4](docs/images/spot-unoq-explode.mp4)
 
 ## Status
@@ -135,14 +135,16 @@ robjk's extended servo mount and M3 bearing pin have no STEP, since they exist o
 ```sh
 python3 scripts/build_makerworld_3mf.py --no-orient                # makerworld/SpotUnoQ_P1S.3mf
 python3 scripts/build_makerworld_3mf.py --no-orient --test-prints  # makerworld/SpotUnoQ_P1S_test_prints.3mf
+python3 scripts/build_makerworld_3mf.py --no-orient --stand        # makerworld/SpotUnoQ_P1S_helper_stand.3mf
 ```
 
 | Project | Plates | Time | Filament |
 | ------- | ------ | ---- | -------- |
 | Full robot | 10, one filament each (black PLA, white PLA, TPU feet) | 32 h | 1.2 kg |
 | Fit tests | 2 (black, white) | 2.8 h | 84 g |
+| Helper stand (optional) | 2, one stand each (black PLA) | 2.7 h | 92 g |
 
-Both are sliced for the P1S (0.4 mm nozzle, 0.20 mm Standard, Textured PEI) with 3 walls on structural plates, 100%
+All are sliced for the P1S (0.4 mm nozzle, 0.20 mm Standard, Textured PEI) with 3 walls on structural plates, 100%
 infill on the covers and 20% elsewhere. The script stops on any part that misses its plate or any slicer warning.
 `--no-orient` keeps `Top_Cover_Split_Rear_with_OLED` from being auto-oriented into a position that needs supports.
 

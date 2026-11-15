@@ -65,7 +65,7 @@ PARTS = [
     ("optional/servo-horns", KOOBA + "Servohorn_6_B_Star.stl", "Servohorn_6_B_Star", 12, 0, "PLA", "20%", "Only if your servos lack FSH6S-type horns"),
     ("optional/rear-cover-medium", ROBJK + "Rear_Cover_Shell_Medium.stl", "Rear_Cover_Shell_Medium", 1, 0, "PLA", "100%", "robjk; shorter alternative to Rear_Cover_Shell_Long"),
     ("optional/rear-cover-medium", ROBJK + "Rear_Cover_Plate_Medium.stl", "Rear_Cover_Plate_Medium", 1, 0, "PLA", "100%", "robjk; pairs with Rear_Cover_Shell_Medium; OLED and 2x GX16 cut-outs"),
-    ("optional/helper-stand", STAND + "2x_stand_top.stl", "Stand_Top", 2, 0, "PLA", "20%", "stefi01"),
+    ("optional/helper-stand", STAND + "2x_stand_top.stl", "Stand_Top", 2, 0, "PLA", "20%", "stefi01; optional but recommended stand, hardware in ../BOM.md"),
     ("optional/helper-stand", STAND + "2x_stand_bottom.stl", "Stand_Bottom", 2, 0, "PLA", "20%", "Nova-SM2"),
     ("optional/helper-stand", STAND + "2x_stand_brace.stl", "Stand_Brace", 2, 0, "PLA", "20%", "Nova-SM2"),
     ("optional/helper-stand", STAND + "4x_stand_feet.stl", "Stand_Feet", 4, 0, "PLA", "20%", "Nova-SM2"),

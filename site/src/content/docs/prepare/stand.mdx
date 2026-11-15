@@ -1,0 +1,75 @@
+---
+title: Helper stand
+description: Optional but recommended. Two stands and two braces that hold the robot by its belly with the legs hanging free.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Done from '../../../components/Done.astro';
+import Hw from '../../../components/Hw.astro';
+import Parts from '../../../components/Parts.astro';
+import Todo from '../../../components/Todo.astro';
+import Check from '../../../components/Check.astro';
+
+<Aside type="note" title="Optional, but recommended">
+You can build the robot without the stand. From [Shoulders into the frame](../../body/install-shoulders/)
+on, though, you'll want it for every servo check, the first power-on, IMU levelling and calibration. A robot resting on
+its folded legs isn't level, and a leg pressed against the bench can stall a servo. It's a short print (about 2.7 h, 92 g)
+and ten minutes to put together.
+</Aside>
+
+The stand is two upright A-frames, one under the front of the belly and one under the rear, joined by two braces. Each
+A-frame is a **top** (the curved cradle on a post) bolted to a **bottom** (the triangular base). The robot's bottom
+cover sits in the cradles, held by their sides.
+
+Print it from the MakerWorld **Helper stand** profile (two plates, one stand each) or from
+[`stl/optional/helper-stand/`](https://github.com/beriberikix/spotmicro-arduino-q/tree/main/stl/optional/helper-stand).
+Black PLA, 20% infill, 3 walls, no supports.
+
+<Parts bag="H" items={[
+	[2, 'Stand top (cradle)'],
+	[2, 'Stand bottom (triangular base)'],
+	[2, 'Stand brace'],
+	[4, 'Stand foot'],
+	[4, '<kbd class="hw">M3×12</kbd> + 4 M3 nuts', 'Top to bottom; M3×10 also fits. Washers recommended'],
+	[8, '<kbd class="hw">M3×16</kbd> + 8 M3 nuts', 'Braces to the stands'],
+]} tools={['2.5 mm hex', 'Pliers or a 5.5 mm spanner for the nuts']} />
+
+## Build each A-frame
+
+<Steps>
+
+1. Lay a top and a bottom on the table so their posts point at each other. The end of each post is a tab half as thick
+   as the post. Overlap the two tabs so they make one post of full thickness, with the two holes in each tab lined up.
+2. Bolt the tabs together with two <Hw>M3×12</Hw>, a washer under each head and nut if you have them. The holes are a
+   loose fit for M3, so square the post up before you tighten.
+3. Push a foot onto each of the two outer corners of the base, the square socket over the square corner. They're a
+   tight push fit. If one is loose, glue it.
+4. Build the second A-frame the same way.
+
+</Steps>
+
+## Join the two A-frames
+
+<Steps>
+
+1. Each brace end has two holes going into it and, a few millimetres in, two slots across them. Drop an M3 nut into
+   each slot, four per brace. They should line up with the holes; push a screw in to check.
+2. Each A-frame has two pairs of small holes side by side on its post: one just below the cradle, one just above the
+   point where the base splits into its triangle. Stand the two A-frames up facing each other. Hold a brace end against
+   the upper pair on one A-frame and screw it on with two <Hw>M3×16</Hw> through the post into the nuts. Do the same
+   at the other end with the second A-frame.
+3. Join the lower pairs with the second brace the same way.
+4. Set the stand on a flat surface and check it doesn't rock. If it does, loosen the tab screws, press the stand flat,
+   and tighten them again.
+
+</Steps>
+
+<Check id="stand-hardware" title="Stand screw sizes">
+No source lists the stand's hardware: the sizes here come from measuring the parts. The tab holes are 4.0 mm, which
+might have been meant for M4. Check that M3×12 holds the tabs firmly and that M3×16 reaches the nuts in the braces
+without bottoming out.
+</Check>
+
+<Todo id="stand-built">The assembled stand from the front-left, empty.</Todo>
+
+<Done id="stand" label="Stand built" />
