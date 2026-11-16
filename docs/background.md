@@ -37,7 +37,8 @@ Leika and Kubina's builds run on an ESP32. This one replaces it with an Arduino 
   SZBK07 don't both fit with it; the battery lead now runs under the plate beside the battery. New: the Media Carrier
   pads and clips (the carrier has no mounting holes) and the SZBK07 posts.
 - **Camera mount:** started as Kooba's `sensormount_esp32_cam`. The HC-SR04 holes and the ESP32-CAM lens and flash
-  openings are filled; two camera mounts with flared lens windows are added.
+  openings and the ESP32-CAM board slot are filled; two camera mounts with flared lens windows are added, their recess
+  ceilings stepped so the part prints face down without supports.
 - **Shoulders:** robjk's reinforced set replaces Kooba's shoulder joints and upper-leg top shell.
 - **Head:** Kooba's ESP32-CAM mount and its counterpiece are no longer printed.
 

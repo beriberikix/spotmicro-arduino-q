@@ -29,6 +29,8 @@ In `cad/UnoQ_Mountingplate.FCStd`:
 
 In `cad/Sensormount_DualCam.FCStd` (from `sensormount_esp32_cam.FCStd`):
 
-- Removed: the four HC-SR04 transducer holes, the two crystal pockets, and the ESP32-CAM lens and flash openings.
+- Removed: the four HC-SR04 transducer holes, the two crystal pockets, the ESP32-CAM lens and flash openings, and the
+  ESP32-CAM board slot on the back (suppressed; it printed as a sagging overhang).
 - Added: a `Params` spreadsheet, and for each of two Raspberry Pi Camera Module 2s a component recess, four M2 pilot
-  holes and a flared lens window.
+  holes and a flared lens window. The recess ceiling is stepped (`Cam_Bridge_Step`) so it prints face down as two
+  layers of anchored bridges, with no supports.
