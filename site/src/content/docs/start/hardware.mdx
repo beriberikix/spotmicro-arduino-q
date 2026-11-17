@@ -6,6 +6,7 @@ description: Pre-sort screws, nuts, bearings and horns into one bag per step.
 import { Aside } from '@astrojs/starlight/components';
 import Done from '../../../components/Done.astro';
 import Check from '../../../components/Check.astro';
+import Todo from '../../../components/Todo.astro';
 
 Sorting the hardware first turns a 250-screw build into a series of small, countable kits, and you'll see straight away
 if anything is missing. Use small zip bags, cups or an egg carton, and label each one with its letter.
@@ -14,11 +15,20 @@ Each bag's first table lists its hardware step by step; the **total** under it i
 A–D are **per leg**: make four of each, so the totals give both one bag and all four. [Totals](#totals) at the end adds
 up every bag. Bag H is for the optional helper stand.
 
+The bags also take one printed part: the **bearing pins**. A bearing pin is a small peg, 5 mm across, that a 625ZZ
+bearing fits onto, held down by a screw through its centre. There are two kinds, told apart by the hole: eight with an
+M2 hole (`Shoulder_Joint_Ball_Bearing_Pin`) and four with a larger M3 hole (`Shoulder_Joint_Ball_Bearing_Pin_M3x8`).
+Take them from your printed parts as you fill the bags.
+
+<Todo id="bearing-pins">The two bearing pins side by side, M2-bore and M3-bore, holes facing the camera, each next to its screw and a 625ZZ bearing.</Todo>
+
 <Aside type="tip" title="Pre-thread the horn screws">
 For bags B, D and E, screw an M2 nut all the way onto each M2×8 now. The nut is a spacer: a bare M2×8
 pokes through the horn and rubs on the servo. If you have M2×6 screws, use those instead and skip the nuts. Two screws per
 horn are enough, if you're short.
 </Aside>
+
+<Todo id="horn-screw-prethread">An M2×8 with an M2 nut run all the way up to the head, next to a bare M2×8, so the spacer nut is easy to see.</Todo>
 
 ## Bag A — Lower leg (×4)
 
@@ -26,7 +36,7 @@ horn are enough, if you're short.
 | --- | ---- | ---- |
 | 2 | M3×8 + 2 M3 nuts | Foot tip |
 | 1 | M2×8 + 1 M2 nut | Knee bearing pin |
-| 1 | Bearing pin, M2 bore (`Shoulder_Joint_Ball_Bearing_Pin`) | Knee bearing pin |
+| 1 | Bearing pin, M2 bore (printed, `Shoulder_Joint_Ball_Bearing_Pin`) | Knee bearing pin |
 | 4 | M3×20 + 4 M3 nuts | Knee servo |
 | 4 | Rubber dampeners | Knee servo |
 | 1 | Servo extension cable, 10–15 cm | Knee servo |
@@ -40,7 +50,7 @@ horn are enough, if you're short.
 | M3×8 | 2 | 8 |
 | M3×20 | 4 | 16 |
 | M3 nuts | 6 | 24 |
-| Bearing pins, M2 bore | 1 | 4 |
+| Bearing pins, M2 bore (printed) | 1 | 4 |
 | Rubber dampeners | 4 | 16 |
 | Servo extension cables | 1 | 4 |
 
@@ -69,7 +79,7 @@ horn are enough, if you're short.
 | --- | ---- | ---- |
 | 4 | M3 nuts + 4 M3×20 | Hip servo and shells |
 | 4 | Rubber dampeners | Hip servo |
-| 1 | Bearing pin, M3 bore (`…Pin_M3x8`) + M3×8 + M3 nut | Shoulder-cover pin on the top shell |
+| 1 | Bearing pin, M3 bore (printed, `…Pin_M3x8`) + M3×8 + M3 nut | Shoulder-cover pin on the top shell |
 | 4 | M3 nuts + 4 M3×20 | Shells to the knee plates |
 
 **Bag C total:** count this into each of the four bags.
@@ -79,7 +89,7 @@ horn are enough, if you're short.
 | M3×8 | 1 | 4 |
 | M3×20 | 8 | 32 |
 | M3 nuts | 9 | 36 |
-| Bearing pins, M3 bore | 1 | 4 |
+| Bearing pins, M3 bore (printed) | 1 | 4 |
 | Rubber dampeners | 4 | 16 |
 
 ## Bag D — Shoulder joint (×4)
@@ -88,7 +98,7 @@ horn are enough, if you're short.
 | --- | ---- | ---- |
 | 1 | 25T six-arm horn | Extended servo cap |
 | 6 | M2×8 with M2 nuts threaded on | Horn to cap |
-| 1 | Bearing pin, M2 bore + M2×8 + M2 nut | Pin on the shoulder servo mount |
+| 1 | Bearing pin, M2 bore (printed) + M2×8 + M2 nut | Pin on the shoulder servo mount |
 | 4 | M3×8 + 4 M3 nuts | Cap to servo mount |
 | 1 | M3×8 | Cap to the hip servo shaft |
 | 4 | M3×20 + 4 M3 nuts | Shoulder servo |
@@ -107,7 +117,7 @@ horn are enough, if you're short.
 | M3 nuts | 10+ | 40+ |
 | 625ZZ bearings | 1 | 4 |
 | 25T six-arm horns | 1 | 4 |
-| Bearing pins, M2 bore | 1 | 4 |
+| Bearing pins, M2 bore (printed) | 1 | 4 |
 | Rubber dampeners | 4 | 16 |
 
 ## Bag E — Body (×1)
@@ -195,8 +205,8 @@ Bags A–G added up; the stand's hardware is in bag H above and not counted here
 | M3 nuts | 24 | – | 36 | 40+ | 24 | – | 28 | **152+** | 148 + extras |
 | 625ZZ bearings | – | 4 | – | 4 | 4 | – | – | **12** | 12 |
 | 25T six-arm horns | – | 4 | – | 4 | 4 | – | – | **12** | 12 |
-| Bearing pins, M2 bore | 4 | – | – | 4 | – | – | – | **8** | 8 (printed) |
-| Bearing pins, M3 bore | – | – | 4 | – | – | – | – | **4** | 4 (printed) |
+| Bearing pins, M2 bore (printed) | 4 | – | – | 4 | – | – | – | **8** | 8 |
+| Bearing pins, M3 bore (printed) | – | – | 4 | – | – | – | – | **4** | 4 |
 | Rubber dampeners | 16 | – | 16 | 16 | – | – | – | **48** | 48 |
 | Servo extension cables | 4 | – | – | – | – | – | – | **4** | 4 |
 
