@@ -3,46 +3,258 @@ title: Fit check
 description: Check the printed parts against the boards, servo, horn and bearings before building.
 ---
 
-import { Aside } from '@astrojs/starlight/components';
+import { Aside, Steps } from '@astrojs/starlight/components';
 import Done from '../../../components/Done.astro';
 import Checklist from '../../../components/Checklist.astro';
-import Todo from '../../../components/Todo.astro';
+import Hw from '../../../components/Hw.astro';
 
 Before you build, check every place where a printed part has to fit something you bought. If you printed the
 [fit-test project](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/docs/test-prints.md) (about 3 hours),
 use those parts. If you printed the full robot straight away, do the same checks with the real parts. Either way,
-nothing gets screwed together for good yet.
+nothing gets screwed together for good yet: take everything apart again when you're done.
 
 ## What you need
 
-- UNO Media Carrier, UNO Q, SZBK07
-- Two Camera Module 2s
-- One DS3218 with its dampeners and a 25T six-arm horn
-- Two 625ZZ bearings
-- 4× M3×8, 8× M2×5 self-tapping, a few M3×20 + nuts, a few M2×8 + nuts
+- **Boards:** UNO Media Carrier, UNO Q, SZBK07, two cameras (Raspberry Pi Camera Module 2, or Arducam IMX219 V2 boards)
+- **Servo parts:** one DS3218 with its four rubber dampeners, one 25T six-arm horn
+- **Bearings:** two 625ZZ (16 mm outside, 5 mm hole, 5 mm thick)
+- **Screws:**
+  - 4× <Hw>M3×8</Hw> for the SZBK07, plus 4× M3×8 and 4 M3 nuts for the cap
+  - 8× M2×5 self-tapping for the cameras
+  - 7× <Hw>M3×20</Hw> and 7 M3 nuts for the servo (4) and the shoulder cover (3)
+  - 2–6× <Hw>M2×8</Hw>, each with an M2 nut threaded all the way up to the head, for the horn
+- **Tools:** 1.5 mm and 2.5 mm hex keys, a screwdriver for the M2×5 screws, pliers, and a vice or a flat block of wood
+  for pressing bearings
 
-## Checks
+## Which part is which
 
-<Checklist id="fit" items={[
-	'<strong>Carrier mount</strong>: hook the carrier edge opposite its USB-C under the two fixed hooks, then press the USB-C edge down past the two snap clips. The clips flex and click without cracking, the carrier sits flat on the four pads without rocking, and nothing underneath touches the plate. Press the UNO Q onto the carrier: the pads take the force.',
-	'<strong>SZBK07 posts</strong>: all four holes line up and 4× M3×8 bite into the pilot holes and hold.',
-	'<strong>Camera mount</strong>: each camera sits flat on the back face with 4× M2×5, the lens is centred in its window, and the ribbon connector on the bottom edge is free.',
-	'<strong>Shoulder servo mount</strong>: the servo with dampeners slides in without filing, and M3×20 screws line up.',
-	'<strong>Extended servo cap</strong>: the horn sits flat in its recess and the M2 holes line up with the horn arms.',
-	'<strong>Ball-bearing mount</strong>: a 625ZZ presses in by hand or with light, even pressure and stays put.',
-	'<strong>Shoulder cover</strong>: a 625ZZ seats in the 16.3 mm bore; the cover holes line up with the cap.',
-	'<strong>Bearing pins</strong> (M2 and M3 bore): the 5 mm pin goes into a bearing snugly, without wobble.',
-]} />
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/fit-parts.png`} alt="The eight fit-test parts: 1 the carrier test frame with hooks and clips, 2 the SZBK07 test frame with four corner posts, 3 the camera mount with two lens windows, 4 the shoulder servo mount with a large round opening and nut pockets, 5 the extended servo cap with a six-arm horn recess in a round pocket, 6 the flat ball-bearing mount with a bearing hole at one end, 7 the curved shoulder cover with a bearing ring at its foot, 8 two small bearing pins." width="2080" height="960" style="background:#fff;border-radius:0.4rem" />
+	<figcaption>The fit-test parts. Parts 1 and 2 are cut from the electronics plate; the rest are the real parts.</figcaption>
+</figure>
 
-<Aside type="caution" title="Measured SZBK07 is smaller than modelled">
-The SZBK07 listing linked in the BOM measures 66 × 48 × 21 mm; the plate was modelled for 60 × 54 × 28 mm. Check its
-four mounting holes against the posts before anything else. If they don't line up, the post spacing is set by
-`Buck_SX` / `Buck_SY` in the plate's Params spreadsheet.
+Older fit-test sets had a trapezoid frame (`UnoQ_Mount_Test`) and a small rectangular frame (`Pololu_Mount_Test`). The
+Media Carrier and the SZBK07 replaced both boards, so throw those two away.
+
+## 1. Carrier mount
+
+The test frame holds the Media Carrier with four round **pads** underneath, two stiff **hooks** at one end and two thin
+**snap clips** at the other. The carrier has no mounting holes; this is the only thing holding it in the robot.
+
+To tell the ends apart: the hooks are chunky (3.8 mm), 20 mm apart, with a deep lip. The snap clips are thin (2.4 mm),
+30 mm apart, with a small catch, and flex when you push them.
+
+<Steps>
+
+1. Hold the carrier with its USB-C edge towards the snap clips.
+2. Tilt it and slide the opposite edge under the two hooks' lips.
+3. Lower the USB-C edge and press it down past the clips until they click over the board.
+4. Press the UNO Q onto the carrier's headers, the same way round (its USB-C over the carrier's).
+
+</Steps>
+
+**Passes when:** the clips click without cracking or turning white, the carrier sits flat on all four pads without
+rocking, nothing on its underside touches the frame, and the carrier doesn't move when you press the UNO Q on.
+
+<Aside type="note" title="Known: the carrier can slide sideways">
+The hooks and clips only hold the carrier's two ends. Nothing stops it sliding a few millimetres sideways, along the
+edges they grip. That's how the current plate is designed, not a problem with your print.
 </Aside>
 
-<Todo id="fit-carrier" kind="video">Carrier snapping into the plate's hooks and clips, then the UNO Q pressed on (10–15 s, top-down, close).</Todo>
-<Todo id="fit-szbk07">Your SZBK07 sitting on its four posts, from above, with a ruler for scale.</Todo>
-<Todo id="fit-camera">Camera Module 2 screwed to the back of the sensor mount, lens centred in its window.</Todo>
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/fit/carrier-test.jpg`} alt="The black carrier test frame clipped onto the Media Carrier, with the UNO Q pressed on underneath, turned over to show the hooks and clips holding the carrier's edges." width="1176" height="1200" style="max-width:26rem" />
+	<figcaption>The carrier test frame with the carrier and UNO Q in place, turned over.</figcaption>
+</figure>
+
+## 2. SZBK07 posts
+
+The SZBK07 sits on four plastic posts. The M3 screws cut their own thread in the posts' 2.6 mm pilot holes, so there
+are no nuts.
+
+<Steps>
+
+1. Set the SZBK07 on the posts, components up, so its four corner holes sit over the posts. Either way round works.
+2. Screw in four <Hw>M3×8</Hw>, a few turns each in turn.
+3. Stop as soon as the board is held firmly. The posts are plastic: one more turn can shear a post off.
+
+</Steps>
+
+**Passes when:** all four holes line up without bending the board, and each screw bites and holds.
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/fit/szbk07-test.jpg`} alt="The SZBK07 step-down module screwed onto the black SZBK07 test frame with M3 screws at its corners." width="855" height="900" style="max-width:24rem" />
+	<figcaption>The SZBK07 on the test frame's posts.</figcaption>
+</figure>
+
+## 3. Camera mount
+
+This is the real camera mount from the head. Each camera screws onto its **back**: the flat face with two rectangular
+recesses. The front, with the two flared windows, faces forward on the robot.
+
+The board only lines up one way round. Its ribbon connector goes towards the end of the window that runs on past the
+screw holes. Both cameras face the same way.
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/fit-camera-orientation.png`} alt="The back of the camera mount with both camera boards in place, their ribbon connectors (red arrows) along the same side." width="732" height="628" style="max-width:24rem;background:#fff;border-radius:0.4rem" />
+	<figcaption>The back of the mount: both ribbon connectors on the same side (red arrows).</figcaption>
+</figure>
+
+<Steps>
+
+1. Lay the board on the back face, lens down, so the lens module drops into the recess and the lens into the window.
+2. Turn it until all four holes line up with the four pilot holes.
+3. Screw it on with four M2×5 self-tapping screws. Snug is enough: they strip plastic easily.
+4. Do the same with the second camera.
+
+</Steps>
+
+**Passes when:** the board sits flat without rocking, the lens is roughly centred in its window when you look from the
+front, and the ribbon connector at the edge is free, so its latch can open.
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/fit/camera-back.jpg`} alt="The back of the camera mount with an Arducam camera board screwed flat into one corner with M2×5 screws, its ribbon connector free at the edge." width="900" height="788" style="max-width:28rem" />
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/fit/camera-front.jpg`} alt="The front of the camera mount: the camera's lens module visible through one of the two flared lens windows." width="900" height="741" style="max-width:28rem" />
+	<figcaption>One camera fitted: screwed flat to the back (top), and its lens showing through the window from the front (bottom).</figcaption>
+</figure>
+
+## 4. Shoulder servo mount
+
+The box that holds the shoulder servo. Mounts printed from the current files have **FL RR** or **FR RL** engraved
+on one face; either version works for this check.
+
+<Steps>
+
+1. Push the four rubber dampeners into the holes in the servo's mounting tabs.
+2. Drop an M3 nut into each of the four hex pockets beside the servo opening.
+3. Lower the servo into the mount so its tabs rest on the mount's ledges.
+4. Screw it down with four <Hw>M3×20</Hw> through the dampeners into the nuts.
+
+</Steps>
+
+**Passes when:** the servo slides in without filing or forcing, the tabs sit flat on the ledges, and all four screws
+reach their nuts and tighten.
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/fit/servo-mount.jpg`} alt="A DS3218-class servo seated in the shoulder servo mount, its mounting tab resting on the mount's edge with an M3 screw through it." width="704" height="900" style="max-width:22rem" />
+	<figcaption>A servo in the shoulder servo mount, screwed down through its tabs.</figcaption>
+</figure>
+
+## 5. Extended servo cap and horn
+
+The cap carries the servo horn. In the robot, the hip servo drives the shoulder through this horn. At one end of
+the cap is a big round pocket with a shallow six-arm star sunk into its floor: the horn drops into the star, which
+stops it turning. The three large holes at the other end are for the shoulder cover's screws (step 7).
+
+<Steps>
+
+1. If you haven't already, thread an M2 nut all the way up to the head of each <Hw>M2×8</Hw>. The nut is a spacer:
+   without it the screw pokes out of the back of the cap.
+2. Lay the horn in the round pocket with its splined hub facing **down**, into the hole in the middle of the star,
+   and turn it until its arms drop into the star. The hub pokes out of the back of the cap: that's where the servo
+   shaft goes in.
+3. Screw it on through the middle hole of an arm. Two screws on opposite arms are enough for the check.
+4. Optional, to check the nut pockets: put four M3 nuts in the pockets in the base of the servo mount from step 4
+   and screw the cap onto it with four <Hw>M3×8</Hw>.
+
+</Steps>
+
+**Passes when:** the horn's arms sit down in the star without rocking or turning, each arm's middle hole is over a
+hole in the star, and the screws bite.
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/fit/cap-horn.jpg`} alt="The extended servo cap with a black six-arm horn in its star recess, hub down into the centre hole, held by two M2×8 screws with nuts under their heads on opposite arms." width="1000" height="678" style="max-width:30rem" />
+	<figcaption>The horn in the cap's star recess, hub down, held by two screws on opposite arms.</figcaption>
+</figure>
+
+## 6. Ball-bearing mount
+
+The flat knee plate with a bearing hole at its rounded end. Its 625ZZ is a deliberately **tight** press fit. The hole
+narrows to a lip near one face, so the bearing goes in from the other, flat face and stops against the lip.
+
+<Steps>
+
+1. Start the bearing square in the hole from the flat face (the textured side that was on the print bed), by hand.
+2. Press it in evenly between the jaws of a vice, or lay a flat block on it and lean on it. Never use a hammer: it
+   damages the bearing.
+3. Keep pressing until it stops against the lip. It then stands about 2 mm proud of the flat face. That's by
+   design: in the robot, that side faces the lower leg.
+
+</Steps>
+
+**Passes when:** the bearing goes in square, right up to the lip, without cracking the plate; it stands about 2 mm
+proud of the flat face, doesn't fall out when you turn the plate over, and its centre still spins freely with a
+finger.
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/fit/bearing-mount.jpg`} alt="The ball-bearing mount, flat side up, with a 625ZZ bearing pressed into the hole at its rounded end, standing slightly proud of the face." width="1000" height="517" style="max-width:30rem" />
+	<figcaption>The bearing pressed in from the flat face, standing about 2 mm proud.</figcaption>
+</figure>
+
+## 7. Shoulder cover
+
+The curved part that bridges over the hip. The ring at its foot holds a 625ZZ; the curved cup at its top end bolts to
+the cap from step 5, on the end with the three large holes.
+
+Unlike the knee plate, the ring is a slip fit, not a press fit: the hole is 16.3 mm for the 16 mm bearing. Like the
+knee plate, it has a lip on the flat outside face, so the bearing goes in from the inside.
+
+<Steps>
+
+1. Drop a 625ZZ into the ring from the inside (the same side as the cup). It rests on the lip and stands about 2 mm
+   proud. A little play is normal: in the robot, the bearing pin and the leg hold it in place.
+2. Drop an M3 nut into each of the three slots in the side of the cover, below the cup.
+3. Lay the cap's three-hole end in the cup, its horn recess facing the same way as the bearing, and put three <Hw>M3×20</Hw> through the cap's large holes, through
+   the floor of the cup and into the nuts. The heads sink into the cap. Tighten them lightly.
+
+</Steps>
+
+**Passes when:** the bearing drops in square and rests on the lip, and all three screws go through the cap and the
+cover into the nuts without forcing.
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/fit-cover-cap.png`} alt="Left: the black extended servo cap lifted above the white shoulder cover, three screws standing in its counterbored holes. Right: the cap's three-hole end seated in the cover's cup, screw heads sunk in the cap, horn recess facing the same way as the bearing at the cover's foot." width="1200" height="807" style="background:#fff;border-radius:0.4rem" />
+	<figcaption>The cap's three-hole end goes in the cover's cup, horn recess facing the same way as the bearing; the screws go in through the cap.</figcaption>
+</figure>
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/fit/cover.jpg`} alt="The shoulder cover standing up: a 625ZZ bearing in the ring at its foot, three M3 screws standing in the cup at the top, and M3 nuts visible in the three slots below the cup." width="516" height="900" style="max-width:22rem" />
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/fit/cover-cap.jpg`} alt="The extended servo cap seated in the shoulder cover's cup, its star-shaped horn recess facing the same way as the bearing at the cover's foot." width="853" height="900" style="max-width:24rem" />
+	<figcaption>The cover with its bearing and the three nuts in their slots (top), and with the cap seated in the cup and screwed down (bottom).</figcaption>
+</figure>
+
+## 8. Bearing pins
+
+Two small pegs, 5 mm across, that a 625ZZ turns on. They look the same from outside; the **M2** pin has a small
+hole and the **M3** pin a larger one.
+
+<Steps>
+
+1. Push each pin into the centre of a bearing: the loose one, or the one already in the ball-bearing mount.
+2. Wiggle it.
+
+</Steps>
+
+**Passes when:** each pin slides in with light friction, all the way, and doesn't wobble in the bearing.
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/fit/bearing-pins.jpg`} alt="Two 625ZZ bearings lying flat, each with a printed bearing pin pushed into its centre." width="700" height="650" style="max-width:20rem" />
+	<figcaption>Both bearing pins pushed into 625ZZ bearings.</figcaption>
+</figure>
+
+## Results
+
+Tick each one off once it passes.
+
+<Checklist id="fit" items={[
+	'<strong>Carrier mount</strong>: clips click, the carrier sits flat, the UNO Q presses on.',
+	'<strong>SZBK07 posts</strong>: holes line up, screws hold, no post broken.',
+	'<strong>Camera mount</strong>: both cameras sit flat, lenses in their windows, connectors free.',
+	'<strong>Shoulder servo mount</strong>: the servo slides in, all four M3×20 tighten.',
+	'<strong>Extended servo cap</strong>: the horn sits flat, the screw holes line up.',
+	'<strong>Ball-bearing mount</strong>: the bearing is pressed up to the lip, held, and spins freely.',
+	'<strong>Shoulder cover</strong>: the bearing rests on the lip, all three screws go through the cap into the nuts.',
+	'<strong>Bearing pins</strong>: both pins are snug in a bearing.',
+]} />
 
 ## If something doesn't fit
 
