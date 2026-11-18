@@ -1,0 +1,90 @@
+---
+/**
+ * A bag's total on Sort the hardware, with a checkbox on each row to tick off while packing.
+ * Ticks are saved in this browser's localStorage under "spot-guide:bag-<letter>:<row>".
+ */
+interface Props {
+	bag: string;
+	/** How many copies of the bag to pack: 4 for the per-leg bags, 1 otherwise. */
+	count?: number;
+	/** [item, quantity in one bag]; a quantity ending in "+" means "at least". */
+	items: [string, number | string][];
+}
+const { bag, count = 1, items } = Astro.props;
+const times = (q: number | string) => {
+	const s = String(q);
+	const plus = s.endsWith('+') ? '+' : '';
+	return `${parseInt(s, 10) * count}${plus}`;
+};
+const id = `bag-${bag.toLowerCase()}`;
+---
+
+<p class="bag-total-title">
+	<strong>Bag {bag} total</strong>{count > 1 && `: count this into each of the ${count} bags.`}
+</p>
+<table class="bag-total" data-bag={id}>
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th>{count > 1 ? 'In each bag' : 'In the bag'}</th>
+			{count > 1 && <th>All {count} bags</th>}
+			<th class="ticks">Packed</th>
+		</tr>
+	</thead>
+	<tbody>
+		{items.map(([item, q], r) => (
+			<tr>
+				<td set:html={item} />
+				<td>{q}</td>
+				{count > 1 && <td>{times(q)}</td>}
+				<td class="ticks">
+					<input type="checkbox" data-key={`spot-guide:${id}:${r}`} aria-label={`${item}, bag ${bag}`} />
+				</td>
+			</tr>
+		))}
+	</tbody>
+</table>
+
+<style>
+	.bag-total-title {
+		margin-bottom: 0.4rem;
+	}
+	.bag-total .ticks {
+		text-align: center;
+	}
+	.bag-total input {
+		accent-color: var(--sl-color-accent);
+		width: 1.1rem;
+		height: 1.1rem;
+		cursor: pointer;
+		vertical-align: middle;
+	}
+	.bag-total tr.done td:not(.ticks) {
+		color: var(--sl-color-gray-3);
+		text-decoration: line-through;
+	}
+</style>
+
+<script>
+	document.querySelectorAll<HTMLTableElement>('table.bag-total').forEach((table) => {
+		const rows = table.querySelectorAll<HTMLTableRowElement>('tbody tr');
+		const update = (row: HTMLTableRowElement) => {
+			row.classList.toggle('done', row.querySelector<HTMLInputElement>('input')!.checked);
+		};
+		rows.forEach((row) => {
+			row.querySelectorAll<HTMLInputElement>('input[data-key]').forEach((box) => {
+				const key = box.dataset.key!;
+				try {
+					box.checked = localStorage.getItem(key) === '1';
+				} catch {}
+				box.addEventListener('change', () => {
+					try {
+						box.checked ? localStorage.setItem(key, '1') : localStorage.removeItem(key);
+					} catch {}
+					update(row);
+				});
+			});
+			update(row);
+		});
+	});
+</script>
