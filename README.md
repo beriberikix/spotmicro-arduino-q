@@ -80,6 +80,10 @@ nearer the carrier's USB-C edge goes to the right camera.
 Camera dimensions are in the mount's `Params` spreadsheet. Check `Cam_Lens_From_Top` (9.46 mm) on the first print:
 it comes from published figures, not an official drawing.
 
+Arducam's IMX219 "Camera Module V2" boards (UC-609) have the same size and holes, but their lens sits about 5 mm
+nearer the cable edge (about 14.8 mm below the top edge). The lens windows reach `Cam_Lens_Alt_Shift` (5.5 mm)
+further towards the cable edge so either board fits; set it to 0 for a Camera Module 2-only window.
+
 ## Reinforced shoulders
 
 ![Reinforced shoulder](docs/images/reinforced-shoulder.png)
