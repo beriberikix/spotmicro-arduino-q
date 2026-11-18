@@ -88,7 +88,7 @@ CC BY-SA 4.0). See ../NOTICE.md.
 
 | File | Normal | Mirrored | Material | Infill | Notes |
 | ---- | ------ | -------- | -------- | ------ | ----- |
-| [Stand_Top.stl](optional/helper-stand/Stand_Top.stl) | 2 | - | PLA | 20% | stefi01 |
+| [Stand_Top.stl](optional/helper-stand/Stand_Top.stl) | 2 | - | PLA | 20% | stefi01; optional but recommended stand, hardware in ../BOM.md |
 | [Stand_Bottom.stl](optional/helper-stand/Stand_Bottom.stl) | 2 | - | PLA | 20% | Nova-SM2 |
 | [Stand_Brace.stl](optional/helper-stand/Stand_Brace.stl) | 2 | - | PLA | 20% | Nova-SM2 |
 | [Stand_Feet.stl](optional/helper-stand/Stand_Feet.stl) | 4 | - | PLA | 20% | Nova-SM2 |

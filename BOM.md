@@ -68,7 +68,20 @@ About 1.2 kg of PLA (PETG works) and a little TPU for the feet, all without supp
 [`stl/`](stl/README.md) with quantities, mirrored copies, material and infill. Print the fit tests first (about 3 h):
 see [docs/test-prints.md](docs/test-prints.md).
 
-### Optional: helper stand
+### Helper stand (optional, recommended)
 
-Holds the robot by its belly with the legs free, for IMU levelling, servo calibration and bench work. Print
-`stl/optional/helper-stand/`: 2× top, 2× bottom, 2× brace, 4× feet.
+Holds the robot by its belly with the legs free. You can build the robot without it, but from the body step on you'll
+want it for servo checks, first power-on, IMU levelling and calibration: a robot resting on folded legs isn't level,
+and a leg pressed against something can stall a servo.
+
+Print `stl/optional/helper-stand/` (2× top, 2× bottom, 2× brace, 4× feet; about 2.7 h and 92 g of PLA, or the
+MakerWorld "Helper stand" profile), plus:
+
+| Qty | Part | Used for |
+| --- | ---- | -------- |
+| 4 + 4 | M3x12 screws + M3 nuts (M3x10 also fits); 8 M3 washers recommended | Each stand's top to its bottom: two per stand through the overlapping tabs (4.0 mm holes) |
+| 8 + 8 | M3x16 screws + M3 nuts | The two braces between the stands: two per brace end, nuts in the brace's slots |
+
+These sizes are confirmed on a real build. M3x8 is too short for both joints,
+and M3x20 bottoms out in the brace ends (their holes are about 9 mm deep). A spare M3x20 does work in the tab joint,
+with about 10 mm sticking out past the nut. The feet push onto the base corners; glue them if they're loose.

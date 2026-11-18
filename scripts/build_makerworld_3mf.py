@@ -8,6 +8,7 @@ own, applies per-part print settings, and slices every plate.
     python3 scripts/build_makerworld_3mf.py            # writes makerworld/SpotUnoQ_P1S.3mf
     python3 scripts/build_makerworld_3mf.py --no-orient  # keep each STL's own orientation
     python3 scripts/build_makerworld_3mf.py --no-orient --test-prints   # fit-test parts only
+    python3 scripts/build_makerworld_3mf.py --no-orient --stand         # optional helper stand only
 
 Printer: Bambu Lab P1S, 0.4 mm nozzle, 0.20 mm Standard. Filaments: 1 Bambu PLA Basic black,
 2 Bambu PLA Basic white, 3 Bambu TPU 95A HF. Set BAMBU_STUDIO to use another install.
@@ -119,7 +120,20 @@ TEST_PLATES = [
         ("shoulders/Shoulder_Cover.stl", 1, {}),
     ]),
 ]
-if "--test-prints" in sys.argv:
+# The optional helper stand (stl/optional/helper-stand): two stands, each a top, bottom, brace and two feet.
+STAND_PLATES = [  # one stand per plate: the tops and bottoms are too wide for both stands on one plate
+    (f"Helper stand {i}", STRUCTURAL, BLACK, [
+        ("optional/helper-stand/Stand_Top.stl", 1, {}),
+        ("optional/helper-stand/Stand_Bottom.stl", 1, {}),
+        ("optional/helper-stand/Stand_Brace.stl", 1, {}),
+        ("optional/helper-stand/Stand_Feet.stl", 2, {}),
+    ]) for i in (1, 2)
+]
+if "--stand" in sys.argv:
+    PLATES = STAND_PLATES
+    FILAMENTS = FILAMENTS[:1]
+    OUT = os.path.join(ROOT, "makerworld", "SpotUnoQ_P1S_helper_stand.3mf")
+elif "--test-prints" in sys.argv:
     PLATES = TEST_PLATES
     FILAMENTS = FILAMENTS[:2]
     OUT = os.path.join(ROOT, "makerworld", "SpotUnoQ_P1S_test_prints.3mf")
