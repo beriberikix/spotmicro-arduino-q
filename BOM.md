@@ -12,7 +12,7 @@ many vendors; check the specs in the notes before buying.
 | 1 | Adafruit 16-channel 12-bit PWM/Servo Shield (PCA9685) | On top of the UNO Q. Solder the plain male header strip it comes with, not stacking headers. | [Adafruit 1411](https://www.adafruit.com/product/1411) |
 | 1 | Right-angle 3x4 male headers, 4-pack | In place of the shield's straight servo headers, so the plugs fit under the top cover. | [Adafruit 816](https://www.adafruit.com/product/816) |
 | 1 | SZBK07 20 A step-down module | Servo rail at 6.0 V; set it before connecting servos. 60 x 54 x 28 mm, M3 holes 39 x 53.5 mm. About 15 A continuous. | [search](https://www.amazon.com/s?k=SZBK07+20A+buck) |
-| 2 | Raspberry Pi Camera Module 2 (IMX219) | Stereo pair in the head. | [Adafruit 3099](https://www.adafruit.com/product/3099) |
+| 2 | Raspberry Pi Camera Module 2 (IMX219) | Stereo pair in the head. Arducam's IMX219 V2 boards also fit the mount (same holes, lens 5 mm lower). | [Adafruit 3099](https://www.adafruit.com/product/3099) |
 | 2 | Raspberry Pi camera cable, Standard–Mini, 200 mm | Camera to carrier. The cable in the camera box doesn't fit the carrier. | [Adafruit 5818](https://www.adafruit.com/product/5818) |
 | 12 | DS3218 servo, 20 kg, **180°**, 25T spline | Many DS3218 listings are 270°; check the angle. See [Servos](#servos). | [Miuzei 4-pack (buy 3)](https://www.amazon.com/dp/B0FH53CKCS) · [HOOYIJ 4-pack](https://www.amazon.com/dp/B0CJ7B2MBN) |
 | 12 | 25T six-arm servo horn (FSH6S type) | Often included with the servos. `Servohorn_6_B_Star` is a printable fallback. | [search](https://www.amazon.com/s?k=25T+servo+horn+aluminum) |

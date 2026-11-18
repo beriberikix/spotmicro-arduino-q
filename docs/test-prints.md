@@ -70,7 +70,7 @@ Print settings match the real parts: 3 walls, 20% infill, Bambu PLA Basic, no su
 | Carrier's bottom sockets touch the plate | `Standoff_H` (default 5.5 mm; each extra mm also raises the servo plugs, which have 1.8 mm to the top cover) |
 | M3 screws too tight or loose in the SZBK07 posts | `Buck_Screw_D` (default 2.6 mm) |
 | SZBK07 holes don't line up (different board revision) | `Buck_SX`, `Buck_SY` |
-| Camera lens off-centre in its window | `Cam_Lens_From_Top` (default 9.462 mm) |
+| Camera lens off-centre in its window | `Cam_Lens_From_Top` (default 9.462 mm); `Cam_Lens_Alt_Shift` (default 5.5 mm) stretches the window towards the cable edge for Arducam-style boards |
 | Camera holes don't line up | `Cam_Hole_SX`, `Cam_Hole_SY`, `Cam_Hole_Inset` |
 | M2 screws too tight or loose in the camera mount | `Cam_Pilot_D` (default 1.8 mm) |
 
