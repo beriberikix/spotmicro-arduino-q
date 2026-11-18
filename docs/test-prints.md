@@ -48,7 +48,7 @@ Print settings match the real parts: 3 walls, 20% infill, Bambu PLA Basic, no su
 | Part | Check | Passes when |
 | ---- | ----- | ----------- |
 | Carrier_Mount_Test | Hook the carrier's edge opposite the USB-C under the two fixed hooks, then press the USB-C edge down past the two snap clips | The clips flex and click over the board without cracking; the carrier sits flat on the four pads without rocking; none of its bottom sockets or jacks touch the frame. Then press the UNO Q onto the carrier: the pads take the force and the carrier stays put. |
-| SZBK07_Mount_Test | Screw the SZBK07 on with 4× M3x8 | All four holes line up; screws bite into the 2.6 mm pilot holes and hold |
+| SZBK07_Mount_Test | Screw the SZBK07 on with 4× M3x8 | All four holes line up; screws bite into the 2.6 mm pilot holes and hold. Stop at snug: over-tightening can shear a post off. |
 | Sensormount_DualCam | Fit each camera from the back with 4× M2x5 | The board sits flat on the back face; the lens is centred in its window and the lens module sits in the recess without pressing; the cable connector on the bottom edge is free |
 | Shoulder_Joint_Servomount_extended_BB | Fit the servo with its dampeners, M3x20 + nuts | The servo body slides in without filing and the mounting holes line up |
 | Shoulder_Joint_Servo_Cap_Extended | Seat the servo horn, M2x8 screws | The horn sits flat in its recess and the screw holes line up with the horn's arms |
