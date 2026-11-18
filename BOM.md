@@ -79,9 +79,9 @@ MakerWorld "Helper stand" profile), plus:
 
 | Qty | Part | Used for |
 | --- | ---- | -------- |
-| 4 + 4 | M3x12 screws + M3 nuts (M3x10 also fits); washers recommended | Each stand's top to its bottom: two per stand through the overlapping tabs (4.0 mm holes) |
+| 4 + 4 | M3x12 screws + M3 nuts (M3x10 also fits); 8 M3 washers recommended | Each stand's top to its bottom: two per stand through the overlapping tabs (4.0 mm holes) |
 | 8 + 8 | M3x16 screws + M3 nuts | The two braces between the stands: two per brace end, nuts in the brace's slots |
 
-No source lists the stand's hardware; these sizes come from measuring the parts. M3x8 is too short for both joints,
+These sizes are confirmed on a real build. M3x8 is too short for both joints,
 and M3x20 bottoms out in the brace ends (their holes are about 9 mm deep). A spare M3x20 does work in the tab joint,
 with about 10 mm sticking out past the nut. The feet push onto the base corners; glue them if they're loose.
