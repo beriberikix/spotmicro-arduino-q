@@ -25,7 +25,7 @@ description: Common problems when building a Spot Micro, and fixes.
 | A servo turns ¾ of a turn for `s ch 0` → `s ch 180` | It's a 270° servo. Replace it with a 180° one. |
 | A servo cuts out after a few seconds of pushing | DS3218 overload protection at stall. Normal standing and walking don't trigger it. |
 | Servo got hot or died | Check the SZBK07 output is 6.0 V with a meter, and look for plastic blocking the joint: a stalled servo blocked by a part burns out. |
-| `PCA9685 not found at 0x40` | Shield not seated, SJ1 not bridged (VCC floating), or a solder bridge on the address pads. |
+| `PCA9685 not found at 0x40` | Shield not seated, VCC select not soldered to 3V (VCC floating), or a solder bridge on the address pads. |
 | Servos twitch when another moves | Add or enlarge the capacitor on C2 (Adafruit: about 100 µF per servo); shorten the SZBK07 → V+ lead. |
 | UNO Q resets when servos move | VIN dipping: check the battery charge, and that the UNO Q's VIN lead is taken before the SZBK07, not from the servo rail. |
-| Nothing in the Serial Monitor | Use App Lab's **Console → Serial Monitor**; `Serial` goes through the UNO Q's Linux side, not the STM32's USB. |
+| Nothing in the Serial Monitor | Use App Lab's **Console → Serial Monitor** while the app is running: servo_tool prints through the Bridge's `Monitor`, not `Serial` (the D0/D1 pins). |

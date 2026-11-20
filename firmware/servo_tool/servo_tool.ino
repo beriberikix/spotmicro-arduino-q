@@ -4,7 +4,9 @@
 // SZBK07 set to 6.0 V on the shield's V+ terminal. DS3218 180-degree servos (500-2500 us).
 // Build guide: https://beriberikix.github.io/spotmicro-arduino-q/prepare/servos/
 //
-// Open the Serial Monitor (App Lab: Console > Serial Monitor), type a command and press Enter:
+// Runs as an Arduino App Lab app. Output and input go through the Bridge's Monitor, which App Lab shows in
+// Console > Serial Monitor while the app is running (plain Serial is the D0/D1 UART on the UNO Q, not App Lab).
+// Type a command and press Enter:
 //   h              help and channel map
 //   c              centre every channel (90 deg, 1500 us)
 //   a              assembly angles (shoulders 90, hips L120/R60, knees L180/R0)
@@ -18,6 +20,7 @@
 //
 // MIT License, see ../../LICENSE.
 
+#include <Arduino_RouterBridge.h>
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
@@ -53,50 +56,50 @@ void off(uint8_t ch) {
   pwm.setPWM(ch, 0, 4096);  // full off: no pulses, the servo goes limp
 }
 
-void report(uint8_t ch, float deg) {
-  Serial.print("  ch ");
-  Serial.print(ch);
-  Serial.print(" (");
-  Serial.print(JOINTS[ch].name);
-  Serial.print(") -> ");
-  Serial.print(deg, 0);
-  Serial.print(" deg, ");
-  Serial.print(degToUs(deg));
-  Serial.println(" us");
+void report(uint8_t ch, int deg) {
+  Monitor.print("  ch ");
+  Monitor.print(ch);
+  Monitor.print(" (");
+  Monitor.print(JOINTS[ch].name);
+  Monitor.print(") -> ");
+  Monitor.print(deg);
+  Monitor.print(" deg, ");
+  Monitor.print(degToUs(deg));
+  Monitor.println(" us");
 }
 
 void help() {
-  Serial.println();
-  Serial.println("servo_tool commands:");
-  Serial.println("  c            centre all (90 deg)");
-  Serial.println("  a [ch]       assembly angles (all, or one channel)");
-  Serial.println("  s ch deg     set angle 0-180");
-  Serial.println("  u ch us      set pulse 500-2500 us");
-  Serial.println("  t ch         test sweep");
-  Serial.println("  o [ch]       outputs off (all, or one channel)");
-  Serial.println("Channel map (assembly angle):");
+  Monitor.println();
+  Monitor.println("servo_tool commands:");
+  Monitor.println("  c            centre all (90 deg)");
+  Monitor.println("  a [ch]       assembly angles (all, or one channel)");
+  Monitor.println("  s ch deg     set angle 0-180");
+  Monitor.println("  u ch us      set pulse 500-2500 us");
+  Monitor.println("  t ch         test sweep");
+  Monitor.println("  o [ch]       outputs off (all, or one channel)");
+  Monitor.println("Channel map (assembly angle):");
   for (uint8_t i = 0; i < CHANNELS; i++) {
-    Serial.print("  ");
-    if (i < 10) Serial.print(' ');
-    Serial.print(i);
-    Serial.print("  ");
-    Serial.print(JOINTS[i].name);
-    Serial.print("  ");
-    Serial.println(JOINTS[i].assembly_deg);
+    Monitor.print("  ");
+    if (i < 10) Monitor.print(' ');
+    Monitor.print(i);
+    Monitor.print("  ");
+    Monitor.print(JOINTS[i].name);
+    Monitor.print("  ");
+    Monitor.println(JOINTS[i].assembly_deg);
   }
 }
 
 bool validChannel(long ch) {
   if (ch < 0 || ch >= CHANNELS) {
-    Serial.println("  channel must be 0-11");
+    Monitor.println("  channel must be 0-11");
     return false;
   }
   return true;
 }
 
 void sweep(uint8_t ch) {
-  Serial.print("  sweeping ch ");
-  Serial.println(ch);
+  Monitor.print("  sweeping ch ");
+  Monitor.println(ch);
   for (int rep = 0; rep < 2; rep++) {
     for (int d = 90; d <= 135; d++) { setUs(ch, degToUs(d)); delay(15); }
     for (int d = 135; d >= 45; d--) { setUs(ch, degToUs(d)); delay(15); }
@@ -123,7 +126,7 @@ void handle(String line) {
       help();
       break;
     case 'c':
-      Serial.println("Centre all:");
+      Monitor.println("Centre all:");
       for (uint8_t i = 0; i < CHANNELS; i++) { setUs(i, degToUs(90)); report(i, 90); delay(60); }
       break;
     case 'a':
@@ -132,7 +135,7 @@ void handle(String line) {
         setUs(a, degToUs(JOINTS[a].assembly_deg));
         report(a, JOINTS[a].assembly_deg);
       } else {
-        Serial.println("Assembly angles:");
+        Monitor.println("Assembly angles:");
         for (uint8_t i = 0; i < CHANNELS; i++) {
           setUs(i, degToUs(JOINTS[i].assembly_deg));
           report(i, JOINTS[i].assembly_deg);
@@ -141,24 +144,24 @@ void handle(String line) {
       }
       break;
     case 's':
-      if (!hasB) { Serial.println("  usage: s <ch> <deg>"); break; }
+      if (!hasB) { Monitor.println("  usage: s <ch> <deg>"); break; }
       if (!validChannel(a)) break;
       setUs(a, degToUs(b));
-      report(a, constrain(b, 0, 180));
+      report(a, (int)constrain(b, 0, 180));
       break;
     case 'u':
-      if (!hasB) { Serial.println("  usage: u <ch> <us>"); break; }
+      if (!hasB) { Monitor.println("  usage: u <ch> <us>"); break; }
       if (!validChannel(a)) break;
       b = constrain(b, US_MIN, US_MAX);
       setUs(a, b);
-      Serial.print("  ch ");
-      Serial.print(a);
-      Serial.print(" -> ");
-      Serial.print(b);
-      Serial.println(" us");
+      Monitor.print("  ch ");
+      Monitor.print(a);
+      Monitor.print(" -> ");
+      Monitor.print(b);
+      Monitor.println(" us");
       break;
     case 't':
-      if (!hasA) { Serial.println("  usage: t <ch>"); break; }
+      if (!hasA) { Monitor.println("  usage: t <ch>"); break; }
       if (!validChannel(a)) break;
       sweep(a);
       break;
@@ -166,36 +169,36 @@ void handle(String line) {
       if (hasA) {
         if (!validChannel(a)) break;
         off(a);
-        Serial.print("  ch ");
-        Serial.print(a);
-        Serial.println(" off");
+        Monitor.print("  ch ");
+        Monitor.print(a);
+        Monitor.println(" off");
       } else {
         for (uint8_t i = 0; i < 16; i++) off(i);
-        Serial.println("  all outputs off");
+        Monitor.println("  all outputs off");
       }
       break;
     default:
-      Serial.println("  unknown command; type h for help");
+      Monitor.println("  unknown command; type h for help");
   }
 }
 
 void setup() {
-  Serial.begin(115200);
+  Monitor.begin();
   Wire.begin();
   // The shield ties A4/A5 to SDA/SCL. Leave A4/A5 unused (and don't call Wire2.begin()).
   if (!pwm.begin()) {
-    Serial.println("PCA9685 not found at 0x40. Check the shield is seated and SJ1 is soldered.");
+    Monitor.println("PCA9685 not found at 0x40. Check the shield is seated on the headers and VCC select is soldered to 3V.");
   }
   pwm.setOscillatorFrequency(25000000);
   pwm.setPWMFreq(50);
   for (uint8_t i = 0; i < 16; i++) off(i);
   delay(500);
-  Serial.println("servo_tool ready. All outputs off.");
+  Monitor.println("servo_tool ready. All outputs off.");
   help();
 }
 
 void loop() {
-  if (Serial.available()) {
-    handle(Serial.readStringUntil('\n'));
+  if (Monitor.available()) {
+    handle(Monitor.readStringUntil('\n'));
   }
 }

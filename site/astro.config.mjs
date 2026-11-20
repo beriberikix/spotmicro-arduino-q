@@ -33,7 +33,7 @@ export default defineConfig({
 					{ label: 'Fit check', slug: 'prepare/fit-check' },
 					{ label: 'Clean up the prints', slug: 'prepare/prints' },
 					{ label: 'Servo shield and power', slug: 'prepare/bench' },
-					{ label: 'Test and centre the servos', slug: 'prepare/servos' },
+					{ label: 'Test and label the servos', slug: 'prepare/servos' },
 					{ label: 'Helper stand', slug: 'prepare/stand', badge: { text: 'Optional', variant: 'note' } },
 				] },
 				{ label: '2 · Legs', items: [
