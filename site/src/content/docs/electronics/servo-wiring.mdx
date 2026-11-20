@@ -16,7 +16,8 @@ import Todo from '../../../components/Todo.astro';
 2. Run them sideways into the channels beside the SZBK07: there's about **23 mm** of room on the left and **19 mm** on
    the right.
 3. Plug each into its channel on the shield's right-angle headers, **brown/black wire to the GND row**. Use the labels
-   from [Test and centre the servos](../../prepare/servos/).
+   from [Test and label the servos](../../prepare/servos/). If a lead isn't labelled, plug it in, send `t <ch>` and
+   check that the right joint moves.
 4. Fold the extra length into the shoulder boxes, not over the board stack: the top cover clears the servo plugs by only
    1.8 mm.
 5. Connect the GY-521: VCC to **3.3 V**, GND, SDA and SCL to the shield's I2C pins (it shares the bus with the PCA9685,

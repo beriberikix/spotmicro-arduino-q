@@ -9,7 +9,7 @@ export const CHECKS: { slug: string; title: string; keys: string[] }[] = [
 	{ slug: 'prepare/fit-check', title: 'Fit check', keys: one('fit-check') },
 	{ slug: 'prepare/prints', title: 'Clean up the prints', keys: one('prints') },
 	{ slug: 'prepare/bench', title: 'Servo shield and power', keys: one('bench') },
-	{ slug: 'prepare/servos', title: 'Test and centre the servos', keys: one('servos') },
+	{ slug: 'prepare/servos', title: 'Test and label the servos', keys: one('servos') },
 	{ slug: 'legs/lower-leg', title: 'Lower legs', keys: legs('lower-leg') },
 	{ slug: 'legs/knee', title: 'Knee joints', keys: legs('knee') },
 	{ slug: 'legs/upper-leg', title: 'Upper legs', keys: legs('upper-leg') },
