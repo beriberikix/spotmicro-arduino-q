@@ -8,8 +8,8 @@ import Done from '../../../components/Done.astro';
 import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
-import Todo from '../../../components/Todo.astro';
 import WhichSide from '../../../components/WhichSide.astro';
+import LegPick from '../../../components/LegPick.astro';
 
 The lower leg (the **wrist**) holds the knee servo. Build all four the same way, using normal parts for
 the left legs and `_mirrored` parts for the right legs.
@@ -26,6 +26,14 @@ the left legs and `_mirrored` parts for the right legs.
 	[4, '<kbd class="hw">M3×20</kbd> + 4 M3 nuts', 'Servo sandwich'],
 ]} tools={['2.5 mm hex', '1.5 mm hex', 'Tweezers']} />
 
+If you printed the MakerWorld profile, the printed parts come from three of its [ten plates](../../prepare/prints/#check-you-have-every-part):
+
+- **Plate 5, Lower legs:** the wrists and wrist counterparts, two normal and two mirrored of each.
+- **Plate 3, Shoulder joints and head mounts:** the bearing pins. It has two kinds, both 5 mm cubes: eight with an
+  M2 bore and four with an M3 bore. This page uses an M2 one: an M2 screw goes through it snugly, while an M3 screw
+  only fits the M3 kind.
+- **Plate 10, Feet (TPU):** the foot tips.
+
 ## Which one?
 
 Parts printed from this repository's current files have their side engraved on a face that ends up hidden: **L** or **R**, and **FL RR** or **FR RL** on the shoulder servo mount. For parts without it, put each one down as described and pick your leg: the green check marks the version that leg takes.
@@ -39,7 +47,8 @@ Parts printed from this repository's current files have their side engraved on a
 
 <Steps>
 
-1. Push two M3 nuts into the pockets at the bottom of the wrist.
+1. Push two M3 nuts into the pockets at the bottom of the wrist. Tweezers make this much easier: hold the nut flat,
+   drop it into the pocket, then press it home with the tip.
 2. Hold the TPU foot tip in place and screw it on with two <Hw>M3×8</Hw>.
 
 </Steps>
@@ -60,13 +69,21 @@ Don't over-tighten: TPU squashes, and the screws only need to hold it snug.
 
 ## 3. Knee servo sandwich
 
+Build one lower leg at a time, and decide first which leg it's for. Each leg takes its own **knee** servo, the one you
+labelled `xx-K`, plus a wrist and counterpart of the matching version:
+
+<LegPick joint="knee" parts={[{ file: 'wrist', name: 'Wrist' }, { file: 'wrist-counterpart', name: 'Counterpart' }]} />
+
+Mark the finished lower leg with the same label (pencil on a hidden face, or tape), so it meets the right upper leg later.
+
 <Render id="leg-knee-servo" caption="Knee servo between the wrist and its counterpart" />
 
 <Steps>
 
 1. Fit the four rubber dampeners to the servo's mounting ears. Fit all four, or the M3×20 won't line up.
 2. Plug the **extension cable** onto the servo lead now, and put a strip of tape around the joint so it can't pull
-   apart inside the leg.
+   apart inside the leg. Label the extension's free end with the same tag (`FL-K` and so on): the servo's own plug ends up
+   inside the leg.
 3. Push four M3 nuts into the small pockets in the wrist counterpart.
 4. Slide the servo into its pocket in the counterpart from above. The output shaft and the bearing pin end up on
    **opposite sides** of the knee: shaft on the inner side (towards the robot's centre line), pin on the outer side.
@@ -82,7 +99,9 @@ Nuts falling out of their pockets is the classic Spot Micro annoyance. A tiny da
 while you close the parts.
 </Aside>
 
-<Todo id="lower-leg-done">A finished lower leg from both sides, showing the servo shaft, bearing pin and extension lead.</Todo>
-<Todo id="lower-leg-sandwich" kind="video">Closing the wrist sandwich: servo into the counterpart, wrist on, four screws (30 s).</Todo>
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/legs/lower-legs-done.jpg`} alt="Four finished lower legs on a table, servo shafts facing up: two with the foot pointing left (normal parts) and two with the foot pointing right (mirrored parts). Each servo lead is joined to an extension cable with tape, one tape flag reading RR-K." width="1600" height="993" style="border-radius:0.4rem" />
+	<figcaption>All four lower legs, servo shafts up. The left-leg pair (normal) has the foot to the left, the right-leg pair (mirrored) has it to the right. The extension joints are taped and labelled.</figcaption>
+</figure>
 
 <Done id="lower-leg" legs />

@@ -1,0 +1,144 @@
+---
+/**
+ * "Which servo and which parts?" for a per-leg step: the four legs laid out as seen from above (head at the top),
+ * each with the servo label to grab, its shield channel, and the part versions (with side renders) that go with it.
+ */
+import { LEG_NAME, SERVOS, type JointName, type Leg } from '../data/servos';
+
+interface Props {
+	joint: JointName;
+	/** Side renders in /renders/sides/ to show per leg, e.g. ['wrist', 'wrist-counterpart']. */
+	parts?: { file: string; name: string }[];
+}
+const { joint, parts = [] } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const legs: Leg[] = ['FL', 'FR', 'RL', 'RR'];
+const left = (l: Leg) => l === 'FL' || l === 'RL';
+const tag = (l: Leg) => `${l}-${joint[0].toUpperCase()}`;
+const ch = (l: Leg) => SERVOS.find((s) => s.leg === l && s.joint === joint)!.ch;
+---
+
+<div class="leg-pick not-content">
+	<p class="head">▲ head (front) · seen from above</p>
+	<div class="grid">
+		{legs.map((l) => (
+			<div class={`card ${left(l) ? 'left' : 'right'}`}>
+				<div class="top">
+					<span class="leg">{LEG_NAME[l]}</span>
+					<span class="tag">{tag(l)}</span>
+				</div>
+				<p class="ch">Shield channel {ch(l)}</p>
+				{parts.length > 0 && (
+					<ul class="parts">
+						{parts.map((p) => (
+							<li>
+								<img
+									src={`${base}/renders/sides/${p.file}-${left(l) ? 'normal' : 'mirrored'}.png`}
+									alt={`${p.name}, ${left(l) ? 'normal' : 'mirrored'} version`}
+									width="800"
+									height="600"
+									loading="lazy"
+								/>
+								<span>{p.name}: <strong>{left(l) ? 'normal' : 'mirrored'}</strong></span>
+							</li>
+						))}
+					</ul>
+				)}
+			</div>
+		))}
+		<div class="body" aria-hidden="true">body</div>
+	</div>
+</div>
+
+<style>
+	.leg-pick {
+		margin: 1rem 0;
+	}
+	.head {
+		text-align: center;
+		color: var(--sl-color-gray-3);
+		font-size: var(--sl-text-sm);
+		margin: 0 0 0.4rem;
+	}
+	.grid {
+		display: grid;
+		grid-template-columns: 1fr 3.5rem 1fr;
+		grid-template-rows: auto auto;
+		gap: 0.6rem;
+	}
+	.card.left {
+		grid-column: 1;
+	}
+	.card.right {
+		grid-column: 3;
+	}
+	.body {
+		grid-column: 2;
+		grid-row: 1 / span 2;
+		border: 2px dashed var(--sl-color-gray-4);
+		border-radius: 0.6rem;
+		display: grid;
+		place-items: center;
+		writing-mode: vertical-rl;
+		color: var(--sl-color-gray-3);
+		font-size: var(--sl-text-xs);
+	}
+	.card {
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+		padding: 0.6rem 0.7rem;
+		background: var(--sl-color-gray-7, var(--sl-color-black));
+	}
+	.top {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 0.4rem;
+		flex-wrap: wrap;
+	}
+	.leg {
+		font-weight: 600;
+	}
+	.tag {
+		font-family: var(--sl-font-mono);
+		font-weight: 700;
+		font-size: 1.05rem;
+		background: #f6e7a8;
+		color: #3a3000;
+		padding: 0.05rem 0.45rem;
+		border-radius: 0.2rem;
+	}
+	.ch {
+		margin: 0.2rem 0 0;
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+	}
+	.parts {
+		list-style: none;
+		padding: 0;
+		margin: 0.5rem 0 0;
+		display: grid;
+		gap: 0.3rem;
+	}
+	.parts li {
+		display: grid;
+		grid-template-columns: 4.5rem 1fr;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: var(--sl-text-sm);
+	}
+	.parts img {
+		width: 100%;
+		height: auto;
+		background: #fff;
+		border-radius: 0.25rem;
+	}
+	@media (max-width: 520px) {
+		.grid {
+			grid-template-columns: 1fr 1.5rem 1fr;
+		}
+		.parts li {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
