@@ -8,7 +8,6 @@ import Done from '../../../components/Done.astro';
 import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
-import Todo from '../../../components/Todo.astro';
 
 Without it, the upper leg hangs on the hip servo's shaft alone, which wobbles. The shoulder cover bridges over the top of the hip and holds a second bearing on the outside of the upper leg, so the leg is
 supported on both sides.
@@ -43,7 +42,14 @@ over it. Take the screw out, slide the 625ZZ onto the pin, put the screw back (i
 ring), and lower the cover over the bearing.
 </Aside>
 
-<Todo id="cover-done">A complete leg with shoulder joint and cover, outside view.</Todo>
-<Todo id="all-legs">All four legs side by side: FL, RL, FR, RR, with the shoulder servo outputs facing outwards.</Todo>
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/shoulders/leg-with-cover.jpg`} alt="A finished leg lying on its side: the white shoulder cover arches over the hip from the extended servo cap to the bearing on the upper leg's outer face, with the shoulder servo in its mount beside it and the knee and foot behind." width="1500" height="1600" loading="lazy" style="max-width:30rem;border-radius:0.4rem" />
+	<figcaption>A finished leg: the cover bridges from the cap over the hip to the bearing on the upper leg.</figcaption>
+</figure>
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/shoulders/four-legs.jpg`} alt="All four finished legs laid out on a wooden floor in two rows, each with its shoulder servo, shoulder cover, upper leg, knee and red foot, and their servo leads trailing." width="1231" height="1600" loading="lazy" style="max-width:30rem;border-radius:0.4rem" />
+	<figcaption>All four legs done, ready for the body.</figcaption>
+</figure>
 
 <Done id="cover" legs />
