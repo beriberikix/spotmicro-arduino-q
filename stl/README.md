@@ -35,17 +35,16 @@ CC BY-SA 4.0). See ../NOTICE.md.
 
 | File | Normal | Mirrored | Material | Infill | Notes |
 | ---- | ------ | -------- | -------- | ------ | ----- |
-| [Shoulder_Joint_Servomount_extended_BB.stl](shoulders/Shoulder_Joint_Servomount_extended_BB.stl) · [Shoulder_Joint_Servomount_extended_BB_mirrored.stl](shoulders/Shoulder_Joint_Servomount_extended_BB_mirrored.stl) | 2 | 2 | PLA | 20% | robjk |
+| [Shoulder_Joint_Servomount_extended_BB.stl](shoulders/Shoulder_Joint_Servomount_extended_BB.stl) · [Shoulder_Joint_Servomount_extended_BB_mirrored.stl](shoulders/Shoulder_Joint_Servomount_extended_BB_mirrored.stl) | 2 | 2 | PLA | 20% | robjk; bearing-pin seat changed to M2 |
 | [Shoulder_Joint_Servo_Cap_Extended.stl](shoulders/Shoulder_Joint_Servo_Cap_Extended.stl) | 4 | - | PLA | 20% | robjk |
 | [Shoulder_Cover.stl](shoulders/Shoulder_Cover.stl) | 4 | - | PLA | 20% | robjk; symmetric, no mirrored copy |
-| [Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl](shoulders/Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl) | 8 | - | PLA | 20% | 4 on the upper-leg shells (robjk; run in the shoulder-cover bearings) and 4 on the shoulder servo mounts (their nut pocket is M3) |
-| [Shoulder_Joint_Ball_Bearing_Pin.stl](shoulders/Shoulder_Joint_Ball_Bearing_Pin.stl) | 4 | - | PLA | 20% | The knees (M2x8 into the wrist counterpart) |
+| [Shoulder_Joint_Ball_Bearing_Pin.stl](shoulders/Shoulder_Joint_Ball_Bearing_Pin.stl) | 12 | - | PLA | 20% | M2 bore, with an M2x8 and nut: 4 knees, 4 upper-leg shells, 4 shoulder servo mounts |
 
 ## legs
 
 | File | Normal | Mirrored | Material | Infill | Notes |
 | ---- | ------ | -------- | -------- | ------ | ----- |
-| [Limb_Top_Shell_with_BB_hole.stl](legs/Limb_Top_Shell_with_BB_hole.stl) · [Limb_Top_Shell_with_BB_hole_mirrored.stl](legs/Limb_Top_Shell_with_BB_hole_mirrored.stl) | 2 | 2 | PLA | 20% | robjk; replaces Limb_Top_Shell |
+| [Limb_Top_Shell_with_BB_hole.stl](legs/Limb_Top_Shell_with_BB_hole.stl) · [Limb_Top_Shell_with_BB_hole_mirrored.stl](legs/Limb_Top_Shell_with_BB_hole_mirrored.stl) | 2 | 2 | PLA | 20% | robjk; replaces Limb_Top_Shell; bearing-pin seat changed to M2 |
 | [Limb_Bottom_Shell.stl](legs/Limb_Bottom_Shell.stl) · [Limb_Bottom_Shell_mirrored.stl](legs/Limb_Bottom_Shell_mirrored.stl) | 2 | 2 | PLA | 20% |  |
 | [Limb_Ball_Bearing_Mount_long_v4.stl](legs/Limb_Ball_Bearing_Mount_long_v4.stl) · [Limb_Ball_Bearing_Mount_long_v4_mirrored.stl](legs/Limb_Ball_Bearing_Mount_long_v4_mirrored.stl) | 2 | 2 | PLA | 20% |  |
 | [Limb_Servohorn_Mount_long_v4.stl](legs/Limb_Servohorn_Mount_long_v4.stl) · [Limb_Servohorn_Mount_long_v4_mirrored.stl](legs/Limb_Servohorn_Mount_long_v4_mirrored.stl) | 2 | 2 | PLA | 20% |  |
@@ -99,6 +98,5 @@ CC BY-SA 4.0). See ../NOTICE.md.
 | ---- | ------ | -------- | -------- | ------ | ----- |
 | [Carrier_Mount_Test.stl](optional/test-prints/Carrier_Mount_Test.stl) | 1 | - | PLA | 20% | Media Carrier pads, hooks and snap clips from the electronics plate |
 | [SZBK07_Mount_Test.stl](optional/test-prints/SZBK07_Mount_Test.stl) | 1 | - | PLA | 20% | SZBK07 posts from the electronics plate |
-
 
 Required prints: 74 parts.

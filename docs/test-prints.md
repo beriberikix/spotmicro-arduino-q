@@ -30,7 +30,7 @@ Print settings match the real parts: 3 walls, 20% infill, Bambu PLA Basic, no su
 
 | Plate | Filament | Parts | Time | Filament used |
 | ----- | -------- | ----- | ---- | ------------- |
-| 1 | Black PLA | Carrier_Mount_Test, SZBK07_Mount_Test, Sensormount_DualCam, Shoulder_Joint_Servomount_extended_BB, Shoulder_Joint_Servo_Cap_Extended, Limb_Ball_Bearing_Mount_long_v4, Shoulder_Joint_Ball_Bearing_Pin, Shoulder_Joint_Ball_Bearing_Pin_M3x8 | 2.2 h | 66 g |
+| 1 | Black PLA | Carrier_Mount_Test, SZBK07_Mount_Test, Sensormount_DualCam, Shoulder_Joint_Servomount_extended_BB, Shoulder_Joint_Servo_Cap_Extended, Limb_Ball_Bearing_Mount_long_v4, Shoulder_Joint_Ball_Bearing_Pin | 2.1 h | 66 g |
 | 2 | White PLA | Shoulder_Cover | 0.6 h | 18 g |
 
 ## What you need on hand
@@ -55,7 +55,6 @@ Print settings match the real parts: 3 walls, 20% infill, Bambu PLA Basic, no su
 | Limb_Ball_Bearing_Mount_long_v4 | Press in a 625ZZ | The bearing presses in by hand or with light pressure and stays put |
 | Shoulder_Cover | Press in a 625ZZ; hold against the cap's extension with M3x20 + nuts | The bearing seats in the 16.3 mm bore; the cover's screw holes line up with the cap |
 | Shoulder_Joint_Ball_Bearing_Pin (Kooba, M2 bore) | Slide into the second bearing | The 5 mm pin goes into the bearing's centre snugly, without wobble |
-| Shoulder_Joint_Ball_Bearing_Pin_M3x8 (robjk, M3 bore) | Same | Same |
 
 ## If something doesn't fit
 

@@ -7,6 +7,7 @@
 # Each entry: (folder, source, output name, normal copies, mirrored copies, material, infill, note).
 # A part with mirrored copies is also written as <name>_mirrored.stl (mirrored across X).
 # Quantities and infill follow Kubina's parts list; robjk's parts replace the matching Kooba parts.
+import math
 import os
 import shutil
 
@@ -38,13 +39,12 @@ PARTS = [
     ("chassis", KOOBA + "LiPo_Mountingbracket_Rear.stl", "LiPo_Mountingbracket_Rear", 1, 0, "PLA", "20%", ""),
     ("electronics", PLATE, "UnoQ_Mountingplate", 1, 0, "PLA", "20%", "New: UNO Media Carrier + UNO Q + servo shield stack, SZBK07, GY-521"),
     # Shoulder joints (robjk reinforced)
-    ("shoulders", ROBJK + "Shoulder_Joint_Servomount_extended_BB.stl", "Shoulder_Joint_Servomount_extended_BB", 2, 2, "PLA", "20%", "robjk"),
+    ("shoulders", ROBJK + "Shoulder_Joint_Servomount_extended_BB.stl", "Shoulder_Joint_Servomount_extended_BB", 2, 2, "PLA", "20%", "robjk; bearing-pin seat changed to M2"),
     ("shoulders", ROBJK + "Shoulder_Joint_Servo_Cap_Extended.stl", "Shoulder_Joint_Servo_Cap_Extended", 4, 0, "PLA", "20%", "robjk"),
     ("shoulders", ROBJK + "Shoulder_Cover.stl", "Shoulder_Cover", 4, 0, "PLA", "20%", "robjk; symmetric, no mirrored copy"),
-    ("shoulders", ROBJK + "Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl", "Shoulder_Joint_Ball_Bearing_Pin_M3x8", 8, 0, "PLA", "20%", "4 on the upper-leg shells (robjk; run in the shoulder-cover bearings) and 4 on the shoulder servo mounts (their nut pocket is M3)"),
-    ("shoulders", KOOBA + "Shoulder_Joint_Ball_Bearing_Pin.stl", "Shoulder_Joint_Ball_Bearing_Pin", 4, 0, "PLA", "20%", "The knees (M2x8 into the wrist counterpart)"),
+    ("shoulders", KOOBA + "Shoulder_Joint_Ball_Bearing_Pin.stl", "Shoulder_Joint_Ball_Bearing_Pin", 12, 0, "PLA", "20%", "M2 bore, with an M2x8 and nut: 4 knees, 4 upper-leg shells, 4 shoulder servo mounts"),
     # Legs
-    ("legs", ROBJK + "Limb_Top_Shell_with_BB_hole.stl", "Limb_Top_Shell_with_BB_hole", 2, 2, "PLA", "20%", "robjk; replaces Limb_Top_Shell"),
+    ("legs", ROBJK + "Limb_Top_Shell_with_BB_hole.stl", "Limb_Top_Shell_with_BB_hole", 2, 2, "PLA", "20%", "robjk; replaces Limb_Top_Shell; bearing-pin seat changed to M2"),
     ("legs", KOOBA + "Limb_Bottom_Shell.stl", "Limb_Bottom_Shell", 2, 2, "PLA", "20%", ""),
     ("legs", KOOBA + "Limb_Ball_Bearing_Mount_long_v4.stl", "Limb_Ball_Bearing_Mount_long_v4", 2, 2, "PLA", "20%", ""),
     ("legs", KOOBA + "Limb_Servohorn_Mount_long_v4.stl", "Limb_Servohorn_Mount_long_v4", 2, 2, "PLA", "20%", ""),
@@ -168,6 +168,58 @@ def mirrored(src, dest):
     m.write(dest)
 
 
+# Bearing-pin seats changed from M3 to M2. robjk's top shell and extended servo mount hold their bearing pin with an M3
+# screw and nut, but an M3 cap head (5.5 mm) is wider than the 625ZZ's 5 mm bore, so the bearing can't slide over it.
+# These fill the M3 hole and nut pocket and cut an M2 clearance hole and M2 nut pocket in the same place, so every pin
+# is the M2-bore one with an M2x8 (head 3.8 mm) and nut, as on the knees. Positions are in the print position of the
+# normal part (the mirrored copy is made from it afterwards).
+# name: (pin axis; centre in the other two axes, in xyz order; outer face, back of the wall, inner face along the
+#        axis; the axis the nut pocket's flats face)
+M2_PIN_SEATS = {
+    "Limb_Top_Shell_with_BB_hole": ("y", (32.2, 15.0), -18.26, -16.86, -14.51, "x"),
+    "Shoulder_Joint_Servomount_extended_BB": ("x", (10.0, 15.0), -22.5, -21.0, -18.0, "y"),
+}
+M2_HOLE_D = 2.4   # M2 clearance
+M2_NUT_AF = 4.3   # M2 nut is 4.0 mm across the flats, 1.6 mm thick
+M3_PLUG = (3.8, 6.0)  # just over the old 3.1-3.2 mm hole and 5.6-5.7 mm pocket
+
+
+def rebore_m2(path, name):
+    import Part
+    V = FreeCAD.Vector
+    axis, (cu, cw), outer, wall, inner, flat = M2_PIN_SEATS[name]
+    unit = {"x": V(1, 0, 0), "y": V(0, 1, 0), "z": V(0, 0, 1)}
+    u, w = [k for k in "xyz" if k != axis]
+
+    def at(t):
+        d = {axis: t, u: cu, w: cw}
+        return V(d["x"], d["y"], d["z"])
+
+    def cyl(dia, t0, t1):
+        return Part.makeCylinder(dia / 2, t1 - t0, at(t0), unit[axis])
+
+    def hexagon(af, t0, t1):
+        r, across = af / math.sqrt(3), (u if flat != u else w)
+        pts = [at(t0) + unit[across] * (r * math.cos(math.radians(60 * k))) + unit[flat] * (r * math.sin(math.radians(60 * k)))
+               for k in range(6)]
+        return Part.Face(Part.makePolygon(pts + [pts[0]])).extrude(unit[axis] * (t1 - t0))
+
+    mesh = Mesh.Mesh(path)
+    shell = Part.Shape()
+    shell.makeShapeFromMesh(mesh.Topology, 0.05)
+    solid = Part.makeSolid(shell)
+    filled = solid.fuse(cyl(M3_PLUG[0], outer, wall).fuse(hexagon(M3_PLUG[1], wall, inner))).removeSplitter()
+    added = filled.Volume - solid.Volume
+    old = math.pi * 1.6 ** 2 * abs(wall - outer) + 1.5 * math.sqrt(3) * (5.65 / math.sqrt(3)) ** 2 * abs(inner - wall)
+    step = 1 if inner > outer else -1
+    cut = filled.cut(cyl(M2_HOLE_D, outer - step, inner).fuse(hexagon(M2_NUT_AF, wall, inner + 0.5 * step)))
+    removed = filled.Volume - cut.Volume
+    new = math.pi * (M2_HOLE_D / 2) ** 2 * abs(wall - outer) + 1.5 * math.sqrt(3) * (M2_NUT_AF / math.sqrt(3)) ** 2 * abs(inner - wall)
+    if not cut.isValid() or abs(added - old) > 0.1 * old or abs(removed - new) > 0.05 * new:
+        raise RuntimeError(f"{path}: M2 rebore filled {added:.1f} (expected ~{old:.1f}) and cut {removed:.1f} (expected {new:.1f}) mm3")
+    MeshPart.meshFromShape(Shape=cut, LinearDeflection=0.02, AngularDeflection=0.2, Relative=False).write(path)
+
+
 # Side labels engraved into the parts that come in normal and mirrored versions, so a printed part says which leg
 # it belongs to. Each label sits on a face that is horizontal as printed, so it adds no overhang: an upward face
 # (the label is the last layers) or the bed face (the first layers, bridged by about 1 mm). Every spot was picked
@@ -243,6 +295,8 @@ def main():
         else:
             Mesh.Mesh(os.path.join(REF, src)).write(dest)  # rewrite as binary STL
         to_print_position(dest, name)
+        if name in M2_PIN_SEATS:  # before mirroring, so the mirrored copy gets it too
+            rebore_m2(dest, name)
         files = [f"{folder}/{name}.stl"]
         if m:
             mirrored(dest, os.path.join(d, name + "_mirrored.stl"))
