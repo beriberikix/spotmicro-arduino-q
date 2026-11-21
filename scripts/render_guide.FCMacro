@@ -81,6 +81,9 @@ def render_step(S, st, video=True):
         c = S.default_colour(o)
         if c == G.C_PRINT:
             S.colour(o, G.C_NEW)
+    S.pose = {}
+    for sels, centre, axis, deg in st.get("pose", []):
+        S.set_pose(resolve(S, sels), centre, axis, deg)
     disp = {}
     for sels, d in st.get("explode", []):
         for o in resolve(S, sels):

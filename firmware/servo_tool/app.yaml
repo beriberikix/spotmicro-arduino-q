@@ -1,0 +1,10 @@
+# servo_tool: test the servos and set each one's angle while the horns go on, following the build guide.
+name: servo_tool
+icon: 🦿
+description: Test the twelve servos and set their assembly angles, step by step with the build guide.
+
+# The Web UI brick serves assets/ on port 7000.
+ports: []
+
+bricks:
+  - arduino:web_ui
