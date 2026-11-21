@@ -109,7 +109,7 @@ function legPicker(joint, current, onpick) {
 // ---------------------------------------------------------------- pages
 const pages = {};
 let tab = 'test';
-const view = { test: {}, knee: {}, hip: {}, shoulder: {}, install: {} };
+const view = { test: {}, knee: {}, hip: {}, install: {} };
 
 pages.test = {
   title: 'Test servos',
@@ -213,25 +213,6 @@ pages.hip = {
     }
     if (v.stage === 'done') card.append(el('p', { class: 'done' }, `${tag(leg, 'hip')} done. Pick the next leg.`));
     if (v.stage === 'stuck') card.append(el('p', {}, 'Neither angle swung the leg the right way. Check the lead is in the right channel and that this is the right leg, then start again.'));
-    return out;
-  },
-};
-
-pages.shoulder = {
-  title: 'Shoulder servo',
-  guide: '/shoulders/shoulder-servo/',
-  render() {
-    const v = view.shoulder;
-    const out = [el('p', { class: 'lead' }, 'Shoulder servo: the servo goes into its mount at 90°. Pick the leg.'),
-      legPicker('shoulder', v.leg, (leg) => { view.shoulder = { leg }; render(); })];
-    if (!v.leg) return out;
-    const c = ch(v.leg, 'shoulder');
-    out.push(el('div', { class: 'card' },
-      steps(`Plug the shoulder servo (${T(v.leg, 'shoulder')}) into <b>channel ${c}</b>.`),
-      btn(`Move ${tag(v.leg, 'shoulder')} to 90°`, async () => { if (await setAngle(c, 90)) { v.set = true; render(); } }),
-      v.set ? steps('Fit its dampeners, put the four nuts in, drop it into the mount with the output shaft facing out of the end of the robot, and screw it in with four M3×20.') : null,
-      v.set ? btn('Done: servo off', async () => { await off(c); view.shoulder = { leg: v.leg, done: true }; render(); }) : null,
-      v.done ? el('p', { class: 'done' }, `${tag(v.leg, 'shoulder')} done.`) : null));
     return out;
   },
 };
