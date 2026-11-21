@@ -52,11 +52,11 @@ and two snap clips (USB-C edge). Clip the carrier in, then press the UNO Q onto 
 - **USB-C:** faces the right side rail, 20 mm away; use a right-angle plug or program over Wi-Fi.
 - **Battery lead:** runs under the plate beside the battery and up through the slot at the rear-left corner.
 
-Power, from a 2S LiPo (7.4-8.4 V):
+Power, from a 3S LiPo (10.5-12.6 V in use):
 
 - **UNO Q and Media Carrier:** battery into the UNO Q's VIN (7-24 V).
-- **Servos:** SZBK07 at 6.0 V into the shield's V+ terminal. It holds 6.0 V down to about 7.5 V of battery, then
-  follows the battery down, still within the servos' rating.
+- **Servos:** SZBK07 at 6.0 V into the shield's V+ terminal. It needs about 3 V of headroom, so it holds 6.0 V over the
+  whole 3S discharge (a 2S pack can't feed it).
 - **I2C:** the shield's PCA9685 and the GY-521 IMU.
 
 All positions and sizes are in the `Params` spreadsheet of `cad/UnoQ_Mountingplate.FCStd`:

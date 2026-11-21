@@ -13,7 +13,7 @@ import Check from '../../../components/Check.astro';
 
 <Parts bag="G" items={[
 	[3, 'LiPo brackets (front, middle, rear)'],
-	[1, '2S LiPo'],
+	[1, '3S LiPo, at most 138 × 47 × 25 mm'],
 	[1, 'Rear cover shell (long) + rear cover plate'],
 	[2, 'Top cover halves + 2 bottom cover halves'],
 	[8, '<kbd class="hw">M3×8</kbd> + 8 M3 nuts', 'Joining the cover halves'],
@@ -32,8 +32,9 @@ import Check from '../../../components/Check.astro';
 </Steps>
 
 <Check id="lipo-brackets" title="How the LiPo brackets fix">
-The brackets aren't in the CAD assembly yet. Document how they fix to the plate, and the battery size that fits, on the
-first build.
+The brackets aren't in the CAD assembly yet. Document how they fix to the plate on the first build. From the CAD, they
+hang under the plate from screw holes 65 mm in front of the centre, at the centre and 65 mm behind, and leave a bay
+48 mm wide and 25.6 mm tall (the bottom cover's floor is right below them), about 138 mm long.
 </Check>
 
 <Todo id="battery">The battery in its brackets under the plate, lead coming up through the rear-left slot.</Todo>

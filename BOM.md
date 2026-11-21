@@ -19,7 +19,8 @@ many vendors; check the specs in the notes before buying.
 | 48 | Servo rubber dampeners | Usually included with the servos. | - |
 | 4 | Servo extension cable, 10-15 cm | Lower-leg servos. | [search](https://www.amazon.com/s?k=servo+extension+cable+15cm) |
 | 1 | GY-521 (MPU-6050) IMU | Mounts on the plate's GY-521 posts. | [search](https://www.amazon.com/s?k=GY-521+MPU6050) |
-| 1 | 2S LiPo, 5200-6200 mAh, 30C+ | Sits in the LiPo brackets under the plate. | [search](https://www.amazon.com/s?k=2S+LiPo+5200mAh+hardcase) |
+| 1 | 3S LiPo, about 5000-5200 mAh, 30C+, XT60, at most 138 x 47 x 25 mm | Sits in the LiPo brackets under the plate. The bay is 25.6 mm tall, so most 3S hard cases (37 mm) don't fit: use a soft case. The reference build uses a Zeee 3S 5200 mAh 50C soft case (132 x 43 x 25 mm, 343 g). | [search](https://www.amazon.com/s?k=3S+LiPo+5200mAh+soft+case+XT60) |
+| 1 | LiPo balance charger, 3S capable | Charging the battery. | [search](https://www.amazon.com/s?k=LiPo+balance+charger+3S) |
 | 1 | Main power switch or 19 mm latching push button | Fits the covers' 19 mm cutout. | [search](https://www.amazon.com/s?k=19mm+latching+push+button+LED) |
 | 1 | XT60 connector pair | Battery connector. | [search](https://www.amazon.com/s?k=XT60+connector+pair) |
 | 1 | USB-C PD power supply, 5 V 3 A | Bench work and flashing. The UNO Q does not boot from a non-PD supply. | [search](https://www.amazon.com/s?k=USB-C+PD+charger+15W) |
@@ -43,7 +44,9 @@ DS3218 on all twelve joints: 20 kg·cm at 6 V, 4.8-6.8 V. MG996R (11 kg·cm) wor
 - "Waterproof" in the title doesn't matter; nearly every DS3218 is sold that way.
 - Some DS3218s cut out after about 5 s at stall (overload protection). Standing and walking don't trigger it; a leg
   pressed against the stand can.
-- The 6 V rail is required: a full 2S pack (8.4 V) is above the rating.
+- The 6 V rail is required: a full 3S pack (12.6 V) is far above the rating.
+- The battery is 3S, not 2S: the SZBK07 needs about 3 V more on its input than its output, so it can't hold 6.0 V from a
+  2S pack (8.4 V full) and the rail sags to 4-5 V.
 - The SZBK07's 15 A continuous is enough; twelve servos never all stall at once.
 
 ## Hardware
