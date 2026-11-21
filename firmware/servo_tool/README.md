@@ -8,7 +8,7 @@ page where a horn is fitted.
 - `sketch/` runs on the microcontroller and drives the PCA9685. It takes commands from App Lab's Serial Monitor
   (type `h`) and from the web page over the Bridge.
 - `python/` and `assets/` serve the web page on port 7000: one tab per guide page (Test servos, Knee joint,
-  Hip joint, Shoulder servo, Install shoulders), with the same steps as the guide and a button for each servo move.
+  Hip joint, Install shoulders), with the same steps as the guide and a button for each servo move.
 
 `assets/libs/` is Arduino's WebUI client (`arduino.js`, MPL-2.0) and Socket.IO 4.8.1 (MIT), copied from App Lab's
 Web UI brick examples.
