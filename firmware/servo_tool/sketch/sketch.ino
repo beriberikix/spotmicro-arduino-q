@@ -4,9 +4,11 @@
 // SZBK07 set to 6.0 V on the shield's V+ terminal. DS3218 180-degree servos (500-2500 us).
 // Build guide: https://beriberikix.github.io/spotmicro-arduino-q/prepare/servos/
 //
-// Runs as an Arduino App Lab app. Output and input go through the Bridge's Monitor, which App Lab shows in
-// Console > Serial Monitor while the app is running (plain Serial is the D0/D1 UART on the UNO Q, not App Lab).
-// Type a command and press Enter:
+// Runs as an Arduino App Lab app (firmware/servo_tool). Two ways to drive it:
+//  - the web page served by the app's Python side (python/main.py, assets/), which walks through the build guide's
+//    steps and calls the functions below over the Bridge (set_angle, set_off, test_sweep);
+//  - App Lab's Console > Serial Monitor, through the Bridge's Monitor (plain Serial is the D0/D1 UART on the UNO Q).
+// Serial Monitor commands, typed and sent with Enter:
 //   h              help and channel map
 //   c              centre every channel (90 deg, 1500 us)
 //   a              assembly angles (shoulders 90, hips L120/R60, knees L180/R0)
@@ -97,6 +99,8 @@ bool validChannel(long ch) {
   return true;
 }
 
+int8_t pendingSweep = -1;  // channel waiting for a test sweep from the web page, run from loop()
+
 void sweep(uint8_t ch) {
   Monitor.print("  sweeping ch ");
   Monitor.println(ch);
@@ -182,8 +186,37 @@ void handle(String line) {
   }
 }
 
+// ---- Bridge functions for the web page. provide_safe runs them between loop() iterations, so they never
+// share the I2C bus with a command from the Serial Monitor.
+void rpcSetAngle(int ch, int deg) {
+  if (ch < 0 || ch >= CHANNELS) return;
+  deg = constrain(deg, 0, 180);
+  setUs(ch, degToUs(deg));
+  report(ch, deg);
+}
+
+void rpcOff(int ch) {
+  if (ch < 0) {
+    for (uint8_t i = 0; i < 16; i++) off(i);
+    Monitor.println("  all outputs off (web)");
+  } else if (ch < CHANNELS) {
+    off(ch);
+    Monitor.print("  ch ");
+    Monitor.print(ch);
+    Monitor.println(" off (web)");
+  }
+}
+
+void rpcTestSweep(int ch) {
+  if (ch >= 0 && ch < CHANNELS) pendingSweep = ch;  // the sweep takes ~3 s: run it from loop(), not inside the call
+}
+
 void setup() {
   Monitor.begin();
+  Bridge.begin();
+  Bridge.provide_safe("set_angle", rpcSetAngle);
+  Bridge.provide_safe("set_off", rpcOff);
+  Bridge.provide_safe("test_sweep", rpcTestSweep);
   Wire.begin();
   // The shield ties A4/A5 to SDA/SCL. Leave A4/A5 unused (and don't call Wire2.begin()).
   if (!pwm.begin()) {
@@ -200,5 +233,10 @@ void setup() {
 void loop() {
   if (Monitor.available()) {
     handle(Monitor.readStringUntil('\n'));
+  }
+  if (pendingSweep >= 0) {
+    uint8_t ch = pendingSweep;
+    pendingSweep = -1;
+    sweep(ch);
   }
 }

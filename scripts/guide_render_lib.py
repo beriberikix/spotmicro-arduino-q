@@ -62,6 +62,8 @@ class Scene:
         self.saved_pl = {o.Name: FreeCAD.Placement(self._pl(o)) for o in self.objs}
         self.saved_mat = {}
         self.parent_rot = {}
+        self.parent_pl = {}
+        self.pose = {}
         self.centre = {}
         self.bb = {}
         for o in self.objs:
@@ -164,6 +166,7 @@ class Scene:
 
     # ------------------------------------------------------------ state
     def reset(self):
+        self.pose = {}
         for o in self.objs:
             self._set_pl(o, self.saved_pl[o.Name])
             o.Visibility = self.saved_vis[o.Name]
@@ -187,19 +190,39 @@ class Scene:
                 if p.TypeId == "App::Part":
                     p.Visibility = True
 
-    def move(self, o, d):
-        """Move `o` by the global vector `d` from its saved placement."""
-        p = FreeCAD.Placement(self.saved_pl[o.Name])
-        rot = self.parent_rot.get(o.Name)
-        if rot is None:
+    def _parent(self, o):
+        """Global placement of `o`'s parent, measured once at the saved placement."""
+        par = self.parent_pl.get(o.Name)
+        if par is None:
+            p = FreeCAD.Placement(self.saved_pl[o.Name])
             self._set_pl(o, p)
             try:
-                parent = o.getGlobalPlacement().multiply(p.inverse())
-                rot = parent.Rotation
+                g = o.getGlobalPlacement()
             except Exception:
-                rot = FreeCAD.Rotation()
-            self.parent_rot[o.Name] = rot
-        p.Base = p.Base + rot.inverted().multVec(V(*d))
+                up = o.getParentGeoFeatureGroup() if hasattr(o, "getParentGeoFeatureGroup") else None
+                try:
+                    g = (up.getGlobalPlacement() if up else FreeCAD.Placement()).multiply(p)
+                except Exception:
+                    g = p
+            par = g.multiply(p.inverse())
+            self.parent_pl[o.Name] = par
+            self.parent_rot[o.Name] = par.Rotation
+        return par
+
+    def set_pose(self, objs, centre, axis, deg):
+        """Rotate `objs` by `deg` about the global axis through `centre`, on top of any pose they already have.
+        Used to show a joint at its assembly angle instead of the CAD model's standing pose."""
+        r = FreeCAD.Placement(V(0, 0, 0), FreeCAD.Rotation(V(*axis), deg), V(*centre))
+        for o in objs:
+            self.pose[o.Name] = r.multiply(self.pose.get(o.Name, FreeCAD.Placement()))
+
+    def move(self, o, d):
+        """Move `o` by the global vector `d` from its saved placement (in its pose, if it has one)."""
+        p = FreeCAD.Placement(self.saved_pl[o.Name])
+        par = self._parent(o)
+        if o.Name in self.pose:
+            p = par.inverse().multiply(self.pose[o.Name].multiply(par.multiply(p)))
+        p.Base = p.Base + par.Rotation.inverted().multVec(V(*d))
         self._set_pl(o, p)
 
     # ------------------------------------------------------------ camera / output

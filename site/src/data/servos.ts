@@ -1,4 +1,4 @@
-// Servo channel map: shield channel -> joint. Must match firmware/servo_tool/servo_tool.ino.
+// Servo channel map: shield channel -> joint. Must match firmware/servo_tool/sketch/sketch.ino and firmware/servo_tool/assets/app.js.
 export type Leg = 'FL' | 'FR' | 'RL' | 'RR';
 export type JointName = 'shoulder' | 'hip' | 'knee';
 export interface Servo {

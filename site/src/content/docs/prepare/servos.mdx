@@ -17,7 +17,7 @@ the horn has 25 teeth and six arms, so it only fits in a few positions, and fixi
 the leg apart. Those pages send you back to this rig to set the angle, so [keep it set up](#later-before-each-horn-goes-on).
 
 This page uses **servo_tool**, a small sketch for the UNO Q:
-[`firmware/servo_tool/servo_tool.ino`](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/firmware/servo_tool/servo_tool.ino).
+[`firmware/servo_tool/sketch/sketch.ino`](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/firmware/servo_tool/sketch/sketch.ino).
 
 ## Load servo_tool
 
@@ -29,7 +29,7 @@ This page uses **servo_tool**, a small sketch for the UNO Q:
 1. Set up the UNO Q in [Arduino App Lab](https://docs.arduino.cc/software/app-lab/) if you haven't yet (first boot,
    Wi-Fi, updates).
 2. Click **Create new app +**, name it `servo_tool`, and replace the contents of `sketch/sketch.ino` with
-   [servo_tool.ino](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/firmware/servo_tool/servo_tool.ino).
+   [sketch.ino](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/firmware/servo_tool/sketch/sketch.ino).
    Leave the app's Python file (`python/main.py`) as it is: everything runs in the sketch.
 3. Click **Add sketch library** (the book icon with a +), search for **Adafruit PWM Servo Driver Library** and install
    it. It brings Adafruit BusIO with it. The board needs internet access to download it.
@@ -45,8 +45,8 @@ This page uses **servo_tool**, a small sketch for the UNO Q:
 ```sh
 arduino-cli core install arduino:zephyr
 arduino-cli lib install "Adafruit PWM Servo Driver Library"
-arduino-cli compile -b arduino:zephyr:unoq firmware/servo_tool
-arduino-cli upload  -b arduino:zephyr:unoq firmware/servo_tool -p <port>
+arduino-cli compile -b arduino:zephyr:unoq firmware/servo_tool/sketch
+arduino-cli upload  -b arduino:zephyr:unoq firmware/servo_tool/sketch -p <port>
 ```
 
 The sketch talks through the Bridge's `Monitor` (the `Arduino_RouterBridge` library, included with the UNO Q core),

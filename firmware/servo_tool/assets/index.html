@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>servo_tool</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">🦿 servo_tool</div>
+      <span id="conn" class="conn">connecting…</span>
+      <button id="all-off" class="danger">All servos off</button>
+    </header>
+    <nav id="tabs"></nav>
+    <main id="page"></main>
+    <footer>
+      <span id="status"></span>
+      <a href="https://beriberikix.github.io/spotmicro-arduino-q/" target="_blank" rel="noopener">Build guide</a>
+    </footer>
+    <script src="libs/socket.io.min.js"></script>
+    <script src="libs/arduino.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

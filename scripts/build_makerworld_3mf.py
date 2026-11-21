@@ -61,8 +61,8 @@ PLATES = [
         ("shoulders/Shoulder_Joint_Servomount_extended_BB.stl", 2, {}),
         ("shoulders/Shoulder_Joint_Servomount_extended_BB_mirrored.stl", 2, {}),
         ("shoulders/Shoulder_Joint_Servo_Cap_Extended.stl", 4, {}),
-        ("shoulders/Shoulder_Joint_Ball_Bearing_Pin.stl", 8, {}),
-        ("shoulders/Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl", 4, {}),
+        ("shoulders/Shoulder_Joint_Ball_Bearing_Pin.stl", 4, {}),
+        ("shoulders/Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl", 8, {}),
         ("head/Sensormount_DualCam.stl", 1, {}),
     ]),
     ("Upper leg frames", STRUCTURAL, BLACK, [

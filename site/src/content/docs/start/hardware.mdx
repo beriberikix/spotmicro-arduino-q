@@ -15,8 +15,9 @@ with a box to tick as you pack it. Bags A–D are **per leg**: make four of each
 all four. [Totals](#totals) at the end adds up every bag. Bag H is for the optional helper stand.
 
 The bags also take one printed part: the **bearing pins**. A bearing pin is a small peg, 5 mm across, that a 625ZZ
-bearing fits onto, held down by a screw through its centre. There are two kinds, told apart by the hole: eight with an
-M2 hole (`Shoulder_Joint_Ball_Bearing_Pin`) and four with a larger M3 hole (`Shoulder_Joint_Ball_Bearing_Pin_M3x8`).
+bearing fits onto, held down by a screw through its centre. There are two kinds, told apart by the hole: four with an
+M2 hole (`Shoulder_Joint_Ball_Bearing_Pin`) for the knees, and eight with a larger M3 hole
+(`Shoulder_Joint_Ball_Bearing_Pin_M3x8`) for the upper legs and the shoulder joints.
 Take them from your printed parts as you fill the bags.
 
 <figure>
@@ -73,8 +74,8 @@ horn are enough, if you're short.
 | 1 | 625ZZ bearing | Ball-bearing mount |
 
 <BagTotal bag="B" count={4} items={[
-	["M2×8", 6],
-	["M2 nuts", 6],
+	["M2×8, <strong>each with an M2 nut screwed all the way on</strong>", 6],
+	["M2 nuts (the ones on the M2×8)", 6],
 	["M3×8", 1],
 	["625ZZ bearings", 1],
 	["25T six-arm horns", 1],
@@ -113,7 +114,7 @@ horn are enough, if you're short.
 | --- | ---- | ---- |
 | 1 | 25T six-arm horn | Extended servo cap |
 | 6 | M2×8 with M2 nuts threaded on | Horn to cap |
-| 1 | Bearing pin, M2 bore (printed) + M2×8 + M2 nut | Pin on the shoulder servo mount |
+| 1 | Bearing pin, M3 bore (printed) + M3×8 + M3 nut | Pin on the shoulder servo mount |
 | 4 | M3×8 + 4 M3 nuts | Cap to servo mount |
 | 1 | M3×8 | Cap to the hip servo shaft |
 | 4 | M3×20 + 4 M3 nuts | Shoulder servo |
@@ -122,14 +123,14 @@ horn are enough, if you're short.
 | 3 + 3 | M3×20 + M3 nuts | Shoulder cover to cap (nuts drop into the slots in the cover) |
 
 <BagTotal bag="D" count={4} items={[
-	["M2×8", 7],
-	["M2 nuts", 7],
-	["M3×8", 5],
+	["M2×8, <strong>each with an M2 nut screwed all the way on</strong>", 6],
+	["M2 nuts (the ones on the M2×8)", 6],
+	["M3×8", 6],
 	["M3×20", 7],
-	["M3 nuts", 11],
+	["M3 nuts", 12],
 	["625ZZ bearings", 1],
 	["25T six-arm horns", 1],
-	["Bearing pins, M2 bore (printed)", 1],
+	["Bearing pins, M3 bore (printed)", 1],
 	["Rubber dampeners", 4],
 ]} />
 
@@ -152,8 +153,8 @@ horn are enough, if you're short.
 | 4 | 625ZZ bearings | Shoulder bearings in the inner shoulders |
 
 <BagTotal bag="E" items={[
-	["M2×8", 24],
-	["M2 nuts", 24],
+	["M2×8, <strong>each with an M2 nut screwed all the way on</strong>", 24],
+	["M2 nuts (the ones on the M2×8)", 24],
 	["M3×8", 28],
 	["M3 nuts", 24],
 	["625ZZ bearings", 4],
@@ -227,16 +228,16 @@ Bags A–G added up; the stand's hardware is in bag H above and not counted here
 
 | Item | A ×4 | B ×4 | C ×4 | D ×4 | E | F | G | **Total** | In [BOM.md](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/BOM.md) |
 | ---- | ---- | ---- | ---- | ---- | - | - | - | --------- | ---- |
-| M2×8 | 4 | 24 | – | 28 | 24 | – | – | **80** | 84 |
-| M2 nuts | 4 | 24 | – | 28 | 24 | – | – | **80** | 84 |
+| M2×8 | 4 | 24 | – | 24 | 24 | – | – | **76** | 80 |
+| M2 nuts | 4 | 24 | – | 24 | 24 | – | – | **76** | 80 |
 | M2×5 self-tapping | – | – | – | – | – | – | 8 | **8** | 8 |
-| M3×8 | 8 | 4 | 4 | 20 | 28 | 4 | 28 | **96** | 96 |
+| M3×8 | 8 | 4 | 4 | 24 | 28 | 4 | 28 | **100** | 100 |
 | M3×20 | 16 | – | 32 | 28 | – | – | – | **76** | 76 |
-| M3 nuts | 24 | – | 36 | 44 | 24 | – | 28 | **156** | 156 |
+| M3 nuts | 24 | – | 36 | 48 | 24 | – | 28 | **160** | 160 |
 | 625ZZ bearings | – | 4 | – | 4 | 4 | – | – | **12** | 12 |
 | 25T six-arm horns | – | 4 | – | 4 | 4 | – | – | **12** | 12 |
-| Bearing pins, M2 bore (printed) | 4 | – | – | 4 | – | – | – | **8** | 8 |
-| Bearing pins, M3 bore (printed) | – | – | 4 | – | – | – | – | **4** | 4 |
+| Bearing pins, M2 bore (printed) | 4 | – | – | – | – | – | – | **4** | 4 |
+| Bearing pins, M3 bore (printed) | – | – | 4 | 4 | – | – | – | **8** | 8 |
 | Rubber dampeners | 16 | – | 16 | 16 | – | – | – | **48** | 48 |
 | Servo extension cables | 4 | – | – | – | – | – | – | **4** | 4 |
 

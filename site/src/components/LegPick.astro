@@ -4,10 +4,14 @@
  * each with the servo label to grab, its shield channel, and the part versions (with side renders) that go with it.
  */
 import { LEG_NAME, SERVOS, type JointName, type Leg } from '../data/servos';
+import { SIDES } from '../data/sides';
 
 interface Props {
 	joint: JointName;
-	/** Side renders in /renders/sides/ to show per leg, e.g. ['wrist', 'wrist-counterpart']. */
+	/**
+	 * Side renders in /renders/sides/ to show per leg, e.g. ['wrist', 'wrist-counterpart']. The version each leg takes
+	 * comes from data/sides.ts (the shoulder mount pairs diagonally); other files fall back to left = normal.
+	 */
 	parts?: { file: string; name: string }[];
 }
 const { joint, parts = [] } = Astro.props;
@@ -16,6 +20,8 @@ const legs: Leg[] = ['FL', 'FR', 'RL', 'RR'];
 const left = (l: Leg) => l === 'FL' || l === 'RL';
 const tag = (l: Leg) => `${l}-${joint[0].toUpperCase()}`;
 const ch = (l: Leg) => SERVOS.find((s) => s.leg === l && s.joint === joint)!.ch;
+const ver = (file: string, l: Leg) =>
+	(SIDES as Record<string, { legs: Record<Leg, 'normal' | 'mirrored'> }>)[file]?.legs[l] ?? (left(l) ? 'normal' : 'mirrored');
 ---
 
 <div class="leg-pick not-content">
@@ -33,13 +39,13 @@ const ch = (l: Leg) => SERVOS.find((s) => s.leg === l && s.joint === joint)!.ch;
 						{parts.map((p) => (
 							<li>
 								<img
-									src={`${base}/renders/sides/${p.file}-${left(l) ? 'normal' : 'mirrored'}.png`}
-									alt={`${p.name}, ${left(l) ? 'normal' : 'mirrored'} version`}
+									src={`${base}/renders/sides/${p.file}-${ver(p.file, l)}.png`}
+									alt={`${p.name}, ${ver(p.file, l)} version`}
 									width="800"
 									height="600"
 									loading="lazy"
 								/>
-								<span>{p.name}: <strong>{left(l) ? 'normal' : 'mirrored'}</strong></span>
+								<span>{p.name}: <strong>{ver(p.file, l)}</strong></span>
 							</li>
 						))}
 					</ul>

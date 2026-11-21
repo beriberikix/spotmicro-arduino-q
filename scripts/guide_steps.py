@@ -111,6 +111,16 @@ BODY = [INNER, CHASSIS_SIDES, CHASSIS_SCREWS] + PLATE
 ALL_LEGS = [legs(None)]
 
 # view directions (camera -> model)
+# Assembly poses. The CAD model stands the robot up; these rotate a leg's parts about a joint axis (front left leg,
+# both axes along Y) to the pose the guide assembles them in.
+KNEE_AXIS = ((-82.52, 0, 121.01), (0, 1, 0))
+HIP_AXIS = ((-4.95, 0, 200.35), (0, 1, 0))
+# Knee folded flat (servo at its assembly angle): the lower leg turned 74 degrees from standing, 0.6 mm clear of the
+# upper leg shells (they touch at 75).
+FOLD_KNEE = [(LOWER_LEG + KNEE_PIN, *KNEE_AXIS, -74)]
+# Upper leg hanging straight down from the shoulder joint, as the hip is fitted: 60 degrees, one horn arm, from standing.
+HIP_DOWN = [(LOWER_LEG + KNEE_PIN + UPPER_LEG + [k for k in KNEE if k not in KNEE_PIN], *HIP_AXIS, -60)]
+
 OUTSIDE = (-0.55, -1.0, -0.45)   # from the robot's left, slightly front and above
 INSIDE = (-0.55, 1.0, -0.45)     # from the centre line, looking out at the leg
 ISO_FRONT = (-1.0, -0.75, -0.6)  # body: from front-left, above
@@ -138,12 +148,12 @@ STEPS = [
          new=HORN_PLATE + KNEE_HORN + KNEE_HORN_SCREWS + KNEE_HORN_NUTS + KNEE_HORN_CENTRE,
          explode=[(HORN_PLATE + KNEE_HORN + KNEE_HORN_SCREWS + KNEE_HORN_NUTS, (0, -40, 0)),
                   (KNEE_HORN_CENTRE, (0, -70, 0))],
-         view=INSIDE),
+         pose=FOLD_KNEE, view=INSIDE),
     dict(id="knee-bearing-plate", context=LOWER_LEG + KNEE_PIN + HORN_PLATE + KNEE_HORN + KNEE_HORN_SCREWS
          + KNEE_HORN_NUTS + KNEE_HORN_CENTRE,
          new=BEARING_PLATE + KNEE_BEARING,
          explode=[(BEARING_PLATE, (0, 40, 0)), (KNEE_BEARING, (0, 70, 0))],
-         view=OUTSIDE),
+         pose=FOLD_KNEE, view=OUTSIDE),
     # ---------------------------------------------------------------- upper leg
     dict(id="upper-servo", context=[], new=UPPER_BOTTOM + HIP_SERVO + HIP_SERVO_DAMP + HIP_SERVO_NUTS,
          explode=[(HIP_SERVO + HIP_SERVO_DAMP, (0, 50, 0)), (HIP_SERVO_NUTS, (0, 25, 0))],
@@ -157,7 +167,7 @@ STEPS = [
          new=UPPER_LEG + KNEE_PLATE_SCREWS + KNEE_PLATE_NUTS,
          explode=[(UPPER_LEG, (15, 0, 40)), (["LL_Body078", "LL_Body079"], (15, -40, 40)),
                   (["LL_Body084", "LL_Body085"], (15, 40, 40)), (KNEE_PLATE_NUTS, (15, 0, 40))],
-         view=INSIDE),
+         pose=FOLD_KNEE, view=INSIDE),
     # ---------------------------------------------------------------- shoulder joint
     dict(id="hip-horn-cap", context=[], new=CAP + HIP_HORN + HIP_HORN_SCREWS + HIP_HORN_NUTS,
          explode=[(HIP_HORN, (0, 20, 0)), (HIP_HORN_NUTS, (0, 35, 0)), (HIP_HORN_SCREWS, (0, 45, 0))],
@@ -173,7 +183,7 @@ STEPS = [
     dict(id="shoulder-to-leg", context=LOWER_LEG + UPPER_LEG + KNEE,
          new=SHOULDER_MOUNT + SH_PIN + HIP,
          explode=[(SHOULDER_MOUNT + SH_PIN + HIP, (0, -60, 0))],
-         view=INSIDE),
+         pose=FOLD_KNEE + HIP_DOWN, view=INSIDE),
     dict(id="shoulder-servo", context=LOWER_LEG + UPPER_LEG + KNEE + SHOULDER_MOUNT + SH_PIN + HIP,
          new=SH_SERVO + SH_SERVO_DAMP + SH_SERVO_SCREWS + SH_SERVO_NUTS,
          explode=[(SH_SERVO + SH_SERVO_DAMP, (0, 0, 70)), (SH_SERVO_SCREWS, (-60, 0, 0)), (SH_SERVO_NUTS, (40, 0, 0))],

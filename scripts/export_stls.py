@@ -41,8 +41,8 @@ PARTS = [
     ("shoulders", ROBJK + "Shoulder_Joint_Servomount_extended_BB.stl", "Shoulder_Joint_Servomount_extended_BB", 2, 2, "PLA", "20%", "robjk"),
     ("shoulders", ROBJK + "Shoulder_Joint_Servo_Cap_Extended.stl", "Shoulder_Joint_Servo_Cap_Extended", 4, 0, "PLA", "20%", "robjk"),
     ("shoulders", ROBJK + "Shoulder_Cover.stl", "Shoulder_Cover", 4, 0, "PLA", "20%", "robjk; symmetric, no mirrored copy"),
-    ("shoulders", ROBJK + "Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl", "Shoulder_Joint_Ball_Bearing_Pin_M3x8", 4, 0, "PLA", "20%", "robjk; runs in the shoulder-cover bearing, M3x8 into the upper-leg shell"),
-    ("shoulders", KOOBA + "Shoulder_Joint_Ball_Bearing_Pin.stl", "Shoulder_Joint_Ball_Bearing_Pin", 8, 0, "PLA", "20%", "4 for the shoulder joints, 4 for the legs"),
+    ("shoulders", ROBJK + "Shoulder_Joint_Ball_Bearing_Pin_M3x8.stl", "Shoulder_Joint_Ball_Bearing_Pin_M3x8", 8, 0, "PLA", "20%", "4 on the upper-leg shells (robjk; run in the shoulder-cover bearings) and 4 on the shoulder servo mounts (their nut pocket is M3)"),
+    ("shoulders", KOOBA + "Shoulder_Joint_Ball_Bearing_Pin.stl", "Shoulder_Joint_Ball_Bearing_Pin", 4, 0, "PLA", "20%", "The knees (M2x8 into the wrist counterpart)"),
     # Legs
     ("legs", ROBJK + "Limb_Top_Shell_with_BB_hole.stl", "Limb_Top_Shell_with_BB_hole", 2, 2, "PLA", "20%", "robjk; replaces Limb_Top_Shell"),
     ("legs", KOOBA + "Limb_Bottom_Shell.stl", "Limb_Bottom_Shell", 2, 2, "PLA", "20%", ""),

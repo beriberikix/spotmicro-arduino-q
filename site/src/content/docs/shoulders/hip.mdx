@@ -10,6 +10,7 @@ import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
 import Todo from '../../../components/Todo.astro';
 import WhichSide from '../../../components/WhichSide.astro';
+import LegPick from '../../../components/LegPick.astro';
 
 The **shoulder joint** is the extended servo mount plus the extended servo cap. The cap carries the horn that the
 hip servo drives, and its extension is where the shoulder cover will bolt on.
@@ -19,11 +20,18 @@ hip servo drives, and its extension is where the shoulder cover will bolt on.
 	[1, 'Extended servo cap'],
 	[1, '25T six-arm servo horn'],
 	[6, '<kbd class="hw">M2×8</kbd> with an M2 nut threaded on', 'Horn to cap'],
-	[1, 'Bearing pin, M2 bore + <kbd class="hw">M2×8</kbd> + M2 nut'],
+	[1, 'Bearing pin, M3 bore + <kbd class="hw">M3×8</kbd> + M3 nut'],
 	[4, '<kbd class="hw">M3×8</kbd> + 4 M3 nuts', 'Cap to servo mount'],
 	[1, '<kbd class="hw">M3×8</kbd>', 'Cap to the hip servo shaft'],
 	[1, 'Leg from the previous pages'],
 ]} tools={['1.5 mm hex', '2.5 mm hex', 'Bench rig with servo_tool']} />
+
+Bag D also holds the parts for the next two pages: the shoulder servo's four <Hw>M3×20</Hw>, nuts and dampeners, and
+the shoulder cover's 625ZZ bearing and three <Hw>M3×20</Hw> with nuts. Leave those in the bag.
+
+Per leg you need one servo mount, one servo cap and one bearing pin. If you printed the MakerWorld profile, all three
+are on **Plate 3, Shoulder joints and head mounts**. Take a pin with the **M3 bore**, the same kind as on the upper
+leg's top shell: an M3 screw goes through it, while the M2 ones are too small.
 
 ## Which servo mount?
 
@@ -33,11 +41,22 @@ from the current files have **FL RR** or **FR RL** engraved on a face that ends 
 
 <WhichSide part="shoulder-mount" />
 
+Work on one leg at a time. Read the hip servo's tag on the upper leg (`xx-H`) and pick the matching mount:
+
+<LegPick joint="hip" parts={[{ file: 'shoulder-mount', name: 'Servo mount' }]} />
+
 ## 1. Horn onto the extended cap
 
 <Render id="hip-horn-cap" caption="Horn onto the extended servo cap" />
 
-Same as the knee: M2×8 screws with nuts threaded on as spacers, through the middle hole of each arm.
+<Steps>
+
+1. If your M2×8 don't have nuts on them yet, screw an M2 nut all the way onto six of them. The nut is a spacer: a
+   bare M2×8 pokes through and rubs on the servo. (M2×6 screws without nuts work too.)
+2. Screw the horn onto the cap through the middle hole of each arm, as on the knee. The horn's **hub goes down into
+   the cap's star recess**, so it pokes through the cap's centre hole, ready to go onto the servo shaft.
+
+</Steps>
 
 ## 2. Bearing pin onto the servo mount
 
@@ -45,8 +64,8 @@ Same as the knee: M2×8 screws with nuts threaded on as spacers, through the mid
 
 <Steps>
 
-1. Put one M2 nut in the small pocket in the servo mount.
-2. Screw an <Hw>M2×8</Hw> through the bearing pin into it. This pin will turn in the bearing in the inner shoulder plate.
+1. Press an M3 nut into the hex pocket on the inside of the servo mount's back wall.
+2. From the outside, put an <Hw>M3×8</Hw> through the bearing pin and the hole, and screw it into the nut. This pin will turn in the bearing in the inner shoulder plate.
 
 </Steps>
 
@@ -57,9 +76,18 @@ Same as the knee: M2×8 screws with nuts threaded on as spacers, through the mid
 <Steps>
 
 1. Put four M3 nuts into the pockets in the base of the servo mount.
-2. Screw the cap on with four <Hw>M3×8</Hw>.
+2. Hold the cap against the mount's base, with the **horn's hub facing away from the mount** (it goes onto the hip
+   servo in step 4) and the cap's **extension** (the end with the slot and three small holes, where the shoulder cover
+   bolts on later) at the **same end as the mount's servo cable slot** (the slot in the top wall that the servo lead comes out of). The four screw holes are square, so the cap fits
+   four ways round: only this one is right. The cap is the same for every leg.
+3. Screw the cap on with four <Hw>M3×8</Hw>.
 
 </Steps>
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/cap-orientation.png`} alt="Two views of the shoulder servo mount with the orange cap screwed on. Left, from the servo side: the servo cable leaves through the slot in the mount's top wall, and the cap's extension, with its slot and three holes, sticks up past the same end. Right, from the cap side: the extension at the top and the horn's hub in the middle of the cap, facing out." width="1590" height="980" loading="lazy" style="background:#fff;border-radius:0.4rem" />
+	<figcaption>The cap's extension goes at the same end as the mount's servo cable slot, and the horn's hub faces out. The servo is shown for reference: it goes in on the next page.</figcaption>
+</figure>
 
 ## 4. Shoulder joint onto the hip servo
 
@@ -67,16 +95,26 @@ Same as the knee: M2×8 screws with nuts threaded on as spacers, through the mid
 
 <Steps>
 
-1. Plug the hip servo into the rig and send its assembly angle: **120° for left legs, 60° for right legs** (channels
-   1, 4, 7, 10). Leave it powered.
-2. Don't line the shoulder joint up with the horn's **top** arm, but with **the next arm to the
-   right on left legs, or to the left on right legs**. Each arm is 60°, and this puts the upper leg at its standing angle.
-   The upper leg then deliberately swings further backwards than forwards.
-3. Push the cap's horn onto the hip servo shaft and screw it on with an <Hw>M3×8</Hw> through the horn centre.
-4. Send `o <ch>` and unplug.
+1. Open servo_tool's web page (**Hip joint** tab) and pick the leg. Plug the hip servo's lead into the channel it shows
+   and press **Move**: it goes to the angle for the upper leg **hanging straight down**.
+2. Hold the shoulder joint so the upper leg hangs straight down, **parallel to the servo mount's side walls**, cable
+   slot end up. Push the cap's horn onto the hip servo shaft in the position nearest to parallel. If none is, pull it
+   off, turn the horn one arm round in the cap and try again. Don't screw it yet.
+3. Press **Check it**. The servo turns 60°, one horn arm, to the standing angle (120° for left legs, 60° for right
+   legs). Hold the servo mount still, cable slot end up: the upper leg should swing up **towards the side with the
+   bearing pin on front legs, away from it on rear legs**, ending about a third of the way up from straight down
+   (picture below). If it swings the other way, press **No**: the page gives you the other straight-down angle to fit
+   it at again. It should pass first time (60° straight down on the left legs, 120° on the right legs, on the first build), and the page remembers it for the other leg on that side.
+4. Screw it on with an <Hw>M3×8</Hw> through the horn centre, and press **Done** to switch the servo off.
 
 </Steps>
 
-<Todo id="hip-angle">The shoulder joint on the upper leg at the assembly angle, side view, so the 60° offset is visible.</Todo>
+Without the web page, use the Serial Monitor: `s <ch> 60` on left legs or `s <ch> 120` on right legs for straight
+down, `a <ch>` for the check; if the leg swung the wrong way, refit it at `s <ch> 180` (left) or `s <ch> 0` (right).
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/hip-angle.png`} alt="Two views of the front-left shoulder joint from the servo mount's open side, the mount see-through and its cable slot end up. Left: the orange upper leg hangs straight down, parallel to the mount's side walls; the bearing pin sticks out of the left wall. Right: after the check the upper leg has swung up and to the left, towards the bearing pin, shown by a red curved arrow." width="1600" height="904" loading="lazy" style="background:#fff;border-radius:0.4rem" />
+	<figcaption>Front left leg. Fit it hanging straight down, then the check swings it up towards the bearing pin. On rear legs it swings away from the pin; right legs are the mirror image.</figcaption>
+</figure>
 
 <Done id="hip" legs />
