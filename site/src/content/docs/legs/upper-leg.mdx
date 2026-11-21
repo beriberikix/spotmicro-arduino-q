@@ -18,7 +18,7 @@ shoulder cover will ride on. Both servo leads, the knee's and the hip's, leave t
 	[1, 'Upper-leg bottom shell (<code>Limb_Bottom_Shell</code>)', 'Normal for left legs, mirrored for right'],
 	[1, 'Upper-leg top shell with BB hole', 'Same side'],
 	[1, 'DS3218 labelled <code>xx-H</code> (hip), with 4 rubber dampeners'],
-	[1, 'Bearing pin, M3 bore + <kbd class="hw">M3×8</kbd> + M3 nut'],
+	[1, 'Bearing pin + <kbd class="hw">M2×8</kbd> + M2 nut'],
 	[4, '<kbd class="hw">M3×20</kbd> + 4 M3 nuts', 'Hip servo and shells'],
 	[4, '<kbd class="hw">M3×20</kbd> + 4 M3 nuts', 'Shells to the knee plates'],
 	[1, 'Lower leg with knee plates, from the previous page'],
@@ -29,8 +29,7 @@ these [plates](../../prepare/prints/#check-you-have-every-part):
 
 - **Top shell:** Plate 6, Upper leg top shells.
 - **Bottom shell:** Plate 7, Upper leg bottom shells and shoulder covers (the covers are for a later page).
-- **Bearing pin:** Plate 3, Shoulder joints and head mounts. Take one with the **M3 bore**: an M3 screw goes through it,
-  while the M2 ones are too small.
+- **Bearing pin:** Plate 3, Shoulder joints and head mounts (the twelve small pegs; all the same).
 
 <div class="not-content" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:0.8rem;align-items:end;margin:1rem 0">
 	<figure style="margin:0">
@@ -82,19 +81,24 @@ back is taking the upper leg apart.
 </Aside>
 
 The top shell has a small hole in its long side wall, near the rounded end (away from the knee). On the inside,
-that hole sits in a **hexagonal nut pocket**. The M3-bore bearing pin goes on the outside, and later the shoulder cover's bearing rides on it.
+that hole sits in a **hexagonal nut pocket**. The bearing pin goes on the outside, and later the shoulder cover's bearing rides on it.
 
 <Steps>
 
-1. Press an M3 nut into the hex pocket on the inside of the top shell.
-2. From the outside, put an <Hw>M3×8</Hw> through the bearing pin and the hole, and screw it into the nut. It only
-   catches a few threads, which is enough.
+1. Drop an M2 nut into the hex pocket on the inside of the top shell, all the way to the bottom.
+2. From the outside, put an <Hw>M2×8</Hw> through the bearing pin and the hole, and screw it into the nut.
 3. Tighten it so the pin sits square and doesn't wobble.
 
 </Steps>
 
+<Aside type="note" title="Top shells printed before 21 November 2026">
+Older top shells have an M3 hole and nut pocket here. Use an M3×8 and M3 nut with the M3-bore pin
+(<code>Shoulder_Joint_Ball_Bearing_Pin_M3x8</code>), and on the [Shoulder cover](../../shoulders/cover/) page put the
+bearing on the pin before the screw: the M3 head is wider than the bearing's bore.
+</Aside>
+
 <figure>
-	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/legs/top-shell-pin.jpg`} alt="An upper-leg top shell lying open side up. Near its rounded left end, the black M3 bearing pin sticks out of the long side wall, held by an M3×8 into a nut on the inside." width="1600" height="1162" loading="lazy" style="border-radius:0.4rem" />
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/legs/top-shell-pin.jpg`} alt="An upper-leg top shell lying open side up. Near its rounded left end, the black bearing pin sticks out of the long side wall, held by a screw into a nut on the inside." width="1600" height="1162" loading="lazy" style="border-radius:0.4rem" />
 	<figcaption>The bearing pin on the top shell's side wall, near the rounded end. The nut is in the hex pocket on the inside.</figcaption>
 </figure>
 

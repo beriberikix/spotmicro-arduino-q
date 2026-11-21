@@ -53,12 +53,11 @@ DS3218 on all twelve joints: 20 kg·cm at 6 V, 4.8-6.8 V. MG996R (11 kg·cm) wor
 
 | Qty | Part | Used for |
 | --- | ---- | -------- |
-| 80 + 80 | M2x8 cylinder-head screws + M2 nuts | Servo horns, knee bearing pins |
+| 88 + 88 | M2x8 cylinder-head screws + M2 nuts | Servo horns, bearing pins |
 | 76 + 76 | M3x8 cylinder-head screws + M3 nuts | General assembly |
 | 12 | M3x8 screws | Knee mounts, servo caps and outer shoulders to the servo shafts (no nuts) |
 | 64 + 64 | M3x20 cylinder-head screws + M3 nuts | Servos, upper legs |
 | 12 + 12 | M3x20 screws + M3 nuts | Shoulder covers to the extended servo caps (3 per cover) |
-| 8 + 8 | M3x8 screws + M3 nuts | M3-bore bearing pins: upper-leg shells (4) and shoulder servo mounts (4) |
 | 4 | M3x8 screws | SZBK07 to its posts |
 | 8 | M2x5 self-tapping screws | Cameras to the head mount |
 | 12 | 625ZZ ball bearing, unflanged | Shoulder and leg joints (8), shoulder covers (4) |

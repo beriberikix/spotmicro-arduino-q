@@ -15,20 +15,20 @@ with a box to tick as you pack it. Bags A–D are **per leg**: make four of each
 all four. [Totals](#totals) at the end adds up every bag. Bag H is for the optional helper stand.
 
 The bags also take one printed part: the **bearing pins**. A bearing pin is a small peg, 5 mm across, that a 625ZZ
-bearing fits onto, held down by a screw through its centre. There are two kinds, told apart by the hole: four with an
-M2 hole (`Shoulder_Joint_Ball_Bearing_Pin`) for the knees, and eight with a larger M3 hole
-(`Shoulder_Joint_Ball_Bearing_Pin_M3x8`) for the upper legs and the shoulder joints.
+bearing fits onto, held down by an M2×8 through its centre. All twelve are the same part
+(`Shoulder_Joint_Ball_Bearing_Pin`, M2 hole): four for the knees, four for the upper legs and four for the shoulder
+joints.
 Take them from your printed parts as you fill the bags.
 
 <figure>
 	<img
 		src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/bearing-pins.png`}
-		alt="The two bearing pins, holes up: top row the M2-bore pin with an M2×8 and a 625ZZ bearing, bottom row the M3-bore pin, with its visibly larger hole, with an M3×8 and a 625ZZ bearing."
+		alt="The bearing pin with its M2×8 and a 625ZZ bearing, side by side."
 		width="1579"
-		height="1093"
+		height="470"
 		style="background:#fff;border-radius:0.4rem"
 	/>
-	<figcaption>Both pins are the same size outside; only the hole differs.</figcaption>
+	<figcaption>A bearing pin with its M2×8 and nut, and the 625ZZ that turns on it.</figcaption>
 </figure>
 
 <Aside type="tip" title="Pre-thread the horn screws">
@@ -92,14 +92,15 @@ horn are enough, if you're short.
 | --- | ---- | ---- |
 | 4 | M3 nuts + 4 M3×20 | Hip servo and shells |
 | 4 | Rubber dampeners | Hip servo |
-| 1 | Bearing pin, M3 bore (printed, `…Pin_M3x8`) + M3×8 + M3 nut | Shoulder-cover pin on the top shell |
+| 1 | Bearing pin (printed) + M2×8 + M2 nut | Shoulder-cover pin on the top shell |
 | 4 | M3 nuts + 4 M3×20 | Shells to the knee plates |
 
 <BagTotal bag="C" count={4} items={[
-	["M3×8", 1],
+	["M2×8", 1],
+	["M2 nuts", 1],
 	["M3×20", 8],
-	["M3 nuts", 9],
-	["Bearing pins, M3 bore (printed)", 1],
+	["M3 nuts", 8],
+	["Bearing pins (printed)", 1],
 	["Rubber dampeners", 4],
 ]} />
 
@@ -114,7 +115,7 @@ horn are enough, if you're short.
 | --- | ---- | ---- |
 | 1 | 25T six-arm horn | Extended servo cap |
 | 6 | M2×8 with M2 nuts threaded on | Horn to cap |
-| 1 | Bearing pin, M3 bore (printed) + M3×8 + M3 nut | Pin on the shoulder servo mount |
+| 1 | Bearing pin (printed) + M2×8 + M2 nut | Pin on the shoulder servo mount |
 | 4 | M3×8 + 4 M3 nuts | Cap to servo mount |
 | 1 | M3×8 | Cap to the hip servo shaft |
 | 4 | M3×20 + 4 M3 nuts | Shoulder servo |
@@ -123,14 +124,14 @@ horn are enough, if you're short.
 | 3 + 3 | M3×20 + M3 nuts | Shoulder cover to cap (nuts drop into the slots in the cover) |
 
 <BagTotal bag="D" count={4} items={[
-	["M2×8, <strong>each with an M2 nut screwed all the way on</strong>", 6],
-	["M2 nuts (the ones on the M2×8)", 6],
-	["M3×8", 6],
+	["M2×8: <strong>six with an M2 nut screwed all the way on</strong>, one loose (bearing pin)", 7],
+	["M2 nuts (six on the M2×8, one loose)", 7],
+	["M3×8", 5],
 	["M3×20", 7],
-	["M3 nuts", 12],
+	["M3 nuts", 11],
 	["625ZZ bearings", 1],
 	["25T six-arm horns", 1],
-	["Bearing pins, M3 bore (printed)", 1],
+	["Bearing pins (printed)", 1],
 	["Rubber dampeners", 4],
 ]} />
 
@@ -228,16 +229,15 @@ Bags A–G added up; the stand's hardware is in bag H above and not counted here
 
 | Item | A ×4 | B ×4 | C ×4 | D ×4 | E | F | G | **Total** | In [BOM.md](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/BOM.md) |
 | ---- | ---- | ---- | ---- | ---- | - | - | - | --------- | ---- |
-| M2×8 | 4 | 24 | – | 24 | 24 | – | – | **76** | 80 |
-| M2 nuts | 4 | 24 | – | 24 | 24 | – | – | **76** | 80 |
+| M2×8 | 4 | 24 | 4 | 28 | 24 | – | – | **84** | 88 |
+| M2 nuts | 4 | 24 | 4 | 28 | 24 | – | – | **84** | 88 |
 | M2×5 self-tapping | – | – | – | – | – | – | 8 | **8** | 8 |
-| M3×8 | 8 | 4 | 4 | 24 | 28 | 4 | 28 | **100** | 100 |
+| M3×8 | 8 | 4 | – | 20 | 28 | 4 | 28 | **92** | 92 |
 | M3×20 | 16 | – | 32 | 28 | – | – | – | **76** | 76 |
-| M3 nuts | 24 | – | 36 | 48 | 24 | – | 28 | **160** | 160 |
+| M3 nuts | 24 | – | 32 | 44 | 24 | – | 28 | **152** | 152 |
 | 625ZZ bearings | – | 4 | – | 4 | 4 | – | – | **12** | 12 |
 | 25T six-arm horns | – | 4 | – | 4 | 4 | – | – | **12** | 12 |
-| Bearing pins, M2 bore (printed) | 4 | – | – | – | – | – | – | **4** | 4 |
-| Bearing pins, M3 bore (printed) | – | – | 4 | 4 | – | – | – | **8** | 8 |
+| Bearing pins (printed) | 4 | – | 4 | 4 | – | – | – | **12** | 12 |
 | Rubber dampeners | 16 | – | 16 | 16 | – | – | – | **48** | 48 |
 | Servo extension cables | 4 | – | – | – | – | – | – | **4** | 4 |
 
