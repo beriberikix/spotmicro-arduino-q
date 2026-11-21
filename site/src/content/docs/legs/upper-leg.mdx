@@ -8,9 +8,8 @@ import Done from '../../../components/Done.astro';
 import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
-import Todo from '../../../components/Todo.astro';
-import Check from '../../../components/Check.astro';
 import WhichSide from '../../../components/WhichSide.astro';
+import LegPick from '../../../components/LegPick.astro';
 
 The upper leg is two shells around the **hip servo**. The top shell has an extra hole for the bearing pin that the
 shoulder cover will ride on. Both servo leads, the knee's and the hip's, leave through the hole in the top shell.
@@ -25,12 +24,42 @@ shoulder cover will ride on. Both servo leads, the knee's and the hip's, leave t
 	[1, 'Lower leg with knee plates, from the previous page'],
 ]} tools={['2.5 mm hex', 'Tweezers']} />
 
+Per leg you need one top shell, one bottom shell and one bearing pin. If you printed the MakerWorld profile, they're on
+these [plates](../../prepare/prints/#check-you-have-every-part):
+
+- **Top shell:** Plate 6, Upper leg top shells.
+- **Bottom shell:** Plate 7, Upper leg bottom shells and shoulder covers (the covers are for a later page).
+- **Bearing pin:** Plate 3, Shoulder joints and head mounts. Take one with the **M3 bore**: an M3 screw goes through it,
+  while the M2 ones are too small.
+
+<div class="not-content" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:0.8rem;align-items:end;margin:1rem 0">
+	<figure style="margin:0">
+		<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/parts/top-shell.jpg`} alt="An upper-leg top shell: a long open tray with a notched, wider hip end." width="585" height="330" loading="lazy" style="width:100%;height:auto;border-radius:0.3rem" />
+		<figcaption style="font-size:var(--sl-text-sm)"><strong>Top shell</strong> · Plate 6</figcaption>
+	</figure>
+	<figure style="margin:0">
+		<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/parts/bottom-shell.jpg`} alt="An upper-leg bottom shell: a long box with a slotted end, standing upright." width="240" height="480" loading="lazy" style="width:100%;max-width:7rem;height:auto;border-radius:0.3rem" />
+		<figcaption style="font-size:var(--sl-text-sm)"><strong>Bottom shell</strong> · Plate 7</figcaption>
+	</figure>
+	<figure style="margin:0">
+		<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/parts/bearing-pins.jpg`} alt="Twelve small bearing pins in two rows." width="320" height="125" loading="lazy" style="width:100%;height:auto;border-radius:0.3rem" />
+		<figcaption style="font-size:var(--sl-text-sm)"><strong>Bearing pins</strong> · Plate 3. They look alike: check the bore with an M3 screw.</figcaption>
+	</figure>
+</div>
+
 ## Which one?
 
 Parts printed from this repository's current files have their side engraved on a face that ends up hidden: **L** or **R**, and **FL RR** or **FR RL** on the shoulder servo mount. For parts without it, put each one down as described and pick your leg: the green check marks the version that leg takes.
 
 <WhichSide part="bottom-shell" />
 <WhichSide part="top-shell" />
+
+## Match the hip servo and shells to each leg
+
+Work on one leg at a time. Take a finished lower leg, read its tag, and pick the **hip** servo (`xx-H`) and the shells
+of the matching version:
+
+<LegPick joint="hip" parts={[{ file: 'bottom-shell', name: 'Bottom shell' }, { file: 'top-shell', name: 'Top shell' }]} />
 
 ## 1. Hip servo into the bottom shell
 
@@ -47,23 +76,27 @@ Parts printed from this repository's current files have their side engraved on a
 
 ## 2. Shoulder-cover pin on the top shell
 
-The top shell has a round hole on its outer face. The M3-bore bearing pin goes on the outside of it, and the
-shoulder cover's bearing rides on that pin.
+<Aside type="caution" title="Do this before you close the shells">
+The pin's nut sits inside the top shell. Once the shells are screwed together you can't reach it, and the only way
+back is taking the upper leg apart.
+</Aside>
+
+The top shell has a small hole in its long side wall, near the rounded end (away from the knee). On the inside,
+that hole sits in a **hexagonal nut pocket**. The M3-bore bearing pin goes on the outside, and later the shoulder cover's bearing rides on it.
 
 <Steps>
 
-1. Put an <Hw>M3×8</Hw> through the hole from the inside of the top shell and screw it into the pin on the outside,
-   with an M3 nut if your pin's bore doesn't grip the thread.
-2. Tighten it so the pin sits square and doesn't wobble.
+1. Press an M3 nut into the hex pocket on the inside of the top shell.
+2. From the outside, put an <Hw>M3×8</Hw> through the bearing pin and the hole, and screw it into the nut. It only
+   catches a few threads, which is enough.
+3. Tighten it so the pin sits square and doesn't wobble.
 
 </Steps>
 
-<Check id="pin-fixing" title="Which side the pin screw goes">
-The pin isn't in the CAD assembly. Confirm which side the screw
-head and nut go on during the first build.
-</Check>
-
-<Todo id="shell-pin">The M3 bearing pin fixed to the top shell, outside and inside views.</Todo>
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/legs/top-shell-pin.jpg`} alt="An upper-leg top shell lying open side up. Near its rounded left end, the black M3 bearing pin sticks out of the long side wall, held by an M3×8 into a nut on the inside." width="1600" height="1162" loading="lazy" style="border-radius:0.4rem" />
+	<figcaption>The bearing pin on the top shell's side wall, near the rounded end. The nut is in the hex pocket on the inside.</figcaption>
+</figure>
 
 ## 3. Route the cables and close the shells
 
@@ -87,7 +120,6 @@ Avoid thick braided sleeving here: there isn't room. Bare servo cable works; if 
 the thinnest you can find.
 </Aside>
 
-<Todo id="upper-cables" kind="video">Routing both servo cables through the top shell and closing the shells (30–45 s), the hardest step to explain in text.</Todo>
 
 ## 4. Bolt the shells between the knee plates
 
@@ -105,6 +137,9 @@ the thinnest you can find.
 The leg should now fold flat: that's the robot's resting position. Turn the knee gently by hand, servo
 unpowered: it should move without binding against the shells.
 
-<Todo id="upper-leg-done">A finished leg (lower + upper), folded flat, from the outside.</Todo>
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/legs/upper-leg-done.jpg`} alt="A finished leg from the outside: the white upper leg bolted between the bronze knee plates, the 625ZZ bearing in the ball-bearing mount, the black lower leg and red foot, and the shoulder-cover pin near the upper leg's far end." width="1600" height="992" loading="lazy" style="border-radius:0.4rem" />
+	<figcaption>A finished leg from the outside, ball-bearing side, posed bent at the knee. The shoulder-cover pin is at the far end of the upper leg.</figcaption>
+</figure>
 
 <Done id="upper-leg" legs />
