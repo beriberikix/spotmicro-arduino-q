@@ -8,6 +8,7 @@ import Done from '../../../components/Done.astro';
 import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
+import Todo from '../../../components/Todo.astro';
 import WhichSide from '../../../components/WhichSide.astro';
 import LegPick from '../../../components/LegPick.astro';
 
@@ -25,8 +26,8 @@ page.
 	[1, 'Lower leg from the previous page'],
 ]} tools={['1.5 mm hex', '2.5 mm hex', 'Bench rig with servo_tool']} />
 
-If you printed the MakerWorld profile, both knee plates come from **Plate 4, Upper leg frames**: four servo-horn mounts
-and four ball-bearing mounts, half of each mirrored. The horn, screws and bearing are in bag B.
+Per leg you need one servohorn mount and one ball-bearing mount. If you printed the MakerWorld profile, both are on
+**Plate 4, Upper leg frames**. The horn, screws and bearing are in bag B.
 
 <Aside type="note" title="The renders show the standing pose">
 The CAD model stands the robot up, so the renders show the knee bent. You assemble it **folded flat**, as described
@@ -68,16 +69,15 @@ Work on one leg at a time. Take a finished lower leg, read its tag, and pick the
 
 1. Plug the lower leg's extension lead (the end you tagged `xx-K`) into its channel on the bench rig and send `a <ch>`: **180° for left legs, 0° for right legs**
    (channels 2, 5, 8, 11; see the [angle table](../../prepare/servos/#assembly-angles)). Leave it powered.
-2. Hold the servohorn mount against the knee, **folded back over the lower leg**: the round end goes on the shaft and
-   the long part points **towards the foot**, lying along the wrist, with the square end (two screw holes) bending
-   out past the wrist's curved edge. If the mount sticks out past the end of the leg, away from the foot, it's on
-   backwards.
-3. Push the horn onto the shaft. One arm of the horn should point **exactly perpendicular** to the wrist's straight
-   edge.
-   The horn has 25 teeth, so it isn't symmetrical: if the plate sits a little off, pull it off, unscrew the horn from
-   the mount, turn the horn to a different arm, and try again until it lines up.
-4. Screw the mount to the shaft with an <Hw>M3×8</Hw> through the centre of the horn.
-5. Send `o <ch>` and unplug the servo.
+2. Use the upper-leg shells as a gauge, so you don't have to judge an angle. Hold the two shells together and put
+   their knee end against the servohorn mount's square end (the two screw holes), as if they were bolted on.
+3. Keeping them like that, fold the shells down so they lie **parallel to the lower leg**, just above it without
+   touching, and push the horn onto the shaft wherever it lands. The spline only lets the horn sit in steps: if the
+   shells tilt up or hit the wrist in every position, pull the mount off, unscrew the horn, turn it one arm round in
+   the mount, and try again.
+4. Put the shells aside.
+5. Screw the mount to the shaft with an <Hw>M3×8</Hw> through the centre of the horn.
+6. Send `o <ch>` and unplug the servo.
 
 </Steps>
 
@@ -87,10 +87,7 @@ push against the stop at 0°/180° and stutter, drawing current all the time. If
 reference pose later, refit the horn one tooth over.
 </Aside>
 
-<figure>
-	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/legs/knee-horn-folded.jpg`} alt="A front-left lower leg with the foot at the top. The bronze servohorn mount sits on the knee servo's shaft at the bottom and points up along the wrist towards the foot, its square end with two screw holes bending out past the wrist's curved edge. Two horn arms point straight left and right, square to the wrist." width="764" height="1600" style="max-width:18rem;border-radius:0.4rem" />
-	<figcaption>FL: the servohorn mount folded back towards the foot at 180°, with two horn arms square to the wrist.</figcaption>
-</figure>
+<Todo id="knee-horn-align">The servohorn mount on the knee servo at the assembly angle: arm standing at about 60°, square end clear of the wrist.</Todo>
 
 ## 3. Ball-bearing mount
 
