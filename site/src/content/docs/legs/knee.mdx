@@ -62,8 +62,10 @@ Work on one leg at a time. Take a finished lower leg, read its tag, and pick the
 
 <Steps>
 
-1. Plug the lower leg's extension lead (the end you tagged `xx-K`) into its channel on the bench rig and send `a <ch>`: **180° for left legs, 0° for right legs**
-   (channels 2, 5, 8, 11; see the [angle table](../../prepare/servos/#assembly-angles)). Leave it powered.
+1. Plug the lower leg's extension lead (the end you tagged `xx-K`) into its channel on the bench rig and set its
+   assembly angle, **180° for left legs, 0° for right legs**: servo_tool's **Knee joint** tab (pick the leg, press
+   **Move**), or `a <ch>` in the Serial Monitor (channels 2, 5, 8, 11; see the
+   [angle table](../../prepare/servos/#assembly-angles)). Leave it powered.
 2. Use the upper-leg shells as a gauge, so you don't have to judge an angle. Hold the two shells together and put
    their knee end against the servohorn mount's square end (the two screw holes), as if they were bolted on.
 3. Keeping them like that, fold the shells down so they lie **parallel to the lower leg**, just above it without
@@ -72,7 +74,7 @@ Work on one leg at a time. Take a finished lower leg, read its tag, and pick the
    the mount, and try again.
 4. Put the shells aside.
 5. Screw the mount to the shaft with an <Hw>M3×8</Hw> through the centre of the horn.
-6. Send `o <ch>` and unplug the servo.
+6. Press **Done: servo off** (or `o <ch>`) and unplug the servo.
 
 </Steps>
 
