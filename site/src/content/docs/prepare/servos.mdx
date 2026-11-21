@@ -16,8 +16,10 @@ Horns go on later, on the shoulder and leg pages. Each servo then has to be at a
 the horn has 25 teeth and six arms, so it only fits in a few positions, and fixing a joint later also means taking
 the leg apart. Those pages send you back to this rig to set the angle, so [keep it set up](#later-before-each-horn-goes-on).
 
-This page uses **servo_tool**, a small sketch for the UNO Q:
-[`firmware/servo_tool/sketch/sketch.ino`](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/firmware/servo_tool/sketch/sketch.ino).
+This page uses **servo_tool**, an Arduino App Lab app for the UNO Q
+([`firmware/servo_tool`](https://github.com/beriberikix/spotmicro-arduino-q/tree/main/firmware/servo_tool)). It has a
+**web page** with a tab for each guide step that moves servos, so you press buttons instead of typing angles, and it
+also takes commands typed in App Lab's Serial Monitor.
 
 ## Load servo_tool
 
@@ -28,14 +30,13 @@ This page uses **servo_tool**, a small sketch for the UNO Q:
 
 1. Set up the UNO Q in [Arduino App Lab](https://docs.arduino.cc/software/app-lab/) if you haven't yet (first boot,
    Wi-Fi, updates).
-2. Click **Create new app +**, name it `servo_tool`, and replace the contents of `sketch/sketch.ino` with
-   [sketch.ino](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/firmware/servo_tool/sketch/sketch.ino).
-   Leave the app's Python file (`python/main.py`) as it is: everything runs in the sketch.
-3. Click **Add sketch library** (the book icon with a +), search for **Adafruit PWM Servo Driver Library** and install
-   it. It brings Adafruit BusIO with it. The board needs internet access to download it.
-4. Click **Run**. The first run takes a few minutes while the board downloads the compiler and libraries.
-5. Open **Console → Serial Monitor** and type `h`, then Enter. You should see the commands and the channel map. The
-   Serial Monitor only works while the app is running.
+2. Download [**servo_tool.zip**](../../downloads/servo_tool.zip). Don't unzip it.
+3. In App Lab, click the **+** next to **Apps** and choose to import an app. In **Import or install an App**, click
+   **Import from computer**, pick `servo_tool.zip` and click **Install**.
+4. Open the app and click **Run**. The first run takes a few minutes while the board downloads the compiler and the
+   servo libraries (it needs internet access).
+5. Open the web page: App Lab shows its address while the app runs, or browse to port **7000** on the board, for example
+   `http://<your board's IP address>:7000`. Any phone or computer on the same Wi-Fi works.
 
 </Steps>
 
@@ -49,15 +50,19 @@ arduino-cli compile -b arduino:zephyr:unoq firmware/servo_tool/sketch
 arduino-cli upload  -b arduino:zephyr:unoq firmware/servo_tool/sketch -p <port>
 ```
 
-The sketch talks through the Bridge's `Monitor` (the `Arduino_RouterBridge` library, included with the UNO Q core),
-not `Serial`, which on the UNO Q is the D0/D1 pins. Its output shows up in App Lab's **Console → Serial Monitor** while an
-app is running, so App Lab is still the easiest way to use it.
+This loads only the sketch, so you get the Serial Monitor commands but not the web page. The sketch talks through the
+Bridge's `Monitor` (the `Arduino_RouterBridge` library, included with the UNO Q core), not `Serial`, which on the UNO Q
+is the D0/D1 pins. Its output shows up in App Lab's **Console → Serial Monitor** while an app is running.
+
+To install the whole app from a terminal instead of App Lab's import, copy the zip to the board and run
+`arduino-app-cli app import servo_tool.zip` there.
 
 </TabItem>
 </Tabs>
 
-At power-up every output is **off**, so nothing moves until you type a command. Type a command in the Serial Monitor
-and press Enter:
+At power-up every output is **off**, so nothing moves until you press a button or type a command. The web page's
+**Test servos** tab has a **Test** and an **Off** button for each channel, and a red **All servos off** button is
+always at the top. In App Lab's **Console → Serial Monitor** you can type the same things as commands, then Enter:
 
 | Command | Does |
 | ------- | ---- |
@@ -77,11 +82,12 @@ and press Enter:
 1. Switch on the servo supply.
 2. Plug one servo into **channel 0**: brown or black wire to the GND row. Push any horn loosely onto the shaft, without
    a screw, just as a pointer so you can see it turn. Take it off again afterwards.
-3. Type `t 0`. The horn should sweep smoothly and quietly, twice, then stop and hold.
-4. Type `s 0 0`, then `s 0 180`. The horn should turn about **half a turn** between the two. If it turns about
+3. On the web page's **Test servos** tab, press **Test** on channel 0's row (or type `t 0`). The horn should sweep
+   smoothly and quietly, twice, then stop and hold.
+4. Press **0°**, then **180°** (or type `s 0 0`, then `s 0 180`). The horn should turn about **half a turn** between the two. If it turns about
    three-quarters of a turn, it's a **270° servo**: the gait assumes 180°, so return it. (Many DS3218 listings are 270°.)
 5. Reject any servo that stutters, grinds, clicks, buzzes when holding still, or gets hot.
-6. Type `o`, unplug it, take the pointer horn off, and put a ✓ on its case. Repeat for all twelve, always on channel 0.
+6. Press **Off** (or type `o`), unplug it, take the pointer horn off, and put a ✓ on its case. Repeat for all twelve, always on channel 0.
 
 </Steps>
 

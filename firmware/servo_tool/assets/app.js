@@ -123,10 +123,11 @@ pages.test = {
         el('td', {}, String(c)),
         el('td', { html: `${T(leg, joint)} ${LEG_NAME[leg]} ${joint}` }),
         el('td', {}, btn('Test', () => command('test', { ch: c }, `Sweeping channel ${c}`)),
+          btn('0°', () => setAngle(c, 0), 'btn ghost'), btn('180°', () => setAngle(c, 180), 'btn ghost'),
           btn('Off', () => off(c), 'btn ghost'))));
     }
     return [
-      el('p', { class: 'lead' }, 'Plug one servo into a channel, push a horn loosely onto its shaft as a pointer, and press Test: it should sweep smoothly twice and stop. Label the servo with the tag in its row.'),
+      el('p', { class: 'lead' }, 'Plug one servo into channel 0 and push a horn loosely onto its shaft as a pointer. Press Test: it should sweep smoothly twice and stop. Then 0° and 180°: about half a turn apart (three-quarters means a 270° servo, return it). Press Off before unplugging.'),
       el('div', { class: 'card' }, el('table', {}, rows)),
     ];
   },

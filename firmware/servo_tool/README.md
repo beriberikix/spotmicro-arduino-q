@@ -12,3 +12,6 @@ page where a horn is fitted.
 
 `assets/libs/` is Arduino's WebUI client (`arduino.js`, MPL-2.0) and Socket.IO 4.8.1 (MIT), copied from App Lab's
 Web UI brick examples.
+
+The guide links to a packed copy, `site/public/downloads/servo_tool.zip`. After changing anything here, rebuild it
+with `scripts/build_servo_tool_zip.sh`.
