@@ -13,6 +13,7 @@ import tempfile
 
 import FreeCAD
 import FreeCADGui
+import Part
 from FreeCAD import Vector as V
 from pivy import coin
 
@@ -44,6 +45,19 @@ def _leaves(group, out, path):
     return out
 
 
+def round_long_edges(shape, r, side):
+    """`shape` with radius-`r` rounds along the two X-direction edges of its bottom ("zmin") or top ("zmax") face."""
+    bb = shape.BoundBox
+    length, x0 = bb.XLength + 2, bb.XMin - 1
+    z, dz = (bb.ZMin, 1) if side == "zmin" else (bb.ZMax, -1)
+    cut = None
+    for y, dy in ((bb.YMin, 1), (bb.YMax, -1)):
+        box = Part.makeBox(length, r + 1, r + 1, V(x0, min(y - dy, y + dy * r), min(z - dz, z + dz * r)))
+        corner = box.cut(Part.makeCylinder(r, length, V(x0, y + dy * r, z + dz * r), V(1, 0, 0)))
+        cut = corner if cut is None else cut.fuse(corner)
+    return shape.cut(cut).removeSplitter()
+
+
 class Scene:
     def __init__(self, path):
         name = os.path.splitext(os.path.basename(path))[0]
@@ -64,6 +78,7 @@ class Scene:
         self.parent_rot = {}
         self.parent_pl = {}
         self.pose = {}
+        self.proxies = []
         self.centre = {}
         self.bb = {}
         for o in self.objs:
@@ -208,6 +223,34 @@ class Scene:
             self.parent_pl[o.Name] = par
             self.parent_rot[o.Name] = par.Rotation
         return par
+
+    def add_proxy(self, name, link, sub, rounds=None):
+        """Stand-in for one piece inside a linked sub-assembly (which the scene can only move as a whole): a plain
+        shape at the piece's place in the model, labelled `name` so selectors and default colours work on it.
+        `rounds` = (radius, "zmin" | "zmax") rounds the two X-direction edges of that face, for CAD bodies that are
+        square where the printed part is rounded."""
+        src = self.doc.getObject(link) or self.doc.getObjectsByLabel(link)[0]
+        o = self.doc.addObject("Part::Feature", "proxy_" + re.sub(r"\W", "_", name))
+        shape = src.getSubObject(sub)
+        if rounds:
+            shape = round_long_edges(shape, *rounds)
+        o.Shape = shape
+        o.Label = name
+        self.objs.append(o)
+        self.proxies.append(o)
+        self.saved_pl[o.Name] = FreeCAD.Placement(o.Placement)
+        self.saved_vis[o.Name] = False
+        self.group_of[o.Name] = set()
+        return o
+
+    def remove_proxies(self):
+        for o in self.proxies:
+            self.objs.remove(o)
+            for d in (self.saved_pl, self.saved_vis, self.group_of, self.parent_pl, self.parent_rot, self.pose):
+                d.pop(o.Name, None)
+            self.saved_mat.pop(o.Name, None)
+            self.doc.removeObject(o.Name)
+        self.proxies = []
 
     def set_pose(self, objs, centre, axis, deg):
         """Rotate `objs` by `deg` about the global axis through `centre`, on top of any pose they already have.

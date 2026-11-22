@@ -90,6 +90,22 @@ def outer_shoulder(xr):
 
 
 INNER = sel(labels=r"Inner_SHoulder_Assembly")
+_IS = "L_Front_Inner_SHoulder_Assembly001"
+# The CAD's two blocks are square-edged; the printed ones (stl/chassis/Top_Shoulder, Bottom_Shoulder) have R7 rounds
+# on the two long edges of the face away from the plate's middle, so the proxies get those rounds added.
+INNER_PIECES = [  # (proxy label, link, sub-object path inside it[, (round radius, "zmin" | "zmax" face)])
+    ("IS Inner_Shoulder", _IS, "Body024."),
+    ("IS Bottom_Shoulder", _IS, "Part009.Body025.", (7, "zmax")),
+    ("IS M3 Nut bottom 1", _IS, "Part009.Body671."),
+    ("IS M3 Nut bottom 2", _IS, "Part009.Body023."),
+    ("IS Top_Shoulder", _IS, "Part007.Body028.", (7, "zmin")),
+    ("IS M3 Nut top 1", _IS, "Part007.Body029."),
+    ("IS M3 Nut top 2", _IS, "Part007.Body670."),
+    ("IS M3x8 1", _IS, "Part008.Body030."),
+    ("IS M3x8 2", _IS, "Part008.Body032."),
+    ("IS M3x8 3", _IS, "Part008.Body031."),
+    ("IS M3x8 4", _IS, "Part008.Body026."),
+]
 CHASSIS_SIDES = sel(labels=r"^L_Chassis_Side|Right_Side_Nuts")
 CHASSIS_SCREWS = sel(labels=r"^L_Part01[01]$")
 PLATE = ["UnoQ_Mountingplate"]
@@ -199,6 +215,14 @@ STEPS = [
     dict(id="legs-to-outer", context=[outer_shoulder(FRONT)], new=[legs(FRONT), sel(labels="FOS Servohorn")],
          explode=[(legs(FRONT, LEFT), (-60, 0, 0)), (legs(FRONT, RIGHT), (-60, 0, 0))],
          view=(0.9, -0.8, -0.5)),
+    # The inner shoulder and its blocks are one linked sub-assembly in the model; proxies stand in for its pieces.
+    dict(id="inner-shoulder", proxies=INNER_PIECES, context=["IS Inner_Shoulder"],
+         new=[p[0] for p in INNER_PIECES[1:]],
+         explode=[(["IS Top_Shoulder", "IS Bottom_Shoulder"], (45, 0, 0)),
+                  (["IS M3 Nut top 1", "IS M3 Nut top 2"], (45, 0, 25)),
+                  (["IS M3 Nut bottom 1", "IS M3 Nut bottom 2"], (45, 0, 25)),
+                  (["IS M3x8 1", "IS M3x8 2", "IS M3x8 3", "IS M3x8 4"], (-30, 0, 0))],
+         view=(0.55, -1.0, -0.55)),
     dict(id="frame", context=[], new=[INNER, CHASSIS_SIDES, CHASSIS_SCREWS] + PLATE,
          explode=[(sel(labels=r"^L_Chassis_Side$|Right_Side_Nuts$"), (0, 50, 0)),
                   (sel(labels=r"^L_Chassis_Side001$|Right_Side_Nuts001$"), (0, -50, 0)),

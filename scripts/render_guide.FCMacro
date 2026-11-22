@@ -70,6 +70,8 @@ def yaw(direction, deg):
 
 
 def render_step(S, st, video=True):
+    for proxy in st.get("proxies", []):
+        S.add_proxy(*proxy)
     ctx = resolve(S, st.get("context", []))
     new = resolve(S, st["new"])
     names = {o.Name for o in ctx}
@@ -156,7 +158,10 @@ def main():
             if only and st["id"] not in only:
                 continue
             FreeCAD.Console.PrintMessage(f"guide: {st['id']}\n")
-            render_step(S, st, video)
+            try:
+                render_step(S, st, video)
+            finally:
+                S.remove_proxies()
     finally:
         S.reset()
         S.view.viewIsometric()
