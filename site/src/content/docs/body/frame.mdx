@@ -8,7 +8,6 @@ import Done from '../../../components/Done.astro';
 import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
-import Todo from '../../../components/Todo.astro';
 
 The frame is two **shoulder blocks** (front and rear) joined by two **chassis sides**, with the electronics plate held
 between the sides.
@@ -23,20 +22,37 @@ between the sides.
 	[8, '<kbd class="hw">M3×8</kbd> + 8 M3 nuts', 'Chassis sides to the inner shoulders'],
 ]} tools={['2.5 mm hex']} />
 
-<Render id="frame" caption="Inner shoulders, chassis sides and electronics plate" />
+If you printed the MakerWorld profile, the parts are on these
+[plates](../../prepare/prints/#check-you-have-every-part), named as in Bambu Studio:
+
+- **Inner shoulders:** Plate 1, *Chassis plates and rails*. The plate also has the two **outer** shoulders, which go on
+  later: the inner ones have round bearing seats for the shoulder pins, the outer ones star-shaped recesses for servo
+  horns.
+- **Chassis sides:** Plate 1, *Chassis plates and rails*.
+- **Top and bottom shoulder blocks:** Plate 2, *Electronics plate and chassis blocks*.
+- **UNO Q mounting plate:** Plate 2, *Electronics plate and chassis blocks*. Leave the three LiPo brackets on that plate
+  for later.
 
 ## Inner shoulders
 
+Build both inner shoulders the same way, one for the front and one for the rear.
+
+<Render id="inner-shoulder" caption="Top and bottom shoulder blocks onto an inner shoulder" />
+
 <Steps>
 
-1. Put two M3 nuts into each top and each bottom shoulder block. Orient the blocks so the nut pockets that will later
-   hold the **covers face into the body**.
-2. Screw each inner shoulder to a top and a bottom block with four <Hw>M3×8</Hw>, so the screw heads sink into their
-   pockets. The **bigger blocks go at the top**.
+1. Drop two M3 nuts into each block: into the two **rectangular slots on its top face, at the end that touches the
+   inner shoulder**. They stand upright in the slots.
+2. Hold the blocks against the flat face of the inner shoulder, the **bigger block at the top** and the smaller one at
+   the bottom, their nut ends against the plate.
+3. Screw each block on with two <Hw>M3×8</Hw> from the other side of the inner shoulder, through the plate and into
+   the nuts.
 
 </Steps>
 
 ## Chassis
+
+<Render id="frame" caption="Inner shoulders, chassis sides and electronics plate" />
 
 <Steps>
 
@@ -52,6 +68,9 @@ Before the frame closes, check that the plate's rear-left slot (for the battery 
 the SZBK07 posts are towards the front. The board stack sits at the rear of the plate.
 </Aside>
 
-<Todo id="frame-done">The finished frame with the bare plate, from above and from the front-left.</Todo>
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/body/frame-done.jpg`} alt="The finished black frame on a table: two inner shoulders joined by the two chassis sides, with the bare electronics plate between them showing its posts, two tall standoffs and a square tube. Each inner shoulder has its bigger block sticking out at the top and the smaller block below." width="1600" height="840" style="border-radius:0.4rem" />
+	<figcaption>The finished frame with the bare electronics plate. The bigger blocks are at the top on both inner shoulders, and the chassis sides have their flat face outwards.</figcaption>
+</figure>
 
 <Done id="frame" label="Frame built" />
