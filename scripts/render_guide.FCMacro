@@ -90,10 +90,16 @@ def render_step(S, st, video=True):
     for sels, d in st.get("explode", []):
         for o in resolve(S, sels):
             disp[o.Name] = d
+    tilt = {}  # hinge-in: (centre, axis, deg) at the exploded end, eased to 0 when assembled
+    for sels, centre, axis, deg in st.get("tilt", []):
+        for o in resolve(S, sels):
+            tilt[o.Name] = (centre, axis, deg)
 
     def pose(t):  # t = 1 exploded, 0 assembled
         for o in allp:
-            S.move(o, [v * t for v in disp.get(o.Name, (0, 0, 0))])
+            tl = tilt.get(o.Name)
+            S.move(o, [v * t for v in disp.get(o.Name, (0, 0, 0))],
+                   (tl[0], tl[1], tl[2] * t) if tl else None)
 
     focus = resolve(S, st["focus"]) if st.get("focus") else allp
     # frame on the union of assembled and exploded poses

@@ -19,7 +19,8 @@ nothing gets screwed together for good yet: take everything apart again when you
 - **Servo parts:** one DS3218 with its four rubber dampeners, one 25T six-arm horn
 - **Bearings:** two 625ZZ (16 mm outside, 5 mm hole, 5 mm thick)
 - **Screws:**
-  - 4× <Hw>M3×8</Hw> for the SZBK07, plus 4× M3×8 and 4 M3 nuts for the cap
+  - 8× <Hw>M3×8</Hw> for the SZBK07 and the carrier clamps, 4 M3 washers for the clamps, plus 4× M3×8 and 4 M3 nuts
+    for the cap
   - 8× M2×5 self-tapping for the cameras
   - 7× <Hw>M3×20</Hw> and 7 M3 nuts for the servo (4) and the shoulder cover (3)
   - 2–6× <Hw>M2×8</Hw>, each with an M2 nut threaded all the way up to the head, for the horn
@@ -29,7 +30,7 @@ nothing gets screwed together for good yet: take everything apart again when you
 ## Which part is which
 
 <figure>
-	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/fit-parts.png`} alt="The eight fit-test parts: 1 the carrier test frame with hooks and clips, 2 the SZBK07 test frame with four corner posts, 3 the camera mount with two lens windows, 4 the shoulder servo mount with a large round opening and nut pockets, 5 the extended servo cap with a six-arm horn recess in a round pocket, 6 the flat ball-bearing mount with a bearing hole at one end, 7 the curved shoulder cover with a bearing ring at its foot, 8 two small bearing pins." width="2080" height="960" style="background:#fff;border-radius:0.4rem" />
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/fit-parts.png`} alt="The eight fit-test parts: 1 the carrier test frame with pads and clamp posts, 2 the SZBK07 test frame with four corner posts, 3 the camera mount with two lens windows, 4 the shoulder servo mount with a large round opening and nut pockets, 5 the extended servo cap with a six-arm horn recess in a round pocket, 6 the flat ball-bearing mount with a bearing hole at one end, 7 the curved shoulder cover with a bearing ring at its foot, 8 two small bearing pins." width="2080" height="960" style="background:#fff;border-radius:0.4rem" />
 	<figcaption>The fit-test parts. Parts 1 and 2 are cut from the electronics plate; the rest are the real parts.</figcaption>
 </figure>
 
@@ -38,37 +39,26 @@ Media Carrier and the SZBK07 replaced both boards, so throw those two away.
 
 ## 1. Carrier mount
 
-The test frame holds the Media Carrier with four round **pads** underneath, two stiff **hooks** at one end and two thin
-**snap clips** at the other. The carrier has no mounting holes; this is the only thing holding it in the robot.
-
-To tell the ends apart: the hooks are chunky (3.8 mm), 20 mm apart, with a deep lip. The snap clips are thin (2.4 mm),
-30 mm apart, with a small catch, and flex when you push them.
+The test frame holds the Media Carrier on four round **pads**, with two **clamp posts** beside each of its short edges
+and two small **front stops** along one long edge. The carrier has no mounting holes: in the robot, an <Hw>M3×8</Hw> with an M3
+washer in each clamp post holds it down, the washer overlapping the board's edge.
 
 <Steps>
 
-1. Hold the carrier with its USB-C edge towards the snap clips.
-2. Tilt it and slide the opposite edge under the two hooks' lips.
-3. Lower the USB-C edge and press it down past the clips until they click over the board.
-4. Press the UNO Q onto the carrier's headers, the same way round (its USB-C over the carrier's).
+1. Hold the frame with the two stops away from you. Lay the carrier on the pads with its USB-C edge on your right and
+   its far edge just behind the stops.
+2. Screw an <Hw>M3×8</Hw> with an M3 washer into each clamp post, snug: they cut their own thread.
+3. Press the UNO Q onto the carrier's headers, the same way round (its USB-C over the carrier's).
 
 </Steps>
 
-**Passes when:** the clips click without cracking or turning white, the carrier sits flat on all four pads without
-rocking, nothing on its underside touches the frame, and the carrier doesn't move when you press the UNO Q on.
-
-<Aside type="note" title="Known: the carrier can slide sideways">
-The hooks and clips only hold the carrier's two ends. Nothing stops it sliding a few millimetres sideways, along the
-edges they grip. That's how the current plate is designed, not a problem with your print.
-</Aside>
-
-<figure>
-	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/fit/carrier-test.jpg`} alt="The black carrier test frame clipped onto the Media Carrier, with the UNO Q pressed on underneath, turned over to show the hooks and clips holding the carrier's edges." width="1176" height="1200" style="max-width:26rem" />
-	<figcaption>The carrier test frame with the carrier and UNO Q in place, turned over.</figcaption>
-</figure>
+**Passes when:** the carrier drops onto the pads without touching the clamp posts, sits flat without rocking, nothing
+on its underside touches the frame, each washer grips the board's edge, and the carrier doesn't move when you press the
+UNO Q on.
 
 ## 2. SZBK07 posts
 
-The SZBK07 sits on four plastic posts. The M3 screws cut their own thread in the posts' 2.6 mm pilot holes, so there
+The SZBK07 sits on four plastic posts. The M3 screws cut their own thread in the posts' 2.9 mm pilot holes, so there
 are no nuts.
 
 <Steps>
@@ -245,7 +235,7 @@ Small pegs, 5 mm across, that a 625ZZ turns on. The fit-test plate has one; the 
 Tick each one off once it passes.
 
 <Checklist id="fit" items={[
-	'<strong>Carrier mount</strong>: clips click, the carrier sits flat, the UNO Q presses on.',
+	'<strong>Carrier mount</strong>: the carrier drops in, sits flat and is clamped, the UNO Q presses on.',
 	'<strong>SZBK07 posts</strong>: holes line up, screws hold, no post broken.',
 	'<strong>Camera mount</strong>: both cameras sit flat, lenses in their windows, connectors free.',
 	'<strong>Shoulder servo mount</strong>: the servo slides in, all four M3×20 tighten.',
