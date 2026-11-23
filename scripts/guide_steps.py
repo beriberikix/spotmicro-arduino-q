@@ -89,23 +89,94 @@ def outer_shoulder(xr):
                labels=r"^L_Outer_Shoulder|Futuba FSH6B01[0-3]|^L_M2(x08[1-9]|x09\d|x1\d\d)|^L_M2 Nut(07\d|08\d|09\d)")
 
 
-INNER = sel(labels=r"Inner_SHoulder_Assembly")
-_IS = "L_Front_Inner_SHoulder_Assembly001"
+# The inner shoulders and their blocks are linked sub-assemblies in the model (moved only as a whole), so for the whole
+# run proxies stand in for their pieces (setup() below), labelled "Front_Inner ..." / "Rear_Inner ...".
+INNER = sel(labels=r"^(Front|Rear)_Inner ")
 # The CAD's two blocks are square-edged; the printed ones (stl/chassis/Top_Shoulder, Bottom_Shoulder) have R7 rounds
-# on the two long edges of the face away from the plate's middle, so the proxies get those rounds added.
-INNER_PIECES = [  # (proxy label, link, sub-object path inside it[, (round radius, "zmin" | "zmax" face)])
-    ("IS Inner_Shoulder", _IS, "Body024."),
-    ("IS Bottom_Shoulder", _IS, "Part009.Body025.", (7, "zmax")),
-    ("IS M3 Nut bottom 1", _IS, "Part009.Body671."),
-    ("IS M3 Nut bottom 2", _IS, "Part009.Body023."),
-    ("IS Top_Shoulder", _IS, "Part007.Body028.", (7, "zmin")),
-    ("IS M3 Nut top 1", _IS, "Part007.Body029."),
-    ("IS M3 Nut top 2", _IS, "Part007.Body670."),
-    ("IS M3x8 1", _IS, "Part008.Body030."),
-    ("IS M3x8 2", _IS, "Part008.Body032."),
-    ("IS M3x8 3", _IS, "Part008.Body031."),
-    ("IS M3x8 4", _IS, "Part008.Body026."),
-]
+# on the two long edges of the face away from the plate's middle, and are 2 mm longer (scripts/export_stls.py
+# LENGTHEN), stretched at their middle. Everything outboard of the blocks' middles - the leg pairs, the head and rear
+# covers and their screws and nuts - therefore sits 2 mm further out than in the model.
+BLOCK_EXTRA = 2.0
+BODY_MID_X = -108.0   # between the two inner shoulders
+INNER_LINKS = {  # end: (link, {piece: sub-object path[, round]})
+    "Front": ("L_Front_Inner_SHoulder_Assembly001", [
+        ("Inner_Shoulder", "Body024."),
+        ("Bottom_Shoulder", "Part009.Body025.", (7, "zmax")),
+        ("M3 Nut bottom 1", "Part009.Body671."),
+        ("M3 Nut bottom 2", "Part009.Body023."),
+        ("Top_Shoulder", "Part007.Body028.", (7, "zmin")),
+        ("M3 Nut top 1", "Part007.Body029."),
+        ("M3 Nut top 2", "Part007.Body670."),
+        ("M3x8 1", "Part008.Body030."),
+        ("M3x8 2", "Part008.Body032."),
+        ("M3x8 3", "Part008.Body031."),
+        ("M3x8 4", "Part008.Body026."),
+    ]),
+    "Rear": ("L_Rear_Inner_SHoulder_Assembly", [
+        ("Inner_Shoulder", "Body658."),
+        ("Bottom_Shoulder", "Part267.Body659.", (7, "zmax")),
+        ("M3 Nut bottom 1", "Part267.Body656."),
+        ("M3 Nut bottom 2", "Part267.Body657."),
+        ("Top_Shoulder", "Part265.Body661.", (7, "zmin")),
+        ("M3 Nut top 1", "Part265.Body019."),
+        ("M3 Nut top 2", "Part265.Body660."),
+        ("M3x8 1", "Part266.Body662."),
+        ("M3x8 2", "Part266.Body669."),
+        ("M3x8 3", "Part266.Body663."),
+        ("M3x8 4", "Part266.Body014."),
+    ]),
+}
+COVER_NUTS = ("L_Cover_Nuts", ["Part304.Body%d." % n for n in range(759, 767)]
+              + ["Part305.Body%d." % n for n in range(767, 775)])
+OUTBOARD_FRONT = r"^L_(Front_Cover|Front_Cover_Screws|Head_Cover_Screws)$"
+OUTBOARD_REAR = r"^L_(Rear_Cover_Assembly|Rear_Cover_Screws001)$"
+
+
+def setup(S):
+    """Make the scene match the printed parts (see BLOCK_EXTRA): proxies for the inner shoulders, with the blocks
+    rounded and stretched, and the parts outboard of the blocks' middles moved out."""
+    out = {}  # end -> (x of the blocks' middle, outward sign)
+    for end, (link, pieces) in INNER_LINKS.items():
+        lk = S.doc.getObject(link)
+        blk = lk.getSubObject(pieces[1][1]).BoundBox
+        mid = (blk.XMin + blk.XMax) / 2
+        sign = 1 if mid > BODY_MID_X else -1
+        out[end] = (mid, sign)
+        for piece in pieces:
+            name, sub = piece[0], piece[1]
+            rounds = piece[2] if len(piece) > 2 else None
+            stretch = (mid, sign * BLOCK_EXTRA) if name.endswith("_Shoulder") and name != "Inner_Shoulder" else None
+            S.add_proxy(f"{end}_Inner {name}", link, sub, rounds=rounds, stretch=stretch, keep=True)
+    nuts = []
+    for i, sub in enumerate(COVER_NUTS[1]):
+        nuts.append(S.add_proxy(f"Cover M3 Nut {i + 1}", COVER_NUTS[0], sub, keep=True))
+    for o in nuts:
+        o.Visibility = False
+
+    def outboard(o):
+        x = S.centre.get(o.Name, (None,))[0]
+        if x is None:
+            return 0
+        mid, sign = out["Front"] if x > BODY_MID_X else out["Rear"]
+        return sign if (x - mid) * sign > 0 else 0
+
+    front = {o.Name for o in S.select(groups=["head"]) + S.select(labels=OUTBOARD_FRONT)}
+    rear = {o.Name for o in S.select(labels=OUTBOARD_REAR)}
+    for o in S.select(groups=["front_legs", "rear_legs", "robjk", "head"]) + S.select(labels=OUTBOARD_REAR) + nuts:
+        if o.Name in front:
+            sign = 1
+        elif o.Name in rear:
+            sign = -1
+        elif o in nuts:
+            sign = outboard(o)
+        elif o.Name in S.centre:  # legs and shoulder joints: by which end they are at (empty links have no centre)
+            sign = 1 if S.centre[o.Name][0] > BODY_MID_X else -1
+        else:
+            sign = 0
+        if sign:
+            S.shift([o], (sign * BLOCK_EXTRA, 0, 0))
+
+
 CHASSIS_SIDES = sel(labels=r"^L_Chassis_Side|Right_Side_Nuts")
 CHASSIS_SCREWS = sel(labels=r"^L_Part01[01]$")
 PLATE = ["UnoQ_Mountingplate"]
@@ -128,7 +199,7 @@ CAMS = ["Camera_Module_2_left", "Camera_Module_2_right"]
 BOTTOM_COVER = ["L_Bottom_Cover_Assembly"]
 TOP_COVER = ["L_Top_Cover_Assembly"]
 REAR_COVER = ["L_Rear_Cover_Assembly", "L_Rear_Cover_Screws001"]
-COVER_HW = ["L_Cover_Nuts", "L_Head_Cover_Screws"]
+COVER_HW = [sel(labels=r"^Cover M3 Nut "), "L_Head_Cover_Screws"]
 
 BODY = [INNER, CHASSIS_SIDES, CHASSIS_SCREWS] + PLATE
 ALL_LEGS = [legs(None)]
@@ -136,8 +207,9 @@ ALL_LEGS = [legs(None)]
 # view directions (camera -> model)
 # Assembly poses. The CAD model stands the robot up; these rotate a leg's parts about a joint axis (front left leg,
 # both axes along Y) to the pose the guide assembles them in.
-KNEE_AXIS = ((-82.52, 0, 121.01), (0, 1, 0))
-HIP_AXIS = ((-4.95, 0, 200.35), (0, 1, 0))
+# setup() moves the front legs out by BLOCK_EXTRA, so the axes move with them.
+KNEE_AXIS = ((-82.52 + BLOCK_EXTRA, 0, 121.01), (0, 1, 0))
+HIP_AXIS = ((-4.95 + BLOCK_EXTRA, 0, 200.35), (0, 1, 0))
 # Knee folded flat (servo at its assembly angle): the lower leg turned 74 degrees from standing, 0.6 mm clear of the
 # upper leg shells (they touch at 75).
 FOLD_KNEE = [(LOWER_LEG + KNEE_PIN, *KNEE_AXIS, -74)]
@@ -225,18 +297,17 @@ STEPS = [
     dict(id="shoulder-bearings", context=[outer_shoulder(FRONT), FRONT_HORN_SCREWS, SHOULDERS_FRONT],
          new=[SH_BEARINGS_FRONT], explode=[(SH_BEARINGS_FRONT, (-40, 0, 0))],
          view=(0.9, -0.7, -0.45)),
-    # The inner shoulder and its blocks are one linked sub-assembly in the model; proxies stand in for its pieces.
-    dict(id="inner-shoulder", proxies=INNER_PIECES, context=["IS Inner_Shoulder"],
-         new=[p[0] for p in INNER_PIECES[1:]],
-         explode=[(["IS Top_Shoulder", "IS Bottom_Shoulder"], (45, 0, 0)),
-                  (["IS M3 Nut top 1", "IS M3 Nut top 2"], (45, 0, 25)),
-                  (["IS M3 Nut bottom 1", "IS M3 Nut bottom 2"], (45, 0, 25)),
-                  (["IS M3x8 1", "IS M3x8 2", "IS M3x8 3", "IS M3x8 4"], (-30, 0, 0))],
+    dict(id="inner-shoulder", context=["Front_Inner Inner_Shoulder"],
+         new=["Front_Inner " + p[0] for p in INNER_LINKS["Front"][1][1:]],
+         explode=[(["Front_Inner Top_Shoulder", "Front_Inner Bottom_Shoulder"], (45, 0, 0)),
+                  (["Front_Inner M3 Nut top 1", "Front_Inner M3 Nut top 2"], (45, 0, 25)),
+                  (["Front_Inner M3 Nut bottom 1", "Front_Inner M3 Nut bottom 2"], (45, 0, 25)),
+                  (["Front_Inner M3x8 %d" % i for i in range(1, 5)], (-30, 0, 0))],
          view=(0.55, -1.0, -0.55)),
     dict(id="frame", context=[], new=[INNER, CHASSIS_SIDES, CHASSIS_SCREWS] + PLATE,
          explode=[(sel(labels=r"^L_Chassis_Side$|Right_Side_Nuts$"), (0, 50, 0)),
                   (sel(labels=r"^L_Chassis_Side001$|Right_Side_Nuts001$"), (0, -50, 0)),
-                  (sel(labels="Front_Inner"), (60, 0, 0)), (sel(labels="Rear_Inner"), (-60, 0, 0)),
+                  (sel(labels="^Front_Inner "), (60, 0, 0)), (sel(labels="^Rear_Inner "), (-60, 0, 0)),
                   (sel(labels=r"^L_Part011$"), (90, 0, 0)), (sel(labels=r"^L_Part010$"), (-90, 0, 0)),
                   (PLATE, (0, 0, 40))],
          view=ISO_FRONT),

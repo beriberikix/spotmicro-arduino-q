@@ -154,6 +154,7 @@ def main():
     video = not globals().get("GUIDE_NO_VIDEO", False)
     S = G.Scene(os.path.join(REPO, "cad", "SpotUnoQ.FCStd"))
     try:
+        guide_steps.setup(S)
         for st in guide_steps.STEPS:
             if only and st["id"] not in only:
                 continue
@@ -164,6 +165,7 @@ def main():
                 S.remove_proxies()
     finally:
         S.reset()
+        S.restore()
         S.view.viewIsometric()
         S.view.fitAll()
 
