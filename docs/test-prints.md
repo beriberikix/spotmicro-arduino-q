@@ -1,6 +1,6 @@
 # Fit-test prints
 
-Print these before the full robot. They take about 3 hours and 84 g of filament. They check every place where a
+Print these before the full robot. They take about 3 hours and 89 g of filament. They check every place where a
 printed part has to fit something you bought: the Media Carrier, the servo regulator, the cameras, a servo and its
 horn, and the 625ZZ bearings. If they fit, the other parts will too, since they share the same printer tolerances and
 the same designs.

@@ -145,7 +145,7 @@ python3 scripts/build_makerworld_3mf.py --no-orient --stand        # makerworld/
 | Project | Plates | Time | Filament |
 | ------- | ------ | ---- | -------- |
 | Full robot | 10, one filament each (black PLA, white PLA, TPU feet) | 32 h | 1.2 kg |
-| Fit tests | 2 (black, white) | 2.8 h | 84 g |
+| Fit tests | 2 (black, white) | 2.9 h | 89 g |
 | Helper stand (optional) | 2, one stand each (black PLA) | 2.7 h | 92 g |
 
 All are sliced for the P1S (0.4 mm nozzle, 0.20 mm Standard, Textured PEI) with 3 walls on structural plates, 100%
