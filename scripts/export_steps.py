@@ -58,6 +58,37 @@ PARTS = [
 ]
 
 
+# Parts that scripts/export_stls.py lengthens at the middle (see LENGTHEN there): the source solid gets the same
+# stretch before it is fitted to the STL. rel path: extra length in mm, along the part's longest axis.
+LENGTHEN = {
+    "chassis/Top_Shoulder.stl": 2.0,
+    "chassis/Bottom_Shoulder.stl": 2.0,
+}
+
+
+def stretch(shape, extra):
+    """Cut the solid at the middle of its longest axis, move the halves apart and fill the gap with the cross-section."""
+    b = shape.BoundBox
+    lengths = (b.XLength, b.YLength, b.ZLength)
+    k = lengths.index(max(lengths))
+    d = FreeCAD.Vector(*[1 if i == k else 0 for i in range(3)])
+    mid = ((b.XMin + b.XMax) / 2, (b.YMin + b.YMax) / 2, (b.ZMin + b.ZMax) / 2)[k]
+    big = max(lengths) * 4
+    lo = Part.makeBox(big, big, big)
+    lo.translate(FreeCAD.Vector(b.Center) - FreeCAD.Vector(big / 2, big / 2, big / 2) + d * (mid - b.Center[k] - big / 2))
+    hi = lo.copy()
+    hi.translate(d * big)
+    low, high = shape.common(lo), shape.common(hi)
+    low.translate(d * (-extra / 2))
+    high.translate(d * (extra / 2))
+    face = Part.Face(shape.slice(d, mid), "Part::FaceMakerBullseye")
+    face.translate(d * (-extra / 2))
+    out = low.fuse([high, face.extrude(d * extra)]).removeSplitter()
+    if abs(out.Volume - shape.Volume - face.Area * extra) > 0.01 * face.Area * extra:
+        raise RuntimeError(f"stretch added {out.Volume - shape.Volume:.1f} mm3, expected {face.Area * extra:.1f}")
+    return out.Solids[0] if len(out.Solids) == 1 else out
+
+
 def source_shape(path, labels):
     doc = FreeCAD.openDocument(path, hidden=True)
     if labels:
@@ -146,6 +177,8 @@ def main():
     results = []
     for rel, src, labels, mirror in PARTS:
         shape = source_shape(src, labels)
+        if rel in LENGTHEN:
+            shape = stretch(shape, LENGTHEN[rel])
         stl_mesh = Mesh.Mesh(os.path.join(STL, rel))
         R, t, _ = fit(sample_shape(shape, 4000, 1), sample_mesh(stl_mesh, 30000, 2))
         placed = shape.copy()

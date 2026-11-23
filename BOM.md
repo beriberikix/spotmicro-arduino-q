@@ -18,7 +18,8 @@ many vendors; check the specs in the notes before buying.
 | 12 | 25T six-arm servo horn (FSH6S type) | Often included with the servos. `Servohorn_6_B_Star` is a printable fallback. | [search](https://www.amazon.com/s?k=25T+servo+horn+aluminum) |
 | 48 | Servo rubber dampeners | Usually included with the servos. | - |
 | 4 | Servo extension cable, 10-15 cm | Lower-leg servos. | [search](https://www.amazon.com/s?k=servo+extension+cable+15cm) |
-| 1 | GY-521 (MPU-6050) IMU | Mounts on the plate's GY-521 posts. | [search](https://www.amazon.com/s?k=GY-521+MPU6050) |
+| 1 | Adafruit MPU-6050 6-DoF accel and gyro, STEMMA QT / Qwiic | On four posts on the plate, held with four M2x8. Same chip and I2C address (0x68) as a GY-521. | [Adafruit 3886](https://www.adafruit.com/product/3886) |
+| 1 | STEMMA QT / Qwiic JST SH 4-pin cable, 200 mm | IMU to the UNO Q's Qwiic socket, routed round the front of the board stack (about 145 mm). | [Adafruit 4401](https://www.adafruit.com/product/4401) |
 | 1 | 3S LiPo, about 5000-5200 mAh, 30C+, XT60, at most 138 x 47 x 25 mm | Sits in the LiPo brackets under the plate. The bay is 25.6 mm tall, so most 3S hard cases (37 mm) don't fit: use a soft case. The reference build uses a Zeee 3S 5200 mAh 50C soft case (132 x 43 x 25 mm, 343 g). | [search](https://www.amazon.com/s?k=3S+LiPo+5200mAh+soft+case+XT60) |
 | 1 | LiPo balance charger, 3S capable | Charging the battery. | [search](https://www.amazon.com/s?k=LiPo+balance+charger+3S) |
 | 1 | Main power switch or 19 mm latching push button | Fits the covers' 19 mm cutout. | [search](https://www.amazon.com/s?k=19mm+latching+push+button+LED) |
@@ -53,7 +54,7 @@ DS3218 on all twelve joints: 20 kg·cm at 6 V, 4.8-6.8 V. MG996R (11 kg·cm) wor
 
 | Qty | Part | Used for |
 | --- | ---- | -------- |
-| 88 + 88 | M2x8 cylinder-head screws + M2 nuts | Servo horns, bearing pins |
+| 88 + 84 | M2x8 cylinder-head screws + M2 nuts | Servo horns, bearing pins; four without nuts hold the IMU |
 | 76 + 76 | M3x8 cylinder-head screws + M3 nuts | General assembly |
 | 12 | M3x8 screws | Knee mounts, servo caps and outer shoulders to the servo shafts (no nuts) |
 | 64 + 64 | M3x20 cylinder-head screws + M3 nuts | Servos, upper legs |

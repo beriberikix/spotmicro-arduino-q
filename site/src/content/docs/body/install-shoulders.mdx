@@ -8,7 +8,7 @@ import Done from '../../../components/Done.astro';
 import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
-import Todo from '../../../components/Todo.astro';
+import LegPick from '../../../components/LegPick.astro';
 
 Each pair of legs (front, rear) hangs between an **outer shoulder plate**, which holds the two shoulder servo horns,
 and the **inner shoulder** in the frame, which holds the bearings for the shoulder pins.
@@ -23,42 +23,92 @@ and the **inner shoulder** in the frame, which holds the bearings for the should
 	[4, 'Finished legs and the frame'],
 ]} tools={['1.5 mm hex', '2.5 mm hex', 'Bench rig with servo_tool']} />
 
+If you printed the MakerWorld profile, the two outer shoulders are on **Plate 1**, *Chassis plates and rails*: they're
+the ones with **star-shaped recesses** for servo horns (the inner shoulders you used on the frame have round bearing
+seats). The horns and screws are in bag E.
+
 ## 1. Horns onto the outer shoulders
 
 <Render id="outer-shoulder-horns" caption="Two horns onto an outer shoulder plate" />
 
-Screw two horns to each outer shoulder plate with 12 M2×8 (with nuts) per plate, through the middle hole of each arm.
+<Steps>
+
+1. Lay a horn in each star-shaped recess, **hub facing out of the recess** (towards the servo), as on the knee and hip.
+2. Screw each horn on with six <Hw>M2×8</Hw> (with nuts threaded on) through the middle hole of each arm.
+
+</Steps>
+
+Which way up the plate goes: of its four plain screw holes, the **two close together go at the bottom** (they meet the
+small bottom block) and the two far apart at the top.
 
 ## 2. Leg pairs onto the outer shoulders
 
-<Render id="legs-to-outer" caption="Front legs onto the front outer shoulder" />
+Each outer shoulder joins the two legs at one end of the robot. All four legs are finished, so read their tags:
+
+<LegPick joint="shoulder" pairs={{ front: 'Front pair: one outer shoulder, channels 0 and 3', rear: 'Rear pair: the other outer shoulder, channels 6 and 9' }} />
+
+Plug each leg's shoulder servo lead (`xx-S`) into the channel shown.
+
+Both outer shoulders are the same part, so either one can take either pair. The tags decide which leg goes on which
+side: each leg's shoulder servo shaft points out of the robot's end, so the legs lie **behind** the outer shoulder, and
+its horns face back at them. Stand in front of the plate's outer face, the way you'd look at the robot from in front
+(front pair) or from behind (rear pair):
+
+- **Front pair, seen from in front:** FL on your **right**, FR on your **left** (the robot's left is on your right).
+- **Rear pair, seen from behind:** RL on your **left**, RR on your **right**.
+
+In both cases each leg's upper leg and knee are on the **outside**, away from the other leg.
+
+<Render id="legs-to-outer" caption="Front pair (FL and FR) onto the front outer shoulder" />
 
 <Steps>
 
 1. Plug both front shoulder servos into the rig (channels 0 and 3) and set them to **90°**: servo_tool's **Install
    shoulders** tab (**Front pair → Move both to 90°**), or `a 0` and `a 3` in the Serial Monitor.
-2. Hold the two front legs hanging **straight down**, and push the outer shoulder's horns onto both shoulder servo
-   shafts. The horn arms should be **perfectly perpendicular**; if not, unscrew a horn, turn it to another arm
-   and refit it.
-3. Screw each shaft to its horn with an <Hw>M3×8</Hw> through the horn centre.
-4. Press **Done: servos off** (or `o`), unplug, and repeat for the rear legs (channels 6 and 9).
+2. Hold the outer shoulder upright, the way it sits on the robot: horns towards the legs, the two close-together holes
+   at the bottom. Push its horns onto both shoulder servo shafts so each leg hangs **straight down**, parallel to the
+   plate's short edges.
+3. If a leg leans to one side, pull the plate off and re-seat that leg one tooth over. If no tooth gets it straight,
+   unscrew that horn, turn it one arm round in its recess and try again: that shifts the choice of positions by a
+   few degrees.
+4. Screw each shaft to its horn with an <Hw>M3×8</Hw> through the horn centre.
+5. Press **Done: servos off** (or `o`), unplug, and repeat for the rear legs (channels 6 and 9).
 
 </Steps>
 
-## 3. Pairs onto the frame
+## 3. Bearings onto the shoulder pins
+
+<Render id="shoulder-bearings" caption="A 625ZZ bearing onto each shoulder pin of the front pair" />
+
+Each shoulder servo mount has a bearing pin on its back wall, pointing towards the body (you fitted it on the
+[hip joint](../../shoulders/hip/#2-bearing-pin-onto-the-servo-mount) page). The 625ZZ bearings go onto those pins,
+and in the next step they drop into the round seats in the inner shoulder.
+
+<Steps>
+
+1. Push a 625ZZ bearing onto the pin of each leg in the pair, all the way down to the servo mount.
+2. Do the same for the other pair: four bearings in all.
+
+</Steps>
+
+On servo mounts printed before 21 November 2026, the pin's M3 screw head is wider than the bearing's bore. Take the
+screw out, put the bearing on, and screw it back in so its head clamps the bearing's inner ring.
+
+## 4. Pairs onto the frame
 
 <Render id="install-shoulders" caption="Front and rear leg pairs onto the frame" />
 
 <Steps>
 
-1. Press a 625ZZ bearing onto each shoulder bearing pin (at the inner end of each shoulder servo mount). On servo
-   mounts printed before 21 November 2026 the pin's M3 screw head is wider than the bearing's bore: take the screw
-   out, put the bearing on, and screw it back in so its head clamps the bearing's inner ring.
-2. Put M3 nuts into the front faces of the top and bottom shoulder blocks.
-3. Slide the front leg pair onto the frame so the four bearings drop into their seats in the inner shoulder, and screw
-   the outer shoulder to the blocks with four <Hw>M3×8</Hw>.
-4. Repeat for the rear pair.
-5. Lead all twelve servo cables up into the body, keeping each leg's three together. They plug in later.
+1. Drop two M3 nuts into each shoulder block at the frame's front end: into the two **rectangular slots at the block's
+   outer end** (the end away from the inner shoulder), upright, as you did at the other end.
+2. Slide the front leg pair onto the frame so the bearings drop into their seats in the inner shoulder and the outer
+   shoulder lies flat against the ends of the blocks. The bearings may sit a little short of the bottom of their seats:
+   that's the clearance, and it's fine. If instead the outer shoulder stands off the blocks, check the blocks are
+   the 49.5 mm ones (see the [Frame](../frame/) page). Screw it on with four <Hw>M3×8</Hw> into those nuts: two at the top,
+   two at the bottom.
+3. Repeat for the rear pair at the rear end.
+4. Lead all twelve servo cables up into the body, keeping each leg's three together. They plug in later.
 
 </Steps>
 
@@ -67,7 +117,9 @@ Stand the robot on the [helper stand](../../prepare/stand/) (optional, but recom
 hang free. A robot resting on folded legs isn't level, and the IMU levelling and servo calibration both need it level.
 </Aside>
 
-<Todo id="body-legs" kind="video">Sliding a leg pair onto the frame so the shoulder bearings seat, and screwing the outer shoulder on (30 s).</Todo>
-<Todo id="body-done">The robot on its stand after this step, from the front-left.</Todo>
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/body/shoulders-done.jpg`} alt="The robot on the yellow helper stand, seen from the front: the black outer shoulder plate with its two six-arm horns closes the front of the frame, the four legs with white shoulder covers hang free with red feet, and the twelve servo cables dangle loose." width="1600" height="1200" style="border-radius:0.4rem" />
+	<figcaption>All four legs on the frame, on the helper stand. The servo cables hang loose until they're plugged in later.</figcaption>
+</figure>
 
 <Done id="install-shoulders" label="All four legs on the frame" />
