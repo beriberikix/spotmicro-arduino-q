@@ -13,7 +13,7 @@ Planned contents:
 
 - Pre-flight checks: meter checks on VIN and the servo rail, no cables over the servo plugs, legs free on the [stand](../../prepare/stand/).
 - Power the UNO Q alone first (servo switch off or XT60 to the SZBK07 unplugged), confirm it boots and joins Wi-Fi.
-- Check the I2C bus sees the PCA9685 (0x40) and the GY-521 (0x68).
+- Check the I2C buses see the PCA9685 (0x40, header I2C) and the MPU-6050 (0x68, Qwiic).
 - Bring up the servo rail with all outputs off, then enable joints one at a time.
 - Current draw at idle and while standing.
 

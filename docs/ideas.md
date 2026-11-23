@@ -6,8 +6,8 @@ Additions that aren't built yet, and what each would take.
 
 | Idea | What it takes |
 | ---- | ------------- |
-| ICM-20948 or BNO055 IMU (with compass; the BNO055 fuses on chip) | A mount in place of the GY-521 posts |
-| HMC5883L magnetometer, or a GY-87 (MPU-6050 + compass) | A mount; only if the GY-521 stays |
+| ICM-20948 or BNO055 IMU (with compass; the BNO055 fuses on chip) | A mount in place of the MPU-6050 posts |
+| HMC5883L magnetometer, or a GY-87 (MPU-6050 + compass) | A mount; only if the MPU-6050 stays |
 | BMP180 barometer | A mount; I2C |
 | PAJ7620U2 gesture sensor | A mount in the head; I2C |
 | INA219 current/voltage sensor | A mount; I2C address 0x41 (A0 high), since the shield's PCA9685 is 0x40 |
