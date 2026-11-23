@@ -110,6 +110,13 @@ CHASSIS_SIDES = sel(labels=r"^L_Chassis_Side|Right_Side_Nuts")
 CHASSIS_SCREWS = sel(labels=r"^L_Part01[01]$")
 PLATE = ["UnoQ_Mountingplate"]
 SH_BEARINGS = sel(groups=["front_legs", "rear_legs"], labels=r"^L_Body(68[0-9]|69[0])$|^L_Body679$")
+SH_BEARINGS_FRONT = sel(groups=["front_legs", "rear_legs"], labels=r"^L_Body(68[5-9]|690)$")  # 625ZZ on the front pins
+SH_BEARINGS_REAR = sel(groups=["front_legs", "rear_legs"], labels=r"^L_Body(679|68[0-4])$")
+FRONT_HORN_SCREWS = sel(labels="FOS Servohorn", box=(FRONT, None, None))  # M3x8 into the front shoulder servo shafts
+# The front pair's shoulder joints only (servo mounts, caps, servos, pins), without the rest of the legs
+SHOULDERS_FRONT = sel(groups=["front_legs", "rear_legs", "robjk"], box=(FRONT, None, (190, None)),
+                      exclude=r"^L_Outer_Shoulder|^L_Body(6[89]\d|69[0-9]|70[0-2]|679|68[0-4])$|FOS Servohorn"
+                              r"|Futuba FSH6B01[0-3]|^L_M2(x08[1-9]|x09[0-9]|x1\d\d)|^L_M2 Nut(07\d|08\d|09\d)")
 OUTER_SCREWS = sel(labels=r"^L_(M3x13[5-8]|M3 Nut1(1[7-9]|20))$")
 CARRIER = ["Arduino_UNO_Media_Carrier"]
 UNOQ = ["Arduino_UNO_Q"]
@@ -212,9 +219,12 @@ STEPS = [
          explode=[(sel(labels=r"Futuba FSH6B01[01]"), (25, 0, 0)), (sel(labels=r"^L_M2 Nut(07\d|08[01])$"), (40, 0, 0)),
                   (sel(labels=r"^L_M2x(08[1-9]|09[0-2])$"), (55, 0, 0))],
          view=(-1.0, -0.5, -0.35)),
-    dict(id="legs-to-outer", context=[outer_shoulder(FRONT)], new=[legs(FRONT), sel(labels="FOS Servohorn")],
+    dict(id="legs-to-outer", context=[outer_shoulder(FRONT)], new=[legs(FRONT), FRONT_HORN_SCREWS],
          explode=[(legs(FRONT, LEFT), (-60, 0, 0)), (legs(FRONT, RIGHT), (-60, 0, 0))],
          view=(0.9, -0.8, -0.5)),
+    dict(id="shoulder-bearings", context=[outer_shoulder(FRONT), FRONT_HORN_SCREWS, SHOULDERS_FRONT],
+         new=[SH_BEARINGS_FRONT], explode=[(SH_BEARINGS_FRONT, (-40, 0, 0))],
+         view=(0.9, -0.7, -0.45)),
     # The inner shoulder and its blocks are one linked sub-assembly in the model; proxies stand in for its pieces.
     dict(id="inner-shoulder", proxies=INNER_PIECES, context=["IS Inner_Shoulder"],
          new=[p[0] for p in INNER_PIECES[1:]],
@@ -232,10 +242,11 @@ STEPS = [
          view=ISO_FRONT),
     dict(id="install-shoulders", context=BODY,
          new=[legs(None), outer_shoulder(None), sel(labels="FOS Servohorn"), SH_BEARINGS, OUTER_SCREWS],
-         explode=[(legs(FRONT), (90, 0, 0)), (outer_shoulder(FRONT), (90, 0, 0)), (sel(labels="FOS Servohorn Left"), (90, 0, 0)),
-                  (sel(labels="FOS Servohorn Right"), (90, 0, 0)),
+         explode=[(legs(FRONT), (90, 0, 0)), (outer_shoulder(FRONT), (90, 0, 0)), (FRONT_HORN_SCREWS, (90, 0, 0)),
                   (legs(REAR), (-90, 0, 0)), (outer_shoulder(REAR), (-90, 0, 0)),
-                  (SH_BEARINGS, (0, 0, 0)), (OUTER_SCREWS, (130, 0, 0))],
+                  (sel(labels="FOS Servohorn", box=(REAR, None, None)), (-90, 0, 0)),
+                  (SH_BEARINGS_FRONT, (90, 0, 0)), (SH_BEARINGS_REAR, (-90, 0, 0)),
+                  (OUTER_SCREWS, (130, 0, 0))],  # bearings stay on the pins, travelling with the legs
          view=ISO_FRONT),
     # ---------------------------------------------------------------- electronics
     dict(id="plate-boards", context=PLATE, new=CARRIER + UNOQ + SHIELD + BUCK,
@@ -248,7 +259,7 @@ STEPS = [
          explode=[(["L_Front_Cover"], (60, 0, 0)), (["L_Front_Cover_Screws"], (-60, 0, 0)), (CAMS, (-45, 0, 0))],
          view=(1.0, -0.8, -0.45)),
     # ---------------------------------------------------------------- covers
-    dict(id="covers", context=BODY + ALL_LEGS + [outer_shoulder(None), sel(labels="FOS Servohorn")] + CARRIER + UNOQ
+    dict(id="covers", context=BODY + ALL_LEGS + [outer_shoulder(None), sel(labels="FOS Servohorn", box=(FRONT, None, None))] + CARRIER + UNOQ
          + SHIELD + BUCK + HEAD + CAMS,
          new=BOTTOM_COVER + TOP_COVER + REAR_COVER,
          explode=[(BOTTOM_COVER, (0, 0, -90)), (TOP_COVER, (0, 0, 110)), (REAR_COVER, (-90, 0, 0))],

@@ -13,8 +13,10 @@ interface Props {
 	 * comes from data/sides.ts (the shoulder mount pairs diagonally); other files fall back to left = normal.
 	 */
 	parts?: { file: string; name: string }[];
+	/** Group the legs into front and rear pairs, with a label above each row (e.g. which outer shoulder they share). */
+	pairs?: { front: string; rear: string };
 }
-const { joint, parts = [] } = Astro.props;
+const { joint, parts = [], pairs } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const legs: Leg[] = ['FL', 'FR', 'RL', 'RR'];
 const left = (l: Leg) => l === 'FL' || l === 'RL';
@@ -26,9 +28,11 @@ const ver = (file: string, l: Leg) =>
 
 <div class="leg-pick not-content">
 	<p class="head">▲ head (front) · seen from above</p>
-	<div class="grid">
+	<div class={`grid${pairs ? ' paired' : ''}`}>
+		{pairs && <p class="pair front">{pairs.front}</p>}
+		{pairs && <p class="pair rear">{pairs.rear}</p>}
 		{legs.map((l) => (
-			<div class={`card ${left(l) ? 'left' : 'right'}`}>
+			<div class={`card ${left(l) ? 'left' : 'right'} ${l[0] === 'F' ? 'front' : 'rear'}`}>
 				<div class="top">
 					<span class="leg">{LEG_NAME[l]}</span>
 					<span class="tag">{tag(l)}</span>
@@ -77,6 +81,37 @@ const ver = (file: string, l: Leg) =>
 	}
 	.card.right {
 		grid-column: 3;
+	}
+	.paired {
+		grid-template-rows: auto auto auto auto;
+	}
+	.pair {
+		grid-column: 1 / -1;
+		margin: 0;
+		padding: 0.25rem 0.6rem;
+		border-radius: 0.4rem;
+		background: var(--sl-color-accent-low);
+		color: var(--sl-color-white);
+		font-size: var(--sl-text-sm);
+		font-weight: 600;
+		text-align: center;
+		position: relative;
+		z-index: 1;
+	}
+	.paired .pair.front {
+		grid-row: 1;
+	}
+	.paired .card.front {
+		grid-row: 2;
+	}
+	.paired .pair.rear {
+		grid-row: 3;
+	}
+	.paired .card.rear {
+		grid-row: 4;
+	}
+	.paired .body {
+		grid-row: 2 / span 3;
 	}
 	.body {
 		grid-column: 2;
