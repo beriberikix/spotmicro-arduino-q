@@ -58,6 +58,22 @@ def round_long_edges(shape, r, side):
     return shape.cut(cut).removeSplitter()
 
 
+def stretch_x(shape, at, extra):
+    """`shape` made |extra| longer along X at the plane x = `at`: the part on the side `extra` points to moves by
+    `extra`, and the gap is filled with the cross-section at `at`."""
+    b = shape.BoundBox
+    big = 4 * (b.DiagonalLength + abs(extra))
+    box = Part.makeBox(big, big, big, V(at if extra > 0 else at - big, b.Center.y - big / 2, b.Center.z - big / 2))
+    moving, fixed = shape.common(box), shape.cut(box)
+    moving.translate(V(extra, 0, 0))
+    face = Part.Face(shape.slice(V(1, 0, 0), at), "Part::FaceMakerBullseye")
+    out = fixed.fuse([moving, face.extrude(V(extra, 0, 0))]).removeSplitter()
+    expected = face.Area * abs(extra)
+    if abs(out.Volume - shape.Volume - expected) > 0.01 * expected:
+        raise RuntimeError(f"stretch added {out.Volume - shape.Volume:.1f} mm3, expected {expected:.1f}")
+    return out
+
+
 class Scene:
     def __init__(self, path):
         name = os.path.splitext(os.path.basename(path))[0]
@@ -79,6 +95,8 @@ class Scene:
         self.parent_pl = {}
         self.pose = {}
         self.proxies = []
+        self.fixed_proxies = []   # proxies kept for the whole run (see add_proxy keep=True)
+        self.orig_pl = {}         # placements before shift(), put back by restore()
         self.centre = {}
         self.bb = {}
         for o in self.objs:
@@ -224,24 +242,55 @@ class Scene:
             self.parent_rot[o.Name] = par.Rotation
         return par
 
-    def add_proxy(self, name, link, sub, rounds=None):
+    def add_proxy(self, name, link, sub, rounds=None, stretch=None, keep=False):
         """Stand-in for one piece inside a linked sub-assembly (which the scene can only move as a whole): a plain
         shape at the piece's place in the model, labelled `name` so selectors and default colours work on it.
         `rounds` = (radius, "zmin" | "zmax") rounds the two X-direction edges of that face, for CAD bodies that are
-        square where the printed part is rounded."""
+        square where the printed part is rounded. `stretch` = (x, extra) lengthens it at the plane x (stretch_x).
+        `keep` keeps the proxy for the whole run instead of removing it after the step."""
         src = self.doc.getObject(link) or self.doc.getObjectsByLabel(link)[0]
         o = self.doc.addObject("Part::Feature", "proxy_" + re.sub(r"\W", "_", name))
         shape = src.getSubObject(sub)
+        if stretch:  # before the rounds, so they run the whole length without a seam
+            shape = stretch_x(shape, *stretch)
         if rounds:
             shape = round_long_edges(shape, *rounds)
         o.Shape = shape
         o.Label = name
         self.objs.append(o)
-        self.proxies.append(o)
+        (self.fixed_proxies if keep else self.proxies).append(o)
         self.saved_pl[o.Name] = FreeCAD.Placement(o.Placement)
         self.saved_vis[o.Name] = False
         self.group_of[o.Name] = set()
+        b = o.Shape.BoundBox
+        self.bb[o.Name] = b
+        self.centre[o.Name] = (b.Center.x, b.Center.y, b.Center.z)
         return o
+
+    def shift(self, objs, d):
+        """Move `objs` by the global vector `d` for the whole run: their resting place becomes the moved one."""
+        for o in objs:
+            par = self._parent(o)
+            if o.Name not in self.orig_pl:
+                self.orig_pl[o.Name] = FreeCAD.Placement(self.saved_pl[o.Name])
+            p = FreeCAD.Placement(self.saved_pl[o.Name])
+            p.Base = p.Base + par.Rotation.inverted().multVec(V(*d))
+            self.saved_pl[o.Name] = p
+            self._set_pl(o, p)
+            if o.Name in self.centre:
+                c = self.centre[o.Name]
+                self.centre[o.Name] = (c[0] + d[0], c[1] + d[1], c[2] + d[2])
+
+    def restore(self):
+        """Undo shift() and remove the kept proxies, leaving the document as it was opened."""
+        for n, p in self.orig_pl.items():
+            o = self.doc.getObject(n)
+            self.saved_pl[n] = p
+            self._set_pl(o, p)
+        self.orig_pl = {}
+        self.proxies += self.fixed_proxies
+        self.fixed_proxies = []
+        self.remove_proxies()
 
     def remove_proxies(self):
         for o in self.proxies:
