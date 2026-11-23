@@ -11,14 +11,14 @@ many vendors; check the specs in the notes before buying.
 | 1 | Arduino UNO Media Carrier (ASX00083) | Under the UNO Q; provides the two camera connectors. Held by the plate's pads and clips. | [Arduino Store](https://store-usa.arduino.cc/products/uno-media-carrier) |
 | 1 | Adafruit 16-channel 12-bit PWM/Servo Shield (PCA9685) | On top of the UNO Q. Solder the plain male header strip it comes with, not stacking headers. | [Adafruit 1411](https://www.adafruit.com/product/1411) |
 | 1 | Right-angle 3x4 male headers, 4-pack | In place of the shield's straight servo headers, so the plugs fit under the top cover. | [Adafruit 816](https://www.adafruit.com/product/816) |
-| 1 | SZBK07 20 A step-down module | Servo rail at 6.0 V; set it before connecting servos. 60 x 54 x 28 mm, M3 holes 39 x 53.5 mm. About 15 A continuous. | [search](https://www.amazon.com/s?k=SZBK07+20A+buck) |
+| 1 | SZBK07 20 A step-down module | Servo rail at 6.0 V; set it before connecting servos. 60 x 45 mm board (about 60 x 56 x 33 mm with heatsinks and coil), M3 holes 39 x 53.5 mm. About 15 A continuous. | [search](https://www.amazon.com/s?k=SZBK07+20A+buck) |
 | 2 | Raspberry Pi Camera Module 2 (IMX219) | Stereo pair in the head. Arducam's IMX219 V2 boards also fit the mount (same holes, lens 5 mm lower). | [Adafruit 3099](https://www.adafruit.com/product/3099) |
 | 2 | Raspberry Pi camera cable, Standard–Mini, 200 mm | Camera to carrier. The cable in the camera box doesn't fit the carrier. | [Adafruit 5818](https://www.adafruit.com/product/5818) |
 | 12 | DS3218 servo, 20 kg, **180°**, 25T spline | Many DS3218 listings are 270°; check the angle. See [Servos](#servos). | [Miuzei 4-pack (buy 3)](https://www.amazon.com/dp/B0FH53CKCS) · [HOOYIJ 4-pack](https://www.amazon.com/dp/B0CJ7B2MBN) |
 | 12 | 25T six-arm servo horn (FSH6S type) | Often included with the servos. `Servohorn_6_B_Star` is a printable fallback. | [search](https://www.amazon.com/s?k=25T+servo+horn+aluminum) |
 | 48 | Servo rubber dampeners | Usually included with the servos. | - |
 | 4 | Servo extension cable, 10-15 cm | Lower-leg servos. | [search](https://www.amazon.com/s?k=servo+extension+cable+15cm) |
-| 1 | Adafruit MPU-6050 6-DoF accel and gyro, STEMMA QT / Qwiic | On four posts on the plate, held with four M2x8. Same chip and I2C address (0x68) as a GY-521. | [Adafruit 3886](https://www.adafruit.com/product/3886) |
+| 1 | Adafruit MPU-6050 6-DoF accel and gyro, STEMMA QT / Qwiic | On four posts on the plate, held with four M2x5 self-tapping screws. Same chip and I2C address (0x68) as a GY-521. | [Adafruit 3886](https://www.adafruit.com/product/3886) |
 | 1 | STEMMA QT / Qwiic JST SH 4-pin cable, 200 mm | IMU to the UNO Q's Qwiic socket, routed round the front of the board stack (about 145 mm). | [Adafruit 4401](https://www.adafruit.com/product/4401) |
 | 1 | 3S LiPo, about 5000-5200 mAh, 30C+, XT60, at most 138 x 47 x 25 mm | Sits in the LiPo brackets under the plate. The bay is 25.6 mm tall, so most 3S hard cases (37 mm) don't fit: use a soft case. The reference build uses a Zeee 3S 5200 mAh 50C soft case (132 x 43 x 25 mm, 343 g). | [search](https://www.amazon.com/s?k=3S+LiPo+5200mAh+soft+case+XT60) |
 | 1 | LiPo balance charger, 3S capable | Charging the battery. | [search](https://www.amazon.com/s?k=LiPo+balance+charger+3S) |
@@ -54,13 +54,14 @@ DS3218 on all twelve joints: 20 kg·cm at 6 V, 4.8-6.8 V. MG996R (11 kg·cm) wor
 
 | Qty | Part | Used for |
 | --- | ---- | -------- |
-| 88 + 84 | M2x8 cylinder-head screws + M2 nuts | Servo horns, bearing pins; four without nuts hold the IMU |
+| 84 + 84 | M2x8 cylinder-head screws + M2 nuts | Servo horns, bearing pins |
 | 76 + 76 | M3x8 cylinder-head screws + M3 nuts | General assembly |
 | 12 | M3x8 screws | Knee mounts, servo caps and outer shoulders to the servo shafts (no nuts) |
 | 64 + 64 | M3x20 cylinder-head screws + M3 nuts | Servos, upper legs |
 | 12 + 12 | M3x20 screws + M3 nuts | Shoulder covers to the extended servo caps (3 per cover) |
 | 4 | M3x8 screws | SZBK07 to its posts |
-| 8 | M2x5 self-tapping screws | Cameras to the head mount |
+| 4 + 4 | M3x8 screws + M3 washers (DIN 125, 7 mm OD) | Media Carrier clamps: the washers clamp the carrier's short edges |
+| 12 | M2x5 self-tapping screws | Cameras to the head mount (8), IMU to its posts (4) |
 | 12 | 625ZZ ball bearing, unflanged | Shoulder and leg joints (8), shoulder covers (4) |
 
 [625ZZ search](https://www.amazon.com/s?k=625ZZ+bearing) ·

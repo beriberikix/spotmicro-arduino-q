@@ -26,6 +26,7 @@ PLATE = "cad:UnoQ_Mountingplate"
 SENSORMOUNT = "cad:Sensormount_DualCam"
 CARRIER_TEST = "cad:Carrier_Mount_Test"
 SZBK07_TEST = "cad:SZBK07_Mount_Test"
+IMU_TEST = "cad:IMU_Mount_Test"
 
 PARTS = [
     # Chassis
@@ -37,7 +38,7 @@ PARTS = [
     ("chassis", KOOBA + "LiPo_Mountingbracket_Front.stl", "LiPo_Mountingbracket_Front", 1, 0, "PLA", "20%", ""),
     ("chassis", KOOBA + "LiPo_Mountingbracket_Middle.stl", "LiPo_Mountingbracket_Middle", 1, 0, "PLA", "20%", ""),
     ("chassis", KOOBA + "LiPo_Mountingbracket_Rear.stl", "LiPo_Mountingbracket_Rear", 1, 0, "PLA", "20%", ""),
-    ("electronics", PLATE, "UnoQ_Mountingplate", 1, 0, "PLA", "20%", "New: UNO Media Carrier + UNO Q + servo shield stack, SZBK07, Adafruit MPU-6050"),
+    ("electronics", PLATE, "UnoQ_Mountingplate", 1, 0, "PLA", "20%", "New: UNO Media Carrier + UNO Q + servo shield stack, SZBK07, Adafruit MPU-6050 (ribbed posts), carrier clamp posts and front stops"),
     # Shoulder joints (robjk reinforced)
     ("shoulders", ROBJK + "Shoulder_Joint_Servomount_extended_BB.stl", "Shoulder_Joint_Servomount_extended_BB", 2, 2, "PLA", "20%", "robjk; bearing-pin seat changed to M2"),
     ("shoulders", ROBJK + "Shoulder_Joint_Servo_Cap_Extended.stl", "Shoulder_Joint_Servo_Cap_Extended", 4, 0, "PLA", "20%", "robjk"),
@@ -70,8 +71,9 @@ PARTS = [
     ("optional/helper-stand", STAND + "2x_stand_brace.stl", "Stand_Brace", 2, 0, "PLA", "20%", "Nova-SM2"),
     ("optional/helper-stand", STAND + "4x_stand_feet.stl", "Stand_Feet", 4, 0, "PLA", "20%", "Nova-SM2"),
     # Fit tests: the board-stack and regulator mounts from the electronics plate, on a light frame
-    ("optional/test-prints", CARRIER_TEST, "Carrier_Mount_Test", 1, 0, "PLA", "20%", "Media Carrier pads, hooks and snap clips from the electronics plate"),
+    ("optional/test-prints", CARRIER_TEST, "Carrier_Mount_Test", 1, 0, "PLA", "20%", "Media Carrier pads, clamp posts and front stops from the electronics plate"),
     ("optional/test-prints", SZBK07_TEST, "SZBK07_Mount_Test", 1, 0, "PLA", "20%", "SZBK07 posts from the electronics plate"),
+    ("optional/test-prints", IMU_TEST, "IMU_Mount_Test", 1, 0, "PLA", "20%", "MPU-6050 posts and ribs, cut from the electronics plate at full thickness"),
 ]
 
 def export_body(dest, fcstd, label, step_dest):
@@ -88,7 +90,7 @@ def export_body(dest, fcstd, label, step_dest):
 
 
 def export_mount_test(dest, which, base=2.0, bar=7.0):
-    """Cut the real carrier pads and clips (or SZBK07 posts) out of the electronics plate and join them
+    """Cut the real carrier pads, clamp posts and stops (or SZBK07 posts) out of the electronics plate and join them
     with a thin frame, so their positions, heights and pilot holes can be checked in a short print."""
     import math
     import Part
@@ -97,17 +99,28 @@ def export_mount_test(dest, which, base=2.0, bar=7.0):
     P = doc.getObject("Params")
     V = FreeCAD.Vector
     top = 5.0
+    if which == IMU_TEST:
+        # the IMU posts, ribs and the full 5 mm plate under them: tests the fit and the posts' strength at their root
+        b = doc.getObject("IMU_Ribs_Sketch").Shape.BoundBox
+        m = 3.0
+        cut = Part.makeBox(b.XLength + 2 * m, b.YLength + 2 * m, 50, V(b.XMin - m, b.YMin - m, -1))
+        shape = body.Shape.common(cut).removeSplitter()
+        MeshPart.meshFromShape(Shape=shape, LinearDeflection=0.05, AngularDeflection=0.2, Relative=False).write(dest)
+        FreeCAD.closeDocument(doc.Name)
+        return
     if which == CARRIER_TEST:
         sk = doc.getObject("UnoQ_Standoffs_Sketch")  # the carrier pads
         pads = [(g.Center.x, g.Center.y) for g in sk.Geometry]
         cutters = [Part.makeCylinder(P.Standoff_D / 2 + 0.01, P.Standoff_H + 0.01, V(x, y, top)) for x, y in pads]
-        clips = []
-        for o in doc.Objects:
-            if o.TypeId == "PartDesign::Pad" and o.Label.startswith(("Carrier_Hook", "Carrier_Snap")):
-                b = o.Profile[0].Shape.BoundBox
-                clips.append(((b.XMin + b.XMax) / 2, b.YMin))
-                cutters.append(Part.makeBox(b.XLength + 0.02, P.Clip_W + 0.02, b.ZMax - top + 0.01,
-                                            V(b.XMin - 0.01, b.YMin - P.Clip_W / 2 - 0.01, top)))
+        # the four clamp posts: an M3 screw and washer in each clamps the carrier's edge
+        clips = [(g.Center.x, g.Center.y) for g in doc.getObject("Carrier_Clamp_Posts_Sketch").Geometry]
+        cutters += [Part.makeCylinder(P.Clamp_D / 2 + 0.01, P.Standoff_H + P.Carrier_T, V(x, y, top)) for x, y in clips]
+        stops = doc.getObject("Carrier_Stops")  # the two front stops that keep the carrier from sliding forwards
+        for st in (stops.AddSubShape.Solids if stops else []):
+            b = st.BoundBox
+            clips.append(((b.XMin + b.XMax) / 2, (b.YMin + b.YMax) / 2))
+            cutters.append(Part.makeBox(b.XLength + 0.02, b.YLength + 0.02, b.ZMax - top + 0.01,
+                                        V(b.XMin - 0.01, b.YMin - 0.01, top)))
         pts, holes, post_d = pads + clips, [], P.Standoff_D
     else:
         pts = [(P.Buck_CX + sx * P.Buck_SX / 2, P.Buck_CY + sy * P.Buck_SY / 2) for sx in (-1, 1) for sy in (-1, 1)]
@@ -332,7 +345,7 @@ def main():
         elif src == SENSORMOUNT:
             export_body(dest, "Sensormount_DualCam.FCStd", "Sensormount_DualCam",
                         os.path.join(ROOT, "step", "head", "Sensormount_DualCam.step"))
-        elif src in (CARRIER_TEST, SZBK07_TEST):
+        elif src in (CARRIER_TEST, SZBK07_TEST, IMU_TEST):
             export_mount_test(dest, src)
         else:
             Mesh.Mesh(os.path.join(REF, src)).write(dest)  # rewrite as binary STL

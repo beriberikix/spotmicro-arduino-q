@@ -29,7 +29,7 @@ CC BY-SA 4.0). See ../NOTICE.md.
 
 | File | Normal | Mirrored | Material | Infill | Notes |
 | ---- | ------ | -------- | -------- | ------ | ----- |
-| [UnoQ_Mountingplate.stl](electronics/UnoQ_Mountingplate.stl) | 1 | - | PLA | 20% | New: UNO Media Carrier + UNO Q + servo shield stack, SZBK07, GY-521 |
+| [UnoQ_Mountingplate.stl](electronics/UnoQ_Mountingplate.stl) | 1 | - | PLA | 20% | New: UNO Media Carrier + UNO Q + servo shield stack, SZBK07, Adafruit MPU-6050 (ribbed posts), carrier clamp posts and front stops |
 
 ## shoulders
 
@@ -96,7 +96,8 @@ CC BY-SA 4.0). See ../NOTICE.md.
 
 | File | Normal | Mirrored | Material | Infill | Notes |
 | ---- | ------ | -------- | -------- | ------ | ----- |
-| [Carrier_Mount_Test.stl](optional/test-prints/Carrier_Mount_Test.stl) | 1 | - | PLA | 20% | Media Carrier pads, hooks and snap clips from the electronics plate |
+| [Carrier_Mount_Test.stl](optional/test-prints/Carrier_Mount_Test.stl) | 1 | - | PLA | 20% | Media Carrier pads, clamp posts and front stops from the electronics plate |
 | [SZBK07_Mount_Test.stl](optional/test-prints/SZBK07_Mount_Test.stl) | 1 | - | PLA | 20% | SZBK07 posts from the electronics plate |
+| [IMU_Mount_Test.stl](optional/test-prints/IMU_Mount_Test.stl) | 1 | - | PLA | 20% | MPU-6050 posts and ribs, cut from the electronics plate at full thickness |
 
 Required prints: 74 parts.

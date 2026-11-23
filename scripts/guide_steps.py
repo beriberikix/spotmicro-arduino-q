@@ -10,6 +10,9 @@ Each step lists:
 Selectors are object names, labels, or "re:<regex on label>".
 The legs are shown for the front-left leg; the others are the same or mirrored.
 """
+import math
+
+import FreeCAD
 
 # ---------------------------------------------------------------- front-left leg, by object name
 FOOT = ["LL_Body055"]
@@ -132,6 +135,31 @@ OUTBOARD_FRONT = r"^L_(Front_Cover|Front_Cover_Screws|Head_Cover_Screws)$"
 OUTBOARD_REAR = r"^L_(Rear_Cover_Assembly|Rear_Cover_Screws001)$"
 
 
+def add_carrier_clamps(S):
+    """The four M3x8 screws and washers that clamp the Media Carrier's edges (not in the CAD assembly), on the
+    plate's clamp posts. Labels: 'Clamp M3x8 n' and 'Clamp Washer n' (no 'Carrier', which would colour them as a PCB)."""
+    import Part
+    V = FreeCAD.Vector
+    link = S.doc.getObject(PLATE[0])
+    pdoc = link.LinkedObject.Document
+    sk = pdoc.getObject("Carrier_Clamp_Posts_Sketch")
+    P = pdoc.getObject("Params")
+    z = 5 + P.Standoff_H + P.Carrier_T  # carrier top, plate frame
+    pl = link.Placement
+    for i, g in enumerate(sk.Geometry):
+        x, y = g.Center.x, g.Center.y
+        washer = Part.makeCylinder(3.5, 0.5, V(x, y, z)).cut(Part.makeCylinder(1.6, 0.5, V(x, y, z)))
+        head = Part.makeCylinder(2.75, 3.0, V(x, y, z + 0.5))
+        sock = Part.makePolygon([V(x + 1.44 * math.cos(math.radians(a)), y + 1.44 * math.sin(math.radians(a)),
+                                   z + 2.0) for a in range(0, 361, 60)])
+        head = head.cut(Part.Face(sock).extrude(V(0, 0, 1.6)))
+        screw = head.fuse(Part.makeCylinder(1.5, 8.0, V(x, y, z + 0.5 - 8.0))).removeSplitter()
+        for shp in (washer, screw):
+            shp.transformShape(pl.toMatrix())
+        S.add_shape(f"Clamp Washer {i + 1}", washer, keep=True)
+        S.add_shape(f"Clamp M3x8 {i + 1}", screw, keep=True)
+
+
 def setup(S):
     """Make the scene match the printed parts (see BLOCK_EXTRA): proxies for the inner shoulders, with the blocks
     rounded and stretched, and the parts outboard of the blocks' middles moved out."""
@@ -147,6 +175,7 @@ def setup(S):
             rounds = piece[2] if len(piece) > 2 else None
             stretch = (mid, sign * BLOCK_EXTRA) if name.endswith("_Shoulder") and name != "Inner_Shoulder" else None
             S.add_proxy(f"{end}_Inner {name}", link, sub, rounds=rounds, stretch=stretch, keep=True)
+    add_carrier_clamps(S)
     nuts = []
     for i, sub in enumerate(COVER_NUTS[1]):
         nuts.append(S.add_proxy(f"Cover M3 Nut {i + 1}", COVER_NUTS[0], sub, keep=True))
@@ -190,6 +219,9 @@ SHOULDERS_FRONT = sel(groups=["front_legs", "rear_legs", "robjk"], box=(FRONT, N
                               r"|Futuba FSH6B01[0-3]|^L_M2(x08[1-9]|x09[0-9]|x1\d\d)|^L_M2 Nut(07\d|08\d|09\d)")
 OUTER_SCREWS = sel(labels=r"^L_(M3x13[5-8]|M3 Nut1(1[7-9]|20))$")
 CARRIER = ["Arduino_UNO_Media_Carrier"]
+CLAMP_WASHERS = sel(labels=r"^Clamp Washer")
+CLAMP_SCREWS = sel(labels=r"^Clamp M3x8")
+CLAMPS = [CLAMP_WASHERS, CLAMP_SCREWS]
 UNOQ = ["Arduino_UNO_Q"]
 SHIELD = ["Adafruit_1411"]
 BUCK = ["SZBK07"]
@@ -320,10 +352,22 @@ STEPS = [
                   (OUTER_SCREWS, (130, 0, 0))],  # bearings stay on the pins, travelling with the legs
          view=ISO_FRONT),
     # ---------------------------------------------------------------- electronics
-    dict(id="plate-boards", context=PLATE, new=CARRIER + UNOQ + SHIELD + BUCK,
-         explode=[(CARRIER, (0, 0, 30)), (UNOQ, (0, 0, 60)), (SHIELD, (0, 0, 95)), (BUCK, (0, 0, 50))],
+    dict(id="plate-boards", context=PLATE, new=CARRIER + CLAMPS + UNOQ + SHIELD + BUCK,
+         explode=[(CARRIER, (0, 0, 30)), (CLAMPS, (0, 0, 42)), (UNOQ, (0, 0, 60)), (SHIELD, (0, 0, 95)),
+                  (BUCK, (0, 0, 50))],
          view=(-0.8, -0.9, -1.0)),
-    dict(id="camera-cables", context=PLATE + CARRIER + UNOQ + SHIELD + BUCK + [INNER, CHASSIS_SIDES], new=FPC,
+    # step 3 close-ups. The carrier hinges in about its hook edge (robot left, global y -59.4) before it drops onto the
+    # pads; its USB-C edge (robot right) then clicks under the snap clips.
+    dict(id="plate-carrier", context=PLATE, new=CARRIER + [CLAMP_WASHERS, CLAMP_SCREWS],
+         explode=[(CARRIER, (0, 0, 25)), (CLAMP_WASHERS, (0, 0, 45)), (CLAMP_SCREWS, (0, 0, 65))],
+         view=(-1.0, 0.2, -0.65), focus=CARRIER + CLAMPS),
+    dict(id="plate-unoq", context=PLATE + CARRIER + CLAMPS, new=UNOQ,
+         explode=[(UNOQ, (0, 0, 35))],
+         view=(-0.75, 0.8, -1.0), focus=CARRIER + UNOQ),
+    dict(id="plate-shield", context=PLATE + CARRIER + CLAMPS + UNOQ, new=SHIELD,
+         explode=[(SHIELD, (0, 0, 35))],
+         view=(-0.75, -0.9, -1.0), focus=CARRIER + SHIELD),
+    dict(id="camera-cables", context=PLATE + CARRIER + CLAMPS + UNOQ + SHIELD + BUCK + [INNER, CHASSIS_SIDES], new=FPC,
          explode=[(FPC, (0, 0, 60))],
          view=(-0.6, -0.5, -1.0), focus=PLATE + FPC),
     dict(id="head", context=[], new=HEAD + CAMS,

@@ -25,7 +25,7 @@ GROUPS = {
     "head": "Head_DualCam",
     "electronics": "Electronics_UnoQ",
 }
-HARDWARE = re.compile(r"(Nut|M2x|M3x|Dampener|Servohorn .* M3x8)", re.I)
+HARDWARE = re.compile(r"(Nut|Washer|M2x|M3x|Dampener|Servohorn .* M3x8)", re.I)
 
 # Colours (r, g, b in 0..1)
 C_NEW = (0.96, 0.55, 0.12)       # parts added in this step
@@ -249,12 +249,17 @@ class Scene:
         square where the printed part is rounded. `stretch` = (x, extra) lengthens it at the plane x (stretch_x).
         `keep` keeps the proxy for the whole run instead of removing it after the step."""
         src = self.doc.getObject(link) or self.doc.getObjectsByLabel(link)[0]
-        o = self.doc.addObject("Part::Feature", "proxy_" + re.sub(r"\W", "_", name))
         shape = src.getSubObject(sub)
         if stretch:  # before the rounds, so they run the whole length without a seam
             shape = stretch_x(shape, *stretch)
         if rounds:
             shape = round_long_edges(shape, *rounds)
+        return self.add_shape(name, shape, keep)
+
+    def add_shape(self, name, shape, keep=False):
+        """A plain shape (global coordinates) added to the scene as a part labelled `name`, for hardware the CAD
+        assembly doesn't model. Removed after the step, or at restore() with `keep`."""
+        o = self.doc.addObject("Part::Feature", "proxy_" + re.sub(r"\W", "_", name))
         o.Shape = shape
         o.Label = name
         self.objs.append(o)
@@ -308,12 +313,17 @@ class Scene:
         for o in objs:
             self.pose[o.Name] = r.multiply(self.pose.get(o.Name, FreeCAD.Placement()))
 
-    def move(self, o, d):
-        """Move `o` by the global vector `d` from its saved placement (in its pose, if it has one)."""
+    def move(self, o, d, rot=None):
+        """Move `o` by the global vector `d` from its saved placement (in its pose, if it has one).
+        `rot` = (centre, axis, deg) first turns it about that global axis (a hinge-in explode)."""
         p = FreeCAD.Placement(self.saved_pl[o.Name])
         par = self._parent(o)
         if o.Name in self.pose:
             p = par.inverse().multiply(self.pose[o.Name].multiply(par.multiply(p)))
+        if rot:
+            centre, axis, deg = rot
+            r = FreeCAD.Placement(V(0, 0, 0), FreeCAD.Rotation(V(*axis), deg), V(*centre))
+            p = par.inverse().multiply(r.multiply(par.multiply(p)))
         p.Base = p.Base + par.Rotation.inverted().multVec(V(*d))
         self._set_pl(o, p)
 

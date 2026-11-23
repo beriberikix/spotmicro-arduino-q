@@ -10,8 +10,9 @@ the same designs.
 | File | What it is |
 | ---- | ---------- |
 | `makerworld/SpotUnoQ_P1S_test_prints.3mf` | Bambu Studio project, sliced for the P1S (0.4 mm nozzle, 0.20 mm Standard, Textured PEI plate). Not committed; build it with the command below. |
-| [`stl/optional/test-prints/Carrier_Mount_Test.stl`](../stl/optional/test-prints/Carrier_Mount_Test.stl) | The electronics plate's Media Carrier pads, hooks and snap clips on a 2 mm frame |
+| [`stl/optional/test-prints/Carrier_Mount_Test.stl`](../stl/optional/test-prints/Carrier_Mount_Test.stl) | The electronics plate's Media Carrier pads, clamp posts and front stops on a 2 mm frame |
 | [`stl/optional/test-prints/SZBK07_Mount_Test.stl`](../stl/optional/test-prints/SZBK07_Mount_Test.stl) | The SZBK07 posts from the electronics plate on a 2 mm frame |
+| [`stl/optional/test-prints/IMU_Mount_Test.stl`](../stl/optional/test-prints/IMU_Mount_Test.stl) | The MPU-6050 posts and ribs with the full 5 mm plate under them |
 | [`stl/head/Sensormount_DualCam.stl`](../stl/head/Sensormount_DualCam.stl) | The real camera mount; it's small, so it serves as its own test |
 
 Build the project:
@@ -20,7 +21,7 @@ Build the project:
 python3 scripts/build_makerworld_3mf.py --no-orient --test-prints
 ```
 
-`scripts/export_stls.py` cuts the two test frames from the electronics plate's real pads, clips and posts, using its
+`scripts/export_stls.py` cuts the two test frames from the electronics plate's real pads, clamp posts, stops and posts, using its
 `Params` spreadsheet, so they always match the current plate. Re-run that script, then the build, after changing the
 plate.
 
@@ -30,7 +31,7 @@ Print settings match the real parts: 3 walls, 20% infill, Bambu PLA Basic, no su
 
 | Plate | Filament | Parts | Time | Filament used |
 | ----- | -------- | ----- | ---- | ------------- |
-| 1 | Black PLA | Carrier_Mount_Test, SZBK07_Mount_Test, Sensormount_DualCam, Shoulder_Joint_Servomount_extended_BB, Shoulder_Joint_Servo_Cap_Extended, Limb_Ball_Bearing_Mount_long_v4, Shoulder_Joint_Ball_Bearing_Pin | 2.1 h | 66 g |
+| 1 | Black PLA | Carrier_Mount_Test, SZBK07_Mount_Test, IMU_Mount_Test, Sensormount_DualCam, Shoulder_Joint_Servomount_extended_BB, Shoulder_Joint_Servo_Cap_Extended, Limb_Ball_Bearing_Mount_long_v4, Shoulder_Joint_Ball_Bearing_Pin | 2.3 h | 71 g |
 | 2 | White PLA | Shoulder_Cover | 0.6 h | 18 g |
 
 ## What you need on hand
@@ -40,15 +41,16 @@ Print settings match the real parts: 3 walls, 20% infill, Bambu PLA Basic, no su
 - Two Raspberry Pi Camera Module 2s
 - One DS3218 servo with its rubber dampeners and a 25T six-arm horn
 - Two 625ZZ bearings
-- Screws: 4× M3x8 (SZBK07), 8× M2x5 self-tapping (cameras), M3x20 + nuts (servo and shoulder cover), M2x8 + nuts
+- Screws: 4× M3x8 (SZBK07), 4× M3x8 + M3 washers (carrier clamps), 12× M2x5 self-tapping (8 cameras, 4 IMU), M3x20 + nuts (servo and shoulder cover), M2x8 + nuts
   (horn and Kooba pin)
 
 ## Checks
 
 | Part | Check | Passes when |
 | ---- | ----- | ----------- |
-| Carrier_Mount_Test | Hook the carrier's edge opposite the USB-C under the two fixed hooks, then press the USB-C edge down past the two snap clips | The clips flex and click over the board without cracking; the carrier sits flat on the four pads without rocking; none of its bottom sockets or jacks touch the frame. Then press the UNO Q onto the carrier: the pads take the force and the carrier stays put. |
-| SZBK07_Mount_Test | Screw the SZBK07 on with 4× M3x8 | All four holes line up; screws bite into the 2.6 mm pilot holes and hold. Stop at snug: over-tightening can shear a post off. |
+| Carrier_Mount_Test | Lay the carrier on the four pads and clamp it with four M3x8 screws and M3 washers in the clamp posts | The carrier drops in without touching the posts and sits flat on the pads without rocking; none of its bottom sockets or jacks touch the frame; each washer grips the board's edge. Then press the UNO Q onto the carrier: the pads take the force and the carrier stays put. |
+| SZBK07_Mount_Test | Screw the SZBK07 on with 4× M3x8 | All four holes line up; screws bite into the 2.9 mm pilot holes and hold. Stop at snug: over-tightening can shear a post off. |
+| IMU_Mount_Test | Screw the Adafruit MPU-6050 on with 4× M2x5 self-tapping screws, then push sideways on the board with a finger | All four holes line up; the screws hold in the pilot holes; no post cracks at its root when the board is pushed or the screws are snugged. |
 | Sensormount_DualCam | Fit each camera from the back with 4× M2x5 | The board sits flat on the back face; the lens is centred in its window and the lens module sits in the recess without pressing; the cable connector on the bottom edge is free |
 | Shoulder_Joint_Servomount_extended_BB | Fit the servo with its dampeners, M3x20 + nuts | The servo body slides in without filing and the mounting holes line up |
 | Shoulder_Joint_Servo_Cap_Extended | Seat the servo horn, M2x8 screws | The horn sits flat in its recess and the screw holes line up with the horn's arms |
@@ -63,11 +65,11 @@ Print settings match the real parts: 3 walls, 20% infill, Bambu PLA Basic, no su
 
 | Problem | Parameter |
 | ------- | --------- |
-| Carrier too tight or loose between the clips | `Clip_Gap` (default 0.3 mm) |
-| Snap clips too stiff, or crack | `Snap_T` (default 1.5 mm; thinner flexes more) or `Snap_Lip` (default 0.6 mm) |
-| Carrier lifts off the hooks | `Hook_Lip` (default 1.5 mm) |
+| Carrier rubs a clamp post or stop | `Clip_Gap` (default 0.3 mm) |
+| Washers don't grip the board, or bend it | `Clamp_Top_Drop` (default 0.15 mm: how far the posts' tops sit below the board's top) |
+| Washers overlap the board too little | `Clamp_Off` (default 2.3 mm from the board's edge to the screw's centre; smaller overlaps more) |
 | Carrier's bottom sockets touch the plate | `Standoff_H` (default 5.5 mm; each extra mm also raises the servo plugs, which have 1.8 mm to the top cover) |
-| M3 screws too tight or loose in the SZBK07 posts | `Buck_Screw_D` (default 2.6 mm) |
+| M3 screws too tight or loose in the SZBK07 posts | `Buck_Screw_D` (default 2.9 mm); `Clamp_Pilot_D` (2.9 mm) and `IMU_Pilot_D` (1.9 mm) for the carrier clamps and the IMU |
 | SZBK07 holes don't line up (different board revision) | `Buck_SX`, `Buck_SY` |
 | Camera lens off-centre in its window | `Cam_Lens_From_Top` (default 9.462 mm); `Cam_Lens_Alt_Shift` (default 5.5 mm) stretches the window towards the cable edge for Arducam-style boards |
 | Camera holes don't line up | `Cam_Hole_SX`, `Cam_Hole_SY`, `Cam_Hole_Inset` |

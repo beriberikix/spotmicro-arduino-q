@@ -108,6 +108,7 @@ TEST_PLATES = [
     ("Fit tests: black", STRUCTURAL, BLACK, [
         ("optional/test-prints/Carrier_Mount_Test.stl", 1, {}),
         ("optional/test-prints/SZBK07_Mount_Test.stl", 1, {}),
+        ("optional/test-prints/IMU_Mount_Test.stl", 1, {}),
         ("head/Sensormount_DualCam.stl", 1, {}),
         ("shoulders/Shoulder_Joint_Servomount_extended_BB.stl", 1, {}),
         ("shoulders/Shoulder_Joint_Servo_Cap_Extended.stl", 1, {}),
