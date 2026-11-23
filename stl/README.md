@@ -19,8 +19,8 @@ CC BY-SA 4.0). See ../NOTICE.md.
 | [Inner_Shoulder.stl](chassis/Inner_Shoulder.stl) | 2 | - | PLA | 20% |  |
 | [Outer_Shoulder.stl](chassis/Outer_Shoulder.stl) | 2 | - | PLA | 20% |  |
 | [Chassis_Side.stl](chassis/Chassis_Side.stl) | 2 | - | PLA | 20% |  |
-| [Top_Shoulder.stl](chassis/Top_Shoulder.stl) | 2 | - | PLA | 20% |  |
-| [Bottom_Shoulder.stl](chassis/Bottom_Shoulder.stl) | 2 | - | PLA | 20% |  |
+| [Top_Shoulder.stl](chassis/Top_Shoulder.stl) | 2 | - | PLA | 20% | 2 mm longer than Kooba's (49.5 mm), for shoulder clearance |
+| [Bottom_Shoulder.stl](chassis/Bottom_Shoulder.stl) | 2 | - | PLA | 20% | 2 mm longer than Kooba's (49.5 mm), for shoulder clearance |
 | [LiPo_Mountingbracket_Front.stl](chassis/LiPo_Mountingbracket_Front.stl) | 1 | - | PLA | 20% |  |
 | [LiPo_Mountingbracket_Middle.stl](chassis/LiPo_Mountingbracket_Middle.stl) | 1 | - | PLA | 20% |  |
 | [LiPo_Mountingbracket_Rear.stl](chassis/LiPo_Mountingbracket_Rear.stl) | 1 | - | PLA | 20% |  |

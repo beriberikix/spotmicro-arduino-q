@@ -32,8 +32,8 @@ PARTS = [
     ("chassis", KOOBA + "Inner_Shoulder.stl", "Inner_Shoulder", 2, 0, "PLA", "20%", ""),
     ("chassis", KOOBA + "Outer_Shoulder.stl", "Outer_Shoulder", 2, 0, "PLA", "20%", ""),
     ("chassis", KOOBA + "Chassis_Side.stl", "Chassis_Side", 2, 0, "PLA", "20%", ""),
-    ("chassis", KOOBA + "Top_Shoulder.stl", "Top_Shoulder", 2, 0, "PLA", "20%", ""),
-    ("chassis", KOOBA + "Bottom_Shoulder.stl", "Bottom_Shoulder", 2, 0, "PLA", "20%", ""),
+    ("chassis", KOOBA + "Top_Shoulder.stl", "Top_Shoulder", 2, 0, "PLA", "20%", "2 mm longer than Kooba's (49.5 mm), for shoulder clearance"),
+    ("chassis", KOOBA + "Bottom_Shoulder.stl", "Bottom_Shoulder", 2, 0, "PLA", "20%", "2 mm longer than Kooba's (49.5 mm), for shoulder clearance"),
     ("chassis", KOOBA + "LiPo_Mountingbracket_Front.stl", "LiPo_Mountingbracket_Front", 1, 0, "PLA", "20%", ""),
     ("chassis", KOOBA + "LiPo_Mountingbracket_Middle.stl", "LiPo_Mountingbracket_Middle", 1, 0, "PLA", "20%", ""),
     ("chassis", KOOBA + "LiPo_Mountingbracket_Rear.stl", "LiPo_Mountingbracket_Rear", 1, 0, "PLA", "20%", ""),
@@ -220,6 +220,48 @@ def rebore_m2(path, name):
     MeshPart.meshFromShape(Shape=cut, LinearDeflection=0.02, AngularDeflection=0.2, Relative=False).write(path)
 
 
+# Shoulder blocks made longer than Kooba's. As drawn, the leg between the outer and inner shoulders has no axial
+# clearance (the bearing sits 0.25 mm deeper than its seat), and real horns, servos and prints only add to it: a
+# measured build came out 1.5 mm too long, leaving the outer shoulder standing off the blocks. The extra length goes
+# in the middle of the block, where it has no features, so the block stays symmetric, both nut slots stay 4.5 mm from
+# their ends (M3x8 still reaches) and the cover screw holes keep their distance from each end: the head and rear
+# covers move out with the legs, and nothing in the body moves.
+# name: (axis in the print position, extra length in mm, half-width of the feature-free band at the middle)
+LENGTHEN = {
+    "Top_Shoulder": ("y", 2.0, 1.7),
+    "Bottom_Shoulder": ("y", 2.0, 1.7),
+}
+
+
+def lengthen(path, name):
+    """Stretch the mesh at the middle of its length: every vertex past the middle moves out by half the extra
+    length. Only valid when no vertex lies in the band around the middle (so only straight faces span it)."""
+    import Part
+    axis, extra, band = LENGTHEN[name]
+    k = "xyz".index(axis)
+    mesh = Mesh.Mesh(path)
+    pts, facets = mesh.Topology
+    b = mesh.BoundBox
+    mid = ((b.XMin + b.XMax) / 2, (b.YMin + b.YMax) / 2, (b.ZMin + b.ZMax) / 2)[k]
+    if any(abs(p[k] - mid) < band for p in pts):
+        raise RuntimeError(f"{path}: vertices inside the {2 * band} mm band at the middle; can't stretch there")
+    moved = []
+    for p in pts:
+        c = [p.x, p.y, p.z]
+        c[k] += extra / 2 if c[k] > mid else -extra / 2
+        moved.append(FreeCAD.Vector(*c))
+    out = Mesh.Mesh((moved, facets))
+    # check: the added volume is the cross-section at the middle times the extra length
+    shell = Part.Shape()
+    shell.makeShapeFromMesh(mesh.Topology, 0.05)
+    normal = FreeCAD.Vector(*[1 if i == k else 0 for i in range(3)])
+    section = Part.Face(Part.makeSolid(shell).slice(normal, mid), "Part::FaceMakerBullseye").Area
+    added = out.Volume - mesh.Volume
+    if not out.isSolid() or abs(added - section * extra) > 0.01 * section * extra:
+        raise RuntimeError(f"{path}: stretch added {added:.1f} mm3, expected {section * extra:.1f}")
+    out.write(path)
+
+
 # Side labels engraved into the parts that come in normal and mirrored versions, so a printed part says which leg
 # it belongs to. Each label sits on a face that is horizontal as printed, so it adds no overhang: an upward face
 # (the label is the last layers) or the bed face (the first layers, bridged by about 1 mm). Every spot was picked
@@ -297,6 +339,8 @@ def main():
         to_print_position(dest, name)
         if name in M2_PIN_SEATS:  # before mirroring, so the mirrored copy gets it too
             rebore_m2(dest, name)
+        if name in LENGTHEN:
+            lengthen(dest, name)
         files = [f"{folder}/{name}.stl"]
         if m:
             mirrored(dest, os.path.join(d, name + "_mirrored.stl"))
