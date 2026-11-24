@@ -6,28 +6,46 @@ description: Plug the twelve servo leads into the shield and dress the cables.
 import { Aside, Steps } from '@astrojs/starlight/components';
 import Done from '../../../components/Done.astro';
 import ServoMap from '../../../components/ServoMap.astro';
+import ServoCableSteps from '../../../components/ServoCableSteps.astro';
 import Todo from '../../../components/Todo.astro';
+import Check from '../../../components/Check.astro';
 
 <ServoMap />
 
+## Plug in and dress the leads, one leg at a time
+
+Each leg's three leads (shoulder, hip, knee) come up into the body through the **oval window in the top shoulder
+block**: the flat printed piece between the two curved shoulder plates at each end. Both legs at that end share the
+window. Do one leg completely, test it, then move to the next: a mistake then only means redoing one leg.
+
+You need about 12 small zip ties or Velcro straps.
+
+<Check id="servo-lead-route" title="Where the leads enter the body">
+The pictures below bring the leads up through the top shoulder block's oval window. From there they would have to
+cross the top edge of the inner shoulder plate, and the top cover sits directly on that edge, so it would crush them.
+The likely route is through the inner shoulder plate's central window instead (the one the camera cables use at the
+front and the power wires at the rear), then along each side. Confirm it on the first build before relying on the
+pictures.
+</Check>
+
+<ServoCableSteps />
+
 <Steps>
 
-1. Bring each leg's three leads (shoulder, hip, knee) in through its shoulder block.
-2. Run them sideways into the channels beside the SZBK07: there's about **23 mm** of room on the left and **19 mm** on
-   the right.
-3. Plug each into its channel on the shield's right-angle headers, **brown/black wire to the GND row**. Use the labels
-   from [Test and label the servos](../../prepare/servos/). If a lead isn't labelled, plug it in, send `t <ch>` and
-   check that the right joint moves.
-4. Fold the extra length into the shoulder boxes, not over the board stack: the top cover clears the servo plugs by only
-   1.8 mm.
-5. Check the IMU's cable is still in the UNO Q's Qwiic socket and the IMU's front socket. Lay the right-side servo
-   leads over the IMU, not under it.
+1. When you plug in, use the labels from [Test and label the servos](../../prepare/servos/) and put the **brown/black
+   wire on the GND row**. If a lead isn't labelled, plug it in, send `t <ch>` and check which joint moves.
+2. **Left side:** the power bundle already runs down there. Lay the left legs' leads beside it or on top of it, not
+   under it.
+3. **Right side:** lay the right legs' leads over the IMU and its cable, not under them.
+4. **Keep the top flat.** Nothing may cross over the servo plugs or loop above the board stack: the top cover clears
+   the plugs by only 1.8 mm.
 
 </Steps>
 
 <Aside type="tip">
-Check every joint once wired: put the robot on its [stand](../../prepare/stand/), power the servos and the UNO Q, run servo_tool and send `t`
-for each channel. Each joint should move the leg you expect. If not, two plugs are swapped.
+To test: put the robot on its [stand](../../prepare/stand/), plug in the XT60, check the SZBK07's ON/OFF switch is at
+ON, press the power button, and run servo_tool. Send `t <ch>` for each channel: each joint should move the leg you
+expect. If not, two plugs are swapped.
 </Aside>
 
 <Todo id="servo-wiring">The shield with all twelve servo plugs in, cables dressed down both sides.</Todo>

@@ -1,0 +1,327 @@
+---
+/**
+ * Step-by-step pictures for dressing one leg's servo leads, in the style of a knot-tying diagram:
+ * numbered panels, simple top views (front at the top), red arrows for what to do.
+ * Every panel but the routing one shows the front end with the front-left leg: the top shoulder block's oval window is
+ * in the middle of the block and both legs at that end share it. The routing panel shows the whole body.
+ */
+const steps = [
+	{ kind: 'feed', text: 'Feed one leg’s three leads up through the oval window in the top shoulder block at that end. Both legs at that end share it.' },
+	{ kind: 'swing', text: 'Swing the leg through its whole range. Leave a loose loop outside, so no lead goes tight.' },
+	{ kind: 'route', text: 'Run the leads along their own side to the shield: front legs back, rear legs forward. Never across the boards.' },
+	{ kind: 'plug', text: 'Plug them in, then pull any extra back down through the window. The spare length waits in the shoulder box.' },
+	{ kind: 'tie', text: 'Tie the three leads together: once by the window, once by the shield.' },
+	{ kind: 'trim', text: 'Test each channel (t &lt;ch&gt;), then trim the tie tails. Repeat for the next leg.' },
+];
+const CABLE = 'M152,28 C116,28 92,44 92,72 C92,96 150,88 152,100';
+const UNDER = 'M62,44 C84,44 122,38 152,28';
+---
+
+<figure class="cable-steps not-content">
+	<div class="grid">
+		{steps.map(({ kind, text }, i) => (
+			<div class="panel">
+				<svg viewBox="0 0 240 190" role="img" aria-label={`Step ${i + 1}`}>
+					<defs>
+						<marker id={`arr-cable-${i}`} viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+							<path d="M0,0 L10,5 L0,10 z" class="arrowhead" />
+						</marker>
+					</defs>
+					{kind !== 'route' && (
+						<g>
+							<rect x="70" y="0" width="170" height="190" class="plate" />
+							<rect x="62" y="0" width="8" height="190" class="rail" />
+							<rect x="74" y="8" width="32" height="44" rx="3" class="servo" />
+							<rect x="110" y="4" width="84" height="48" rx="4" class="block" />
+							<ellipse cx="152" cy="28" rx="11" ry="16" class="hole" />
+							<text x="218" y="20" class="lab small">top</text>
+							<text x="218" y="31" class="lab small">shoulder</text>
+							<text x="218" y="42" class="lab small">block</text>
+							<rect x="118" y="58" width="82" height="46" rx="3" class="buck" />
+							<text x="168" y="85" class="lab on-dark small">SZBK07</text>
+							<rect x="130" y="128" width="110" height="62" rx="4" class="shield" />
+							<rect x="140" y="116" width="96" height="12" rx="1" class="header" />
+							{[146, 154, 170, 178, 186, 202, 210, 218, 226].map((x) => <rect x={x} y="119" width="4" height="6" class="pin" />)}
+							<text x="185" y="166" class="lab on-dark">shield</text>
+						</g>
+					)}
+
+					{kind === 'feed' && (
+						<g>
+							<path d={UNDER} class="hidden-coil" />
+							<path d="M152,28 C152,52 130,62 110,60" class="cable" />
+							<path d="M152,28 C152,52 130,62 110,60" class="stripe" />
+							<rect x="96" y="54" width="14" height="12" rx="2" class="plug" />
+							<path d="M164,40 C164,66 142,74 118,74" class="arrow" marker-end={`url(#arr-cable-${i})`} />
+							<text x="94" y="92" class="red-lab">feed up</text>
+							<text x="31" y="120" class="lab small">dashed:</text>
+							<text x="31" y="131" class="lab small">from the leg,</text>
+							<text x="31" y="142" class="lab small">under the</text>
+							<text x="31" y="153" class="lab small">block</text>
+						</g>
+					)}
+
+					{kind === 'plug' && (
+						<g>
+							<ellipse cx="140" cy="30" rx="28" ry="11" class="hidden-coil" />
+							<ellipse cx="140" cy="30" rx="20" ry="7" class="hidden-coil" />
+							<path d={CABLE} class="cable" />
+							<path d={CABLE} class="stripe" />
+							<rect x="146" y="100" width="12" height="16" rx="2" class="plug" />
+							<path d="M194,100 C184,106 172,108 162,106" class="arrow" marker-end={`url(#arr-cable-${i})`} />
+							<text x="212" y="98" class="red-lab">plug in</text>
+							<path d="M108,60 C108,44 124,34 140,32" class="arrow" marker-end={`url(#arr-cable-${i})`} />
+							<text x="31" y="40" class="red-lab">pull extra</text>
+							<text x="31" y="52" class="red-lab">back down</text>
+							<text x="31" y="120" class="lab small">dashed:</text>
+							<text x="31" y="131" class="lab small">spare length,</text>
+							<text x="31" y="142" class="lab small">under the</text>
+							<text x="31" y="153" class="lab small">block</text>
+						</g>
+					)}
+
+					{kind === 'swing' && (
+						<g>
+							<rect x="10" y="56" width="38" height="84" rx="12" class="leg ghost" transform="rotate(-14 29 64)" />
+							<rect x="10" y="56" width="38" height="84" rx="12" class="leg ghost" transform="rotate(14 29 64)" />
+							<rect x="10" y="56" width="38" height="84" rx="12" class="leg" />
+							<text x="29" y="104" class="lab small" style="fill:#555">leg</text>
+							<path d="M36,62 C36,118 66,112 66,48" class="cable" />
+							<path d="M36,62 C36,118 66,112 66,48" class="stripe" />
+							<path d="M66,48 C84,44 122,38 152,28" class="hidden-coil" />
+							<path d={CABLE} class="cable" />
+							<path d={CABLE} class="stripe" />
+							<rect x="146" y="100" width="12" height="16" rx="2" class="plug" />
+							<path d="M10,156 C20,172 40,172 50,156" class="arrow" marker-start={`url(#arr-cable-${i})`} marker-end={`url(#arr-cable-${i})`} />
+							<text x="30" y="186" class="red-lab">swing</text>
+							<text x="72" y="134" class="red-lab" style="text-anchor:start">loose loop</text>
+						</g>
+					)}
+
+					{(kind === 'tie' || kind === 'trim') && (
+						<g>
+							<path d={CABLE} class="cable" />
+							<path d={CABLE} class="stripe" />
+							<rect x="146" y="100" width="12" height="16" rx="2" class="plug" />
+							<rect x="118" y="22" width="5" height="16" rx="1" class="tie" transform="rotate(10 120 30)" />
+							<rect x="122" y="86" width="5" height="16" rx="1" class="tie" transform="rotate(-70 124 94)" />
+						</g>
+					)}
+
+					{kind === 'tie' && (
+						<g>
+							<text x="104" y="16" class="red-lab">tie</text>
+							<text x="112" y="122" class="red-lab">tie</text>
+						</g>
+					)}
+
+					{kind === 'trim' && (
+						<g>
+							<path d="M121,38 L112,50" class="tail" />
+							<path d="M118,92 L106,82" class="tail" />
+							<g class="scissors" transform="translate(98 64) rotate(60)">
+								<circle cx="-8" cy="8" r="4" />
+								<circle cx="-8" cy="-8" r="4" />
+								<path d="M-5,5 L12,-6 M-5,-5 L12,6" />
+							</g>
+							<text x="31" y="72" class="red-lab">trim</text>
+							<path d="M150,146 l8,8 l16,-18" class="tick" />
+							<text x="185" y="184" class="lab on-dark small">t 0 … t 11</text>
+						</g>
+					)}
+
+					{kind === 'route' && (
+						<g>
+							<text x="120" y="8" class="lab small">FRONT ↑</text>
+							<rect x="60" y="14" width="120" height="166" rx="6" class="plate" />
+							<rect x="60" y="14" width="120" height="22" rx="4" class="block" />
+							<rect x="60" y="158" width="120" height="22" rx="4" class="block" />
+							<ellipse cx="120" cy="25" rx="7" ry="9" class="hole" />
+							<ellipse cx="120" cy="169" rx="7" ry="9" class="hole" />
+							<rect x="92" y="44" width="56" height="50" rx="3" class="buck" />
+							<text x="120" y="73" class="lab on-dark small">SZBK07</text>
+							<rect x="88" y="112" width="64" height="40" rx="3" class="shield" />
+							<text x="120" y="138" class="lab on-dark small">shield</text>
+							<rect x="92" y="106" width="56" height="8" rx="1" class="header" />
+							<path d="M116,25 C90,25 74,36 74,60 L74,100 C74,106 80,106 98,106" class="cable thin" />
+							<path d="M124,25 C150,25 166,36 166,60 L166,100 C166,106 160,106 142,106" class="cable thin" />
+							<path d="M116,169 C92,169 80,158 80,140 L80,116 C80,104 90,100 108,104" class="cable thin" />
+							<path d="M124,169 C148,169 160,158 160,140 L160,116 C160,104 150,100 132,104" class="cable thin" />
+							<path d="M66,50 L66,88" class="arrow" marker-end={`url(#arr-cable-${i})`} />
+							<path d="M174,50 L174,88" class="arrow" marker-end={`url(#arr-cable-${i})`} />
+							<path d="M66,150 L66,120" class="arrow" marker-end={`url(#arr-cable-${i})`} />
+							<path d="M174,150 L174,120" class="arrow" marker-end={`url(#arr-cable-${i})`} />
+							<text x="30" y="70" class="red-lab">front</text>
+							<text x="30" y="81" class="red-lab">legs</text>
+							<text x="30" y="132" class="red-lab">rear</text>
+							<text x="30" y="143" class="red-lab">legs</text>
+						</g>
+					)}
+
+					<circle cx="16" cy="16" r="12" class="num" />
+					<text x="16" y="21" class="num-text">{i + 1}</text>
+				</svg>
+				<p set:html={text} />
+			</div>
+		))}
+	</div>
+</figure>
+
+<style>
+	.cable-steps {
+		margin: 1rem 0 1.5rem;
+	}
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+		gap: 0.9rem;
+	}
+	.panel {
+		background: var(--sl-color-gray-7, var(--sl-color-gray-6));
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+		padding: 0.5rem 0.6rem 0.6rem;
+	}
+	.panel svg {
+		width: 100%;
+		height: auto;
+		overflow: visible;
+	}
+	.panel p {
+		margin: 0.3rem 0 0;
+		font-size: var(--sl-text-sm);
+		line-height: 1.4;
+		color: var(--sl-color-gray-2);
+	}
+	text {
+		fill: var(--sl-color-white);
+		font-size: 12px;
+		font-weight: 600;
+		text-anchor: middle;
+	}
+	.small {
+		font-size: 9.5px;
+		font-weight: 400;
+	}
+	.lab {
+		fill: var(--sl-color-gray-2);
+	}
+	.on-dark {
+		fill: #fff;
+	}
+	.servo {
+		fill: #1b1b1b;
+	}
+	.red-lab {
+		paint-order: stroke;
+		stroke: var(--sl-color-gray-7, var(--sl-color-gray-6));
+		stroke-width: 3px;
+		fill: #e5484d;
+		font-size: 11px;
+		font-weight: 700;
+	}
+	.plate {
+		fill: var(--sl-color-gray-6);
+		stroke: var(--sl-color-gray-5);
+	}
+	.rail {
+		fill: var(--sl-color-gray-4);
+	}
+	.block {
+		fill: var(--sl-color-gray-5);
+	}
+	.hole {
+		fill: #000;
+		stroke: var(--sl-color-gray-3);
+	}
+	.shield {
+		fill: #1f62c4;
+	}
+	.buck {
+		fill: #1e4e9c;
+	}
+	.header {
+		fill: #151515;
+	}
+	.pin {
+		fill: #e1c46a;
+	}
+	.slot {
+		fill: none;
+		stroke: var(--sl-color-gray-3);
+		stroke-dasharray: 3 2;
+	}
+	.leg {
+		fill: #e9e6df;
+		stroke: #9a958c;
+	}
+	.leg.ghost {
+		fill: none;
+		stroke: var(--sl-color-gray-3);
+		stroke-dasharray: 4 3;
+	}
+	.cable {
+		fill: none;
+		stroke: #f2a33a;
+		stroke-width: 8;
+		stroke-linecap: round;
+	}
+	.cable.thin {
+		stroke-width: 5;
+	}
+	.stripe {
+		fill: none;
+		stroke: #8b4a1c;
+		stroke-width: 2;
+		stroke-linecap: round;
+	}
+	.hidden-coil {
+		fill: none;
+		stroke-linecap: round;
+		stroke: #f2a33a;
+		stroke-width: 3;
+		stroke-dasharray: 5 4;
+	}
+	.plug {
+		fill: #111;
+		stroke: #666;
+	}
+	.tie {
+		fill: #111;
+		stroke: #ddd;
+		stroke-width: 1;
+	}
+	.tail {
+		stroke: #ddd;
+		stroke-width: 2;
+	}
+	.scissors circle,
+	.scissors path {
+		fill: none;
+		stroke: var(--sl-color-gray-2);
+		stroke-width: 2;
+	}
+	.tick {
+		fill: none;
+		stroke: #30a46c;
+		stroke-width: 4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.arrow {
+		fill: none;
+		stroke: #e5484d;
+		stroke-width: 2.5;
+	}
+	.arrowhead {
+		fill: #e5484d;
+	}
+	.num {
+		fill: #e5484d;
+	}
+	.num-text {
+		fill: #fff;
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>
