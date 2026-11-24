@@ -1,0 +1,293 @@
+---
+/**
+ * Top view of the body showing where each power wire runs, from the CAD positions (plate-local mm:
+ * +x robot right, +y robot front). Not exactly to scale near the SZBK07's IN terminals, where the wires are spread
+ * out so each one can be followed.
+ */
+const S = 2; // px per mm
+const X = (x: number) => 210 + S * x;
+const Y = (y: number) => 26 + S * (112 - y);
+const pts = (p: [number, number][]) => 'M' + p.map(([x, y]) => `${X(x)},${Y(y)}`).join(' L');
+const rect = (x0: number, y0: number, x1: number, y1: number) => ({
+	x: X(Math.min(x0, x1)),
+	y: Y(Math.max(y0, y1)),
+	width: S * Math.abs(x1 - x0),
+	height: S * Math.abs(y1 - y0),
+});
+
+type W = { n: number; colour: 'red' | 'black'; width: number; d: string; badge: [number, number] };
+const wires: W[] = [
+	// 1 battery lead, 16 AWG: up the rear-left slot, forward along the left side, into IN+ / IN- from the front
+	{ n: 1, colour: 'red', width: 3.5, d: pts([[-42, -67], [-44, -64], [-44, 76], [-3, 76], [-3, 70]]), badge: [-44, 30] },
+	{ n: 1, colour: 'black', width: 3.5, d: pts([[-43, -67], [-48, -62], [-48, 80], [4, 80], [4, 70]]), badge: [-48, 30] },
+	// 2 button feed (red) and 3 LED ground (black), 22 AWG: IN terminals, back along the left, through the rear shoulder
+	{ n: 2, colour: 'red', width: 2.5, d: pts([[-1, 70], [-1, 78], [-46, 78], [-46, -80], [0, -80], [0, -170], [19, -170]]), badge: [0, -128] },
+	{ n: 3, colour: 'black', width: 2.5, d: pts([[8, 70], [8, 84], [-52, 84], [-52, -84], [-5, -84], [-5, -176], [20, -176]]), badge: [-5, -150] },
+	// 4 VIN lead, 22 AWG red: carrier VIN pad, back along the left, through the rear shoulder to the button
+	{ n: 4, colour: 'red', width: 2.5, d: pts([[-37, -12], [-42, -12], [-42, -76], [5, -76], [5, -164], [20, -164]]), badge: [5, -108] },
+	// 5 VIN ground, 22 AWG black: carrier GND pad, forward along the left to IN-
+	{ n: 5, colour: 'black', width: 2.5, d: pts([[-37, -8], [-50, -8], [-50, 82], [6, 82], [6, 70]]), badge: [-50, 46] },
+	// 6 servo rail, 16 AWG: SZBK07 OUT at its rear end to the shield's terminal block
+	{ n: 6, colour: 'red', width: 3.5, d: pts([[11, 16], [11, 6], [26, 6], [26, -24]]), badge: [36, -30] },
+	{ n: 6, colour: 'black', width: 3.5, d: pts([[3, 16], [3, 3], [23, 3], [23, -30]]), badge: [36, -30] },
+];
+
+const legend: [n: number, colours: string, text: string, detail: string][] = [
+	[1, 'red + black · 16 AWG · 25 cm', 'Battery lead', 'XT60 under the plate → up the rear-left slot → along the left side → SZBK07 IN+ / IN−'],
+	[2, 'red · 22 AWG · 35 cm', 'Button feed', 'SZBK07 IN+ → along the left side → through the rear shoulder → button (green C)'],
+	[3, 'black · 22 AWG · 35 cm', 'Button LED ground', 'Button (black LED−) → same route as 2, taped to it → SZBK07 IN−'],
+	[4, 'red · 22 AWG · 30 cm', 'VIN lead', 'Carrier VIN pad → along the left side → rear shoulder → button (blue NO + red LED+)'],
+	[5, 'black · 22 AWG · 15 cm', 'VIN ground', 'Carrier GND pad → forward along the left side → SZBK07 IN−'],
+	[6, 'red + black · 16 AWG · 10 cm', 'Servo rail', 'SZBK07 OUT+ / OUT− → shield V+ / GND, between the two boards'],
+];
+---
+
+<figure class="routing not-content">
+	<svg viewBox="0 0 680 660" role="img" aria-label="Top view of the body showing where each power wire runs">
+		<!-- frame -->
+		<rect {...rect(-62, 104, 62, 75)} rx="6" class="shoulder" />
+		<rect {...rect(-62, -75, 62, -104)} rx="6" class="shoulder" />
+		<rect {...rect(-60, -104, 60, -176)} rx="14" class="cover" />
+		<rect {...rect(-62, 75, -56, -75)} class="rail" />
+		<rect {...rect(56, 75, 62, -75)} class="rail" />
+		<rect {...rect(-53, 75, 53, -75)} rx="3" class="plate" />
+		<ellipse cx={X(0)} cy={Y(-89.5)} rx={S * 18} ry={S * 6} class="hole" />
+		<ellipse cx={X(0)} cy={Y(89.5)} rx={S * 18} ry={S * 6} class="hole" />
+
+		<!-- under the plate: battery and XT60 -->
+		<rect {...rect(-21, 66, 21, -66)} rx="6" class="under" />
+		<path d={pts([[-8, -66], [-8, -72], [-27, -72]])} class="under-wire red" />
+		<path d={pts([[-4, -66], [-4, -74], [-27, -74]])} class="under-wire black" />
+		<rect {...rect(-35, -69, -27, -77)} rx="1.5" class="xt60" />
+		<path d={pts([[-35, -72], [-42, -72], [-42, -67]])} class="under-wire red" />
+		<path d={pts([[-35, -74], [-43, -74], [-43, -67]])} class="under-wire black" />
+		<rect {...rect(-45, -62.5, -40, -72.5)} class="slot" />
+
+		<!-- boards -->
+		<rect {...rect(-41, -4, 28, -57)} rx="3" class="stack" />
+		<rect {...rect(20, -20, 29, -34)} rx="1" class="terminal-blue" />
+		<rect {...rect(31, 11, 46, -11)} rx="1.5" class="imu" />
+		<rect {...rect(-25, 63, -20.5, 18)} class="fin" />
+		<rect {...rect(24.5, 63, 29, 18)} class="fin" />
+		<rect {...rect(-20.5, 71, 24.5, 11)} rx="2" class="buck" />
+		<rect {...rect(-7, 71, 10, 62)} rx="1" class="terminal" />
+		<rect {...rect(-1, 20, 15, 11)} rx="1" class="terminal" />
+		<circle cx={X(-37)} cy={Y(-12)} r="3.2" class="pad" />
+		<circle cx={X(-37)} cy={Y(-8)} r="3.2" class="pad" />
+		<circle cx={X(29)} cy={Y(-172)} r={S * 9.5} class="button" />
+		<circle cx={X(29)} cy={Y(-172)} r={S * 5.5} class="button-cap" />
+
+		<!-- part labels -->
+		<text x={X(2)} y={Y(44)} class="on-dark">SZBK07</text>
+		<text x={X(1.5)} y={Y(66)} class="on-dark tiny">IN</text>
+		<text x={X(7)} y={Y(14)} class="on-dark tiny">OUT</text>
+		<text x={X(-6)} y={Y(-34)} class="on-dark">board stack</text>
+		<text x={X(-6)} y={Y(-44)} class="on-dark small">carrier · UNO Q · shield</text>
+		<text x={X(24.5)} y={Y(-38)} class="tiny lab">V+ GND</text>
+		<text x={X(-31)} y={Y(-1)} class="tiny lab" style="text-anchor:start">VIN, GND pads</text>
+		<text x={X(38.5)} y={Y(-16)} class="tiny lab">IMU</text>
+		<text x={X(-40)} y={Y(-60)} class="tiny lab" style="text-anchor:start">slot</text>
+		<text x={X(-36)} y={Y(-95)} class="tiny lab">XT60 (under)</text>
+		<text x={X(32)} y={Y(-92)} class="lab small" style="text-anchor:start">rear shoulder</text>
+		<text x={X(32)} y={Y(92)} class="lab small" style="text-anchor:start">front shoulder</text>
+		<text x={X(-56)} y={Y(-120)} class="lab small" style="text-anchor:start">rear cover</text>
+		<text x={X(29)} y={Y(-196)} class="lab small">push button</text>
+		<text x={X(0)} y={Y(108)} class="lab">FRONT ↑</text>
+		<text x={X(-70)} y={Y(0)} class="lab small" transform={`rotate(-90 ${X(-70)} ${Y(0)})`}>robot's left</text>
+		<text x={X(70)} y={Y(0)} class="lab small" transform={`rotate(90 ${X(70)} ${Y(0)})`}>robot's right</text>
+
+		<!-- wires -->
+		{wires.map((w) => (
+			<g class="wire">
+				<path d={w.d} class="case" style={`--w:${w.width}px`} />
+				<path d={w.d} class={`core ${w.colour}`} style={`--w:${w.width}px`} />
+			</g>
+		))}
+		{wires
+			.filter((w, i, all) => all.findIndex((v) => v.n === w.n) === i)
+			.map((w) => (
+				<g class="badge">
+					<circle cx={X(w.badge[0])} cy={Y(w.badge[1])} r="8" />
+					<text x={X(w.badge[0])} y={Y(w.badge[1]) + 4}>{w.n}</text>
+				</g>
+			))}
+
+		<!-- legend -->
+		{legend.map(([n, colours, title, detail], i) => (
+			<g class="legend" transform={`translate(372 ${40 + i * 92})`}>
+				<g class="badge">
+					<circle cx="10" cy="0" r="9" />
+					<text x="10" y="4">{n}</text>
+				</g>
+				<text x="26" y="5" class="leg-title">{title}</text>
+				<text x="26" y="23" class="leg-sub">{colours}</text>
+				<foreignObject x="26" y="30" width="280" height="56">
+					<p class="leg-detail">{detail}</p>
+				</foreignObject>
+			</g>
+		))}
+	</svg>
+	<figcaption>
+		Top view, front at the top. Dashed parts are under the plate: the battery outline, the XT60 and the
+		battery's own lead. Wires 1–5 share the channel down the left side of the
+		board stack; tape them into one bundle there.
+	</figcaption>
+</figure>
+
+<style>
+	.routing {
+		margin: 1rem 0 1.5rem;
+	}
+	svg {
+		width: 100%;
+		height: auto;
+		background: var(--sl-color-gray-7, var(--sl-color-gray-6));
+		border-radius: 0.5rem;
+		border: 1px solid var(--sl-color-gray-5);
+	}
+	text {
+		fill: var(--sl-color-white);
+		font-size: 14px;
+		font-weight: 600;
+		text-anchor: middle;
+	}
+	.small {
+		font-size: 11px;
+		font-weight: 400;
+	}
+	.tiny {
+		font-size: 9px;
+	}
+	.lab {
+		fill: var(--sl-color-gray-2);
+	}
+	.faint {
+		fill: var(--sl-color-gray-3);
+	}
+	.on-dark {
+		fill: #fff;
+	}
+	.shoulder {
+		fill: var(--sl-color-gray-5);
+	}
+	.cover {
+		fill: none;
+		stroke: var(--sl-color-gray-4);
+		stroke-width: 2;
+		stroke-dasharray: 5 4;
+	}
+	.rail {
+		fill: var(--sl-color-gray-5);
+	}
+	.plate {
+		fill: var(--sl-color-gray-6);
+		stroke: var(--sl-color-gray-4);
+	}
+	.hole {
+		fill: var(--sl-color-gray-7, var(--sl-color-gray-6));
+		stroke: var(--sl-color-gray-4);
+	}
+	.under {
+		fill: none;
+		stroke: var(--sl-color-gray-3);
+		stroke-width: 1.5;
+		stroke-dasharray: 6 4;
+	}
+	.under-wire {
+		fill: none;
+		stroke-width: 2.5;
+		stroke-dasharray: 4 3;
+	}
+	.under-wire.red {
+		stroke: #e5484d;
+	}
+	.under-wire.black {
+		stroke: var(--sl-color-gray-2);
+	}
+	.xt60 {
+		fill: #e8c21a;
+		opacity: 0.75;
+	}
+	.slot {
+		fill: #000;
+		stroke: var(--sl-color-gray-3);
+	}
+	.stack {
+		fill: #1f62c4;
+	}
+	.buck {
+		fill: #1e4e9c;
+	}
+	.fin {
+		fill: #c9ced6;
+	}
+	.terminal {
+		fill: #1b1b1b;
+	}
+	.terminal-blue {
+		fill: #2d8fe0;
+	}
+	.imu {
+		fill: #1b1b1b;
+		stroke: var(--sl-color-gray-3);
+	}
+	.pad {
+		fill: #d6dade;
+		stroke: #e1c46a;
+		stroke-width: 1.5;
+	}
+	.button {
+		fill: #2a2d33;
+		stroke: #9aa3ad;
+		stroke-width: 3;
+	}
+	.button-cap {
+		fill: #c9ced6;
+	}
+	.wire path {
+		fill: none;
+		stroke-linejoin: round;
+		stroke-linecap: round;
+		stroke-width: var(--w);
+	}
+	.wire .case {
+		stroke: var(--sl-color-gray-4);
+		stroke-width: calc(var(--w) + 2.5px);
+	}
+	.core.red {
+		stroke: #e5484d;
+	}
+	.core.black {
+		stroke: #111;
+	}
+	.badge circle {
+		fill: var(--sl-color-white);
+		stroke: var(--sl-color-gray-5);
+	}
+	.badge text {
+		fill: var(--sl-color-black);
+		font-size: 11px;
+		font-weight: 700;
+	}
+	.legend .leg-title {
+		text-anchor: start;
+		font-size: 14px;
+	}
+	.legend .leg-sub {
+		text-anchor: start;
+		font-size: 12px;
+		font-weight: 600;
+		fill: var(--sl-color-gray-2);
+	}
+	.leg-detail {
+		margin: 0;
+		font-size: 11.5px;
+		line-height: 1.35;
+		color: var(--sl-color-gray-2);
+	}
+	figcaption {
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-2);
+		margin-top: 0.4rem;
+	}
+</style>

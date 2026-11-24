@@ -24,7 +24,8 @@ shield** on top. The **SZBK07** sits in front of it, over the camera cables.
 	[4, '<kbd class="hw">M3×8</kbd> + 4 M3 washers', 'Media Carrier clamps'],
 	[4, '<kbd class="hw">M3×8</kbd>', 'SZBK07 to its posts'],
 	[4, '<kbd class="hw">M2×5</kbd> self-tapping', 'IMU to its posts'],
-]} tools={['2.5 mm hex', '1.5 mm hex']} />
+	['', '22 AWG wire: 30 cm red, 15 cm black', 'The UNO Q\'s VIN leads, soldered to the carrier'],
+]} tools={['2.5 mm hex', '1.5 mm hex', 'Soldering iron', 'Multimeter']} />
 
 <Render id="plate-boards" caption="Media Carrier, UNO Q, servo shield and SZBK07 onto the plate" start="exploded" />
 
@@ -54,10 +55,10 @@ software releases had trouble with `Wire1`. If the IMU doesn't show up on it, cu
 to the shield's 3V, GND, SDA and SCL instead: the IMU then shares the shield's bus (address 0x68, no clash with 0x40).
 </Aside>
 
-## 2. Camera cables onto the carrier
+## 2. Camera cables and VIN leads onto the carrier
 
-Do this before the carrier goes in: the connectors are on the carrier, and the cables run forwards **under** the
-SZBK07.
+Do this before the carrier goes in: the connectors are on the carrier, the cables run forwards **under** the SZBK07,
+and once the UNO Q and shield are on, there's no way to reach VIN.
 
 <Steps>
 
@@ -66,8 +67,17 @@ SZBK07.
 2. Open each camera connector's latch, push in the **Mini** end of a 200 mm cable (contacts facing the right way, see
    the carrier's marking) and close the latch.
 3. **CAMERA0** goes to the **right** camera: mark its cable `R`. **CAMERA1** goes to the left camera.
+4. Find the row of four through-hole pads labelled **3V3, 5V, VIN, GND** at the carrier's corner by the angled edge,
+   on the same long edge as the camera connectors. The UNO Q's own VIN ends up buried under the shield, so the battery
+   feeds it through the carrier's **VIN** pad instead, which passes through to the UNO Q.
+5. Solder the **30 cm red** 22 AWG wire into **VIN** and the **15 cm black** one into **GND**, from the underside,
+   so nothing stands up into the 3 mm gap under the UNO Q. Keep the joints low, lay both wires flat to the board's
+   short edge by the angled corners, and tag the free ends `VIN` and `GND`.
+6. Meter: VIN and GND not shorted to each other, or to 5V and 3V3.
 
 </Steps>
+
+The free ends get connected on the [Power wiring](../power/) page: VIN to the push button, GND to the SZBK07.
 
 ## 3. Carrier, UNO Q and shield
 
@@ -79,7 +89,7 @@ the board, and its washer overlaps the board's edge by about 1 mm.
 <Steps>
 
 1. Lay the carrier on its four pads, camera connectors down and at the front (towards the SZBK07 posts), just behind
-   the two small **front stops**. **CAMERA0** is then on the right, and the board's angled corners point to the left
+   the two small **front stops**, with the VIN and GND leads out past its left end. **CAMERA0** is then on the right, and the board's angled corners point to the left
    side rail.
 2. Put an M3 washer on each of four <Hw>M3×8</Hw> and screw them into the four clamp posts, two beside each short edge
    of the carrier. They cut their own thread in the pilot holes. Tighten until the washers just grip the board: snug,
