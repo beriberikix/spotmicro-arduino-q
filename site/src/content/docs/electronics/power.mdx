@@ -6,7 +6,7 @@ description: Battery, XT60, SZBK07, power button and UNO Q VIN.
 import { Aside, Steps } from '@astrojs/starlight/components';
 import Done from '../../../components/Done.astro';
 import PowerDiagram from '../../../components/PowerDiagram.astro';
-import Todo from '../../../components/Todo.astro';
+import PowerRouting from '../../../components/PowerRouting.astro';
 
 Power comes from a 3S LiPo (12.6 V full, about 10.5 V when it needs charging) through one XT60 and splits in two:
 
@@ -16,17 +16,43 @@ Power comes from a 3S LiPo (12.6 V full, about 10.5 V when it needs charging) th
 - **Brains:** the push button switches the battery into the UNO Q's **VIN** (7–24 V), which also powers the Media
   Carrier and cameras. The IMU and the shield's logic run from the UNO Q's 3.3 V.
 
+Cut these before you start. The lengths are measured along the routes in the CAD, plus a few centimetres to strip,
+tin and tidy; trim them to fit as you go.
+
+| Wire | Colour | Gauge | From → to | Cut |
+| --- | --- | --- | --- | --- |
+| Battery positive | Red | 16 AWG | Female XT60 **+** under the plate → up the rear-left slot → SZBK07 **IN+** | 25 cm |
+| Battery ground | Black | 16 AWG | Female XT60 **−** under the plate → up the rear-left slot → SZBK07 **IN−** | 25 cm |
+| Button feed | Red | 22 AWG | SZBK07 **IN+** → back past the rear shoulder → button's **green** (C) lead | 35 cm |
+| Button LED ground | Black | 22 AWG | Button's **black** (LED−) lead → back with the feed → SZBK07 **IN−** | 35 cm |
+| VIN lead | Red | 22 AWG | Media Carrier **VIN** pad → button's **blue** (NO) and **red** (LED+) leads (soldered on in [Electronics plate](../plate/)) | 30 cm |
+| VIN ground | Black | 22 AWG | Media Carrier **GND** pad → SZBK07 **IN−** (soldered on in [Electronics plate](../plate/)) | 15 cm |
+| Servo rail positive | Red | 16 AWG | SZBK07 **OUT+** → shield terminal block **V+** | 10 cm |
+| Servo rail ground | Black | 16 AWG | SZBK07 **OUT−** → shield terminal block **GND** | 10 cm |
+
+In all: about 70 cm of 16 AWG (35 cm red, 35 cm black) and 115 cm of 22 AWG (65 cm red, 50 cm black).
+
 <PowerDiagram mode="robot" />
+
+The diagram above shows what connects to what. This one shows where each wire actually runs in the body:
+
+<PowerRouting />
 
 <Steps>
 
 1. Solder the female XT60 to a 16 AWG lead for the battery side. The battery lead runs **under the plate**, beside the
    battery, and up through the **slot at the rear-left corner**.
 2. Run that lead straight to the SZBK07's **IN+** and **IN−**, with no switch in it.
-3. Into the same two terminals, alongside the 16 AWG wires, clamp a thinner pair (22 AWG) for the UNO Q.
-4. Wire the push button into the 22 AWG positive, then run it to the UNO Q's **VIN**, for example the VIN pin on the
-   shield's power header, which passes straight through to the UNO Q. The 22 AWG ground goes to GND on the same
-   header.
+3. Into the same two terminals, alongside the 16 AWG wires, clamp the 35 cm red 22 AWG button feed into **IN+**, and
+   the carrier's black **GND** lead plus a 35 cm black 22 AWG LED ground into **IN−**.
+4. Run the red feed and the black LED ground together back past the rear shoulder to the push button in the rear
+   cover, and join the button's leads (solder and heat-shrink each joint):
+   - **green** (C, common) to the red button feed;
+   - **blue** (NO, normally open) and **red** (LED+) twisted together, to the carrier's red **VIN** lead;
+   - **black** (LED−) to the black LED ground;
+   - **yellow** (NC, normally closed): not used. Cut it short and cover the end with heat-shrink.
+
+   Press the button in (latched) and the UNO Q and the button's LED come on; press again and both go off.
 5. Keep the SZBK07 → shield V+ lead from the bench rig, shortened to length.
 6. Before plugging in the battery: meter **between VIN and GND**, and **between the SZBK07 input terminals**, to
    check there's no short and the polarity is right.
@@ -35,6 +61,21 @@ Power comes from a 3S LiPo (12.6 V full, about 10.5 V when it needs charging) th
 
 The button only carries the UNO Q's current (well under 2 A), so a small 19 mm latching button is fine. The servo
 current (several amps while walking, more at stall) never goes through it.
+
+<Aside type="note" title="A different button?">
+The colours above are the reference build's button, a 19 mm latching push button with an LED and five wire leads.
+Other buttons use other colours, or screw or solder terminals marked **C** (or COM), **NO**, **NC**, **+** and **−**.
+Wire them by function, not colour: C to the feed, NO to VIN, and NC left unconnected. If it has an LED, join LED+ to
+NO and LED− to ground, and make sure the LED is rated for 12 V (a 12 V or 12–24 V version): a 3–6 V LED burns out
+on a 3S battery. A button without an LED needs only C and NO, and no LED ground wire.
+</Aside>
+
+<Aside type="note" title="Plate built without the VIN leads?">
+The UNO Q's own VIN is buried under the shield, so the leads go on the Media Carrier's **VIN** and **GND** pads (see
+[Electronics plate](../plate/), step 2). To add them now: lift the shield and UNO Q off, undo the two clamp screws at
+the carrier's left end and tip it up (the camera cables can stay in), solder the leads from the underside, meter for
+shorts, then clamp it back down and press the boards back on.
+</Aside>
 
 <Aside type="caution">
 With the XT60 plugged in, the SZBK07 and the servo rail are live even when the button is off. The servos stay limp
@@ -47,6 +88,9 @@ Stop and charge at about 3.5 V per cell (10.5 V for the pack). That protects the
 SZBK07's 9 V minimum for a 6.0 V output.
 </Aside>
 
-<Todo id="power-wiring">The power wiring in the body: XT60 lead coming up through the rear-left slot, the SZBK07 input with the thin VIN pair beside it, the push button and the VIN lead.</Todo>
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/electronics/power-wiring.jpg`} alt="The body from above, front at the top: the SZBK07 at the front with its IN terminals towards the front shoulder and its OUT terminals at the rear, the servo shield on the board stack behind it, and the IMU to its right. Red and black power wires leave the SZBK07's IN terminals, run as one bundle down the left side of the plate past the board stack, and pass through the opening in the rear shoulder plate towards the rear cover." width="649" height="1400" loading="lazy" style="border-radius:0.4rem;max-width:22rem" />
+	<figcaption>The power wiring in the body, front at the top: the wires leave the SZBK07's IN terminals, run as one bundle down the left side, and go out through the rear shoulder's opening to the button.</figcaption>
+</figure>
 
 <Done id="power" label="Power wired and checked with the meter" />

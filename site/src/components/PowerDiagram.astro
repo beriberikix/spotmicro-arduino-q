@@ -1,101 +1,267 @@
 ---
 /**
- * Power wiring diagram. mode="bench": bench supply -> SZBK07 -> shield, UNO Q on USB-C.
+ * Power wiring diagram with 2D drawings of the parts.
+ * mode="bench": bench supply -> SZBK07 -> shield, UNO Q on USB-C.
  * mode="robot": LiPo -> XT60 -> SZBK07 -> shield V+ (the XT60 is the servo disconnect), and
- *   XT60 -> push button -> UNO Q VIN.
- * Hover or tap a wire to see its gauge and notes.
+ *   SZBK07 IN+ -> push button -> Media Carrier VIN pad, SZBK07 IN- -> carrier GND pad.
+ *   Robot mode draws the Media Carrier (bottom of the stack) with its 3V3/5V/VIN/GND pads.
+ * Each wire is drawn in its colour with its gauge and cut length. Hover or tap a wire for notes.
  */
 interface Props {
 	mode?: 'bench' | 'robot';
 }
 const { mode = 'robot' } = Astro.props;
 const bench = mode === 'bench';
+
+type Path = [d: string, colour: 'red' | 'black' | 'usb' | 'link' | 'green' | 'blue' | 'yellow', width: number];
+type Wire = { info: string; paths: Path[]; labels?: [x: number, y: number, text: string, anchor?: string][] };
+
+const batteryIn: Wire = bench
+	? {
+			info: 'Bench supply to the SZBK07 input: 16 AWG, red to IN+, black to IN−. Check polarity with the meter before switching on.',
+			paths: [
+				['M156,80 L322,80', 'red', 4],
+				['M156,100 L322,100', 'black', 4],
+			],
+			labels: [[240, 68, '16 AWG red + black']],
+		}
+	: {
+			info: 'Battery lead: 16 AWG, 25 cm each of red and black, from the female XT60 under the plate, up through the rear-left slot, to the SZBK07\'s IN+ (red) and IN− (black). No switch in this lead: unplug the XT60 to cut the servos.',
+			paths: [
+				['M215,80 L322,80', 'red', 4],
+				['M215,100 L322,100', 'black', 4],
+			],
+			labels: [[262, 68, '16 AWG · 25 cm']],
+		};
+
+const robotOnly: Wire[] = [
+	{
+		info: 'The battery\'s own lead, ending in its male XT60.',
+		paths: [
+			['M150,80 L175,80', 'red', 4],
+			['M150,100 L175,100', 'black', 4],
+		],
+	},
+	{
+		info: 'Button feed and LED ground: a 22 AWG pair, 35 cm each, run together from the SZBK07 back past the rear shoulder to the push button in the rear cover. Red from IN+ to the button\'s green C lead; black from the button\'s black LED− lead to IN−.',
+		paths: [
+			['M300,80 L300,320 L366,320', 'red', 2.5],
+			['M400,356 L307,356 L307,100', 'black', 2.5],
+		],
+		labels: [[292, 214, '22 AWG\nred + black\n35 cm each', 'end']],
+	},
+	{
+		info: 'The button\'s own leads (19 mm latching button with an LED): green C (common) from the button feed; blue NO (normally open) and red LED+ twisted together into the VIN lead, so the LED lights when the UNO Q is on; black LED− to ground; yellow NC not used, cut short and insulated.',
+		paths: [
+			['M366,320 L377,320', 'green', 3],
+			['M423,320 L476,320', 'blue', 3],
+			['M400,297 L400,284 L476,284 L476,320', 'red', 2.5],
+			['M400,343 L400,356', 'black', 3],
+			['M417,337 L428,348', 'yellow', 3],
+		],
+	},
+	{
+		info: 'VIN lead: 22 AWG red, 30 cm, from the button\'s blue NO and red LED+ leads to the VIN pad on the Media Carrier (front-left corner), which feeds the UNO Q\'s VIN. The button only carries the UNO Q\'s current (well under 2 A).',
+		paths: [['M476,320 L545,320 L545,350 L592,350', 'red', 2.5]],
+		labels: [[512, 337, '22 AWG · 30 cm']],
+	},
+	{
+		info: 'VIN ground: 22 AWG black, 15 cm, clamped into the SZBK07\'s IN− beside the 16 AWG wire, to the GND pad beside VIN on the Media Carrier.',
+		paths: [['M315,100 L315,420 L565,420 L565,362 L592,362', 'black', 2.5]],
+		labels: [[440, 435, '22 AWG · 15 cm']],
+	},
+];
+
+const servoRail: Wire = {
+	info: bench
+		? 'SZBK07 output to the shield\'s terminal block: 16 AWG, red OUT+ to V+, black OUT− to GND, as short as possible. Set and measure 6.0 V before connecting.'
+		: 'Servo rail: 16 AWG, 10 cm each, red from OUT+ to the shield\'s V+ and black from OUT− to GND (the lead from the bench rig, shortened). Set and measure 6.0 V before connecting.',
+	paths: [
+		['M508,80 L584,80', 'red', 4],
+		['M508,100 L584,100', 'black', 4],
+	],
+	labels: [[546, bench ? 68 : 56, bench ? '16 AWG' : '16 AWG\n10 cm']],
+};
+
+const benchOnly: Wire[] = [
+	{
+		info: 'USB-C from the computer powers the UNO Q and connects App Lab. The servo rail never powers the UNO Q.',
+		paths: [['M452,355 L580,355', 'usb', 4]],
+		labels: [[516, 345, 'USB-C']],
+	},
+];
+
+const link: Wire = bench
+	? {
+			info: 'The shield sits on the UNO Q\'s headers: they share I2C and ground. The shield\'s V+ is isolated from the UNO Q\'s VIN and 5V.',
+			paths: [['M720,150 L720,300', 'link', 3]],
+			labels: [[712, 222, 'stacked:\nI2C + GND', 'end']],
+		}
+	: {
+			info: 'The stack: Media Carrier at the bottom, UNO Q in the middle, shield on top. The carrier\'s VIN pad feeds the UNO Q\'s VIN through the carrier\'s connectors; the shield shares the UNO Q\'s I2C and ground. The shield\'s V+ is isolated from VIN and 5V.',
+			paths: [['M720,150 L720,296', 'link', 3]],
+			labels: [[712, 218, 'stacked, with the\nUNO Q in between', 'end']],
+		};
+
+const wires: Wire[] = [batteryIn, ...(bench ? benchOnly : robotOnly), servoRail, link];
+const fins = (x0: number, x1: number, y: number, h: number) =>
+	Array.from({ length: Math.floor((x1 - x0) / 13) + 1 }, (_, i) => ({ x: x0 + i * 13, y, h }));
+const pins = Array.from({ length: 12 }, (_, i) => 632 + i * 10);
 ---
 
 <figure class="power not-content" data-mode={mode}>
-	<svg viewBox="0 0 720 330" role="img" aria-label={bench ? 'Bench power wiring' : 'Robot power wiring'}>
-		<defs>
-			<marker id={`arr-${mode}`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-				<path d="M0,0 L10,5 L0,10 z" class="arrowhead" />
-			</marker>
-		</defs>
-
+	<svg viewBox="0 0 790 446" role="img" aria-label={bench ? 'Bench power wiring' : 'Robot power wiring'}>
 		<!-- source -->
-		<g class="box src">
-			<rect x="20" y="40" width="140" height="70" rx="8" />
-			<text x="90" y="70">{bench ? 'Bench supply' : '3S LiPo'}</text>
-			<text x="90" y="92" class="sub">{bench ? '10–12 V, ≥3 A' : '10.5–12.6 V'}</text>
-		</g>
-		{!bench && (
-			<g class="box">
-				<rect x="300" y="210" width="150" height="70" rx="8" />
-				<text x="375" y="240">Push button</text>
-				<text x="375" y="262" class="sub">UNO Q on/off</text>
+		{bench ? (
+			<g class="part">
+				<rect x="20" y="40" width="140" height="84" rx="6" class="psu" />
+				<rect x="34" y="54" width="78" height="30" rx="3" class="lcd" />
+				<text x="73" y="75" class="lcd-text">12.0 V</text>
+				<circle cx="150" cy="80" r="6" class="jack-red" />
+				<circle cx="150" cy="100" r="6" class="jack-black" />
+				<text x="90" y="150">Bench supply</text>
+				<text x="90" y="168" class="sub">10–12 V, ≥3 A</text>
+			</g>
+		) : (
+			<g class="part">
+				<rect x="20" y="48" width="130" height="64" rx="8" class="lipo" />
+				<rect x="34" y="60" width="102" height="40" rx="4" class="lipo-label" />
+				<text x="85" y="78" class="on-dark">3S LiPo</text>
+				<text x="85" y="93" class="on-dark small">10.5–12.6 V</text>
+				<rect x="175" y="70" width="20" height="40" rx="3" class="xt60" />
+				<rect x="195" y="70" width="20" height="40" rx="3" class="xt60 female" />
+				<text x="195" y="130" class="sub">XT60</text>
+				<text x="85" y="150">Battery</text>
+				<text x="85" y="168" class="sub">under the plate</text>
 			</g>
 		)}
-		<g class="box buck">
-			<rect x="340" y="40" width="150" height="70" rx="8" />
-			<text x="415" y="70">SZBK07</text>
-			<text x="415" y="92" class="sub">set to 6.0 V</text>
+
+		<!-- SZBK07 -->
+		<g class="part">
+			{fins(347, 482, 22, 22).map((f) => <rect x={f.x} y={f.y} width="4" height={f.h} class="fin" />)}
+			<rect x="345" y="38" width="142" height="8" class="fin" />
+			<rect x="320" y="44" width="190" height="92" rx="3" class="pcb-buck" />
+			<rect x="345" y="134" width="142" height="8" class="fin" />
+			{fins(347, 482, 136, 22).map((f) => <rect x={f.x} y={f.y} width="4" height={f.h} class="fin" />)}
+			<rect x="322" y="66" width="24" height="48" rx="2" class="terminal" />
+			<circle cx="334" cy="80" r="6" class="screw" />
+			<circle cx="334" cy="100" r="6" class="screw" />
+			<rect x="484" y="66" width="24" height="48" rx="2" class="terminal" />
+			<circle cx="496" cy="80" r="6" class="screw" />
+			<circle cx="496" cy="100" r="6" class="screw" />
+			<circle cx="372" cy="72" r="10" class="cap-big" />
+			<circle cx="372" cy="108" r="10" class="cap-big" />
+			<circle cx="415" cy="90" r="19" class="coil" />
+			<circle cx="456" cy="68" r="7" class="cap" />
+			<circle cx="456" cy="90" r="7" class="cap" />
+			<circle cx="456" cy="112" r="7" class="cap" />
+			<rect x="466" y="50" width="9" height="9" class="pot" />
+			<rect x="466" y="121" width="9" height="9" class="pot" />
+			<text x="334" y="60" class="on-dark tiny">IN</text>
+			<text x="496" y="60" class="on-dark tiny">OUT</text>
+			<text x="415" y="186">SZBK07</text>
+			<text x="415" y="204" class="sub">set to 6.0 V</text>
 		</g>
-		<g class="box shield">
-			<rect x="550" y="30" width="150" height="90" rx="8" />
-			<text x="625" y="62">Servo shield</text>
-			<text x="625" y="84" class="sub">V+ terminal block</text>
-			<text x="625" y="102" class="sub">→ 12 servos</text>
+
+		<!-- servo shield -->
+		<g class="part">
+			<rect x="580" y="34" width="190" height="112" rx="4" class="pcb-shield" />
+			<rect x="582" y="66" width="24" height="48" rx="2" class="terminal-blue" />
+			<circle cx="594" cy="80" r="6" class="screw" />
+			<circle cx="594" cy="100" r="6" class="screw" />
+			<text x="612" y="84" class="on-dark tiny" style="text-anchor:start">V+</text>
+			<text x="612" y="104" class="on-dark tiny" style="text-anchor:start">GND</text>
+			{[0, 1, 2].map((r) => pins.map((x) => <rect x={x + 18} y={50 + r * 9} width="5" height="5" class="pin" />))}
+			<rect x="684" y="104" width="60" height="28" rx="2" class="chip" />
+			<text x="675" y="170">Servo shield</text>
+			<text x="675" y="188" class="sub">→ 12 servos</text>
 		</g>
-		<g class="box unoq">
-			<rect x="550" y="200" width="150" height="90" rx="8" />
-			<text x="625" y="232">UNO Q</text>
-			<text x="625" y="254" class="sub">{bench ? 'USB-C to computer' : 'VIN (7–24 V)'}</text>
-			<text x="625" y="272" class="sub">shield sits on top</text>
-		</g>
-		{bench && (
-			<g class="box">
-				<rect x="300" y="210" width="150" height="70" rx="8" />
-				<text x="375" y="240">Computer</text>
-				<text x="375" y="262" class="sub">App Lab</text>
+
+		{bench ? (
+			<g class="part">
+				<rect x="580" y="300" width="190" height="96" rx="4" class="pcb-unoq" />
+				<rect x="600" y="302" width="80" height="9" rx="1" class="header" />
+				{[608, 620, 632, 644, 656, 668].map((x) => <rect x={x - 3} y="304" width="5" height="5" class="pin" />)}
+				<rect x="740" y="330" width="20" height="40" rx="2" class="header" />
+				<text x="675" y="352" class="on-dark">UNO Q</text>
+				<text x="675" y="372" class="on-dark small">shield on top</text>
+			</g>
+		) : (
+			<g class="part">
+				<!-- Media Carrier, top view: angled corners at its left end, JMEDIA and JMISC strips, the 3V3/5V/VIN/GND pads -->
+				<path d="M590,296 L770,296 L770,404 L590,404 L582,396 L582,304 Z" class="pcb-carrier" />
+				<rect x="636" y="303" width="122" height="9" rx="1" class="header" />
+				{Array.from({ length: 20 }, (_, i) => <rect x={639 + i * 6} y="306" width="3" height="3" class="pin" />)}
+				<rect x="636" y="388" width="122" height="9" rx="1" class="header" />
+				{Array.from({ length: 20 }, (_, i) => <rect x={639 + i * 6} y="391" width="3" height="3" class="pin" />)}
+				<rect x="748" y="322" width="18" height="14" rx="2" class="jack" />
+				<rect x="748" y="364" width="18" height="14" rx="2" class="jack" />
+				{[
+					[326, '3V3', false],
+					[338, '5V', false],
+					[350, 'VIN', true],
+					[362, 'GND', true],
+				].map(([y, name, used]) => (
+					<>
+						<circle cx="598" cy={y as number} r="4.2" class={used ? 'pad solder' : 'pad'} />
+						<text x="606" y={(y as number) + 3} class={used ? 'on-dark tiny' : 'on-dark tiny dim'} style="text-anchor:start">{name}</text>
+					</>
+				))}
+				<text x="684" y="346" class="on-dark">Media Carrier</text>
+				<text x="684" y="364" class="on-dark small">UNO Q, shield on top</text>
+				<text x="676" y="427" class="sub">VIN, GND soldered from below</text>
+			</g>
+		)}
+
+		{bench ? (
+			<g class="part">
+				<rect x="318" y="312" width="118" height="74" rx="4" class="laptop" />
+				<rect x="326" y="320" width="102" height="58" rx="2" class="screen" />
+				<path d="M304,390 L450,390 L440,400 L314,400 Z" class="laptop" />
+				<text x="377" y="354" class="on-dark small">App Lab</text>
+				<text x="377" y="292">Computer</text>
+			</g>
+		) : (
+			<g class="part">
+				<circle cx="400" cy="320" r="24" class="button-ring" />
+				<circle cx="400" cy="320" r="14" class="button-cap" />
+				<text x="340" y="311" class="lead">C (green)</text>
+				<text x="450" y="313" class="lead">NO (blue)</text>
+				<text x="438" y="278" class="lead">LED+ (red)</text>
+				<text x="372" y="370" class="lead">LED− (black)</text>
+				<text x="432" y="361" class="lead" style="text-anchor:start">NC (yellow): not used</text>
+				<text x="400" y="392">Push button</text>
+				<text x="400" y="408" class="sub">rear cover · UNO Q on/off</text>
 			</g>
 		)}
 
 		<!-- wires -->
-		{bench ? (
-			<g class="wire" tabindex="0" data-info="Bench supply to SZBK07 input: 16 AWG. Check polarity with the meter before switching on.">
-				<path d="M160,75 L340,75" marker-end={`url(#arr-${mode})`} />
-				<text x="250" y="66" class="w">16 AWG</text>
+		{wires.map((w) => (
+			<g class="wire" tabindex="0" data-info={w.info}>
+				{w.paths.map(([d, colour, width]) => (
+					<>
+						<path d={d} class="case" style={`--w:${width}px`} />
+						<path d={d} class={`core ${colour}`} style={`--w:${width}px`} />
+					</>
+				))}
 			</g>
-		) : (
-			<>
-				<g class="wire" tabindex="0" data-info="Battery to SZBK07 input through the XT60: 16 AWG, carrying all the servo current (several amps when walking). There's no switch in this lead: unplug the XT60 to cut the servos. The battery lead runs under the plate and up through the slot at the rear-left corner.">
-					<path d="M160,75 L340,75" marker-end={`url(#arr-${mode})`} />
-					<text x="205" y="66" class="w">XT60</text>
-					<text x="295" y="66" class="w">16 AWG</text>
-				</g>
-				<g class="wire" tabindex="0" data-info="Battery to the push button, tapped off the battery side of the SZBK07 input: 22 AWG. The button switches only the UNO Q, Media Carrier and cameras (well under 2 A).">
-					<path d="M250,75 L250,245 L300,245" marker-end={`url(#arr-${mode})`} />
-				</g>
-				<g class="wire" tabindex="0" data-info="Push button to UNO Q VIN: 22 AWG. VIN takes 7–24 V.">
-					<path d="M450,245 L550,245" marker-end={`url(#arr-${mode})`} />
-					<text x="500" y="236" class="w">22 AWG → VIN</text>
-				</g>
-			</>
-		)}
-		<g class="wire servo" tabindex="0" data-info="SZBK07 output to the shield's V+ terminal: 16 AWG, as short as possible. Red to V+, black to GND. Set and measure 6.0 V before connecting.">
-			<path d="M490,75 L550,75" marker-end={`url(#arr-${mode})`} />
-			<text x="520" y="66" class="w">6.0 V</text>
-		</g>
-		{bench && (
-			<g class="wire usb" tabindex="0" data-info="USB-C from the computer powers the UNO Q and connects App Lab. The servo rail never powers the UNO Q.">
-				<path d="M450,245 L550,245" marker-end={`url(#arr-${mode})`} />
-				<text x="500" y="236" class="w">USB-C</text>
+		))}
+		{!bench && (
+			<g class="joints">
+				<circle cx="476" cy="320" r="5" class="joint" />
+				<circle cx="366" cy="320" r="3.5" class="joint" />
+				<circle cx="400" cy="356" r="3.5" class="joint" />
+				<text x="482" y="299" class="joint-label" style="text-anchor:start">NO + LED+ joined</text>
+				<text x="482" y="311" class="joint-label" style="text-anchor:start">→ VIN lead</text>
 			</g>
 		)}
-		<g class="wire gnd" tabindex="0" data-info="Ground is shared through the shield's header pins. The shield's V+ is isolated from the UNO Q's VIN and 5V.">
-			<path d="M625,120 L625,200" stroke-dasharray="6 4" />
-			<text x="635" y="165" class="w" text-anchor="start">I2C + GND</text>
-		</g>
+		{wires.flatMap((w) => w.labels ?? []).map(([x, y, t, anchor]) => (
+			<text x={x} y={y} class="w" style={`text-anchor:${anchor ?? 'middle'}`}>
+				{t.split('\n').map((line, i) => <tspan x={x} dy={i ? 13 : 0}>{line}</tspan>)}
+			</text>
+		))}
 	</svg>
-	<figcaption class="info">Hover or tap a wire for details.</figcaption>
+	<figcaption class="info">Hover or tap a wire for details. Red is positive, black is ground; the short coloured stubs are the button's own leads.</figcaption>
 </figure>
 
 <style>
@@ -109,18 +275,6 @@ const bench = mode === 'bench';
 		border-radius: 0.5rem;
 		border: 1px solid var(--sl-color-gray-5);
 	}
-	.box rect {
-		fill: var(--sl-color-bg);
-		stroke: var(--sl-color-gray-3);
-		stroke-width: 2;
-	}
-	.buck rect {
-		stroke: #e5484d;
-	}
-	.shield rect,
-	.unoq rect {
-		stroke: #30a46c;
-	}
 	text {
 		fill: var(--sl-color-white);
 		font-size: 16px;
@@ -133,29 +287,204 @@ const bench = mode === 'bench';
 		font-weight: 400;
 		fill: var(--sl-color-gray-2);
 	}
-	.wire path {
+	.w {
+		pointer-events: none;
+		paint-order: stroke;
+		stroke: var(--sl-color-gray-7, var(--sl-color-gray-6));
+		stroke-width: 4px;
+	}
+	.on-dark {
+		fill: #fff;
+	}
+	.small {
+		font-size: 11px;
+		font-weight: 400;
+	}
+	.tiny {
+		font-size: 9px;
+		font-weight: 600;
+	}
+	/* parts */
+	.lipo {
+		fill: #3b4250;
+		stroke: #1f242c;
+		stroke-width: 2;
+	}
+	.lipo-label {
+		fill: #56627a;
+	}
+	.xt60 {
+		fill: #e8c21a;
+		stroke: #9c7f00;
+		stroke-width: 1.5;
+	}
+	.xt60.female {
+		fill: #d9b10c;
+	}
+	.psu,
+	.laptop {
+		fill: #3a3f47;
+		stroke: #22262c;
+		stroke-width: 2;
+	}
+	.lcd {
+		fill: #0d1410;
+	}
+	.lcd-text {
+		fill: #5bd17a;
+		font-size: 14px;
+		font-family: ui-monospace, monospace;
+	}
+	.screen {
+		fill: #1d2b3a;
+	}
+	.jack-red {
+		fill: #e5484d;
+	}
+	.jack-black {
+		fill: #111;
+		stroke: #888;
+	}
+	.fin {
+		fill: #c9ced6;
+	}
+	.pcb-buck {
+		fill: #1e4e9c;
+	}
+	.pcb-shield {
+		fill: #1f62c4;
+	}
+	.pcb-unoq {
+		fill: #00838a;
+	}
+	.pcb-carrier {
+		fill: #1d5bb3;
+	}
+	.jack {
+		fill: #b8bec7;
+		stroke: #6b7280;
+	}
+	.pad {
+		fill: #1d5bb3;
+		stroke: #e1c46a;
+		stroke-width: 2.4;
+	}
+	.pad.solder {
+		fill: #d6dade;
+		stroke: #e1c46a;
+	}
+	.dim {
+		opacity: 0.6;
+	}
+	.terminal {
+		fill: #1b1b1b;
+	}
+	.terminal-blue {
+		fill: #2d8fe0;
+	}
+	.screw {
+		fill: #b8bec7;
+		stroke: #6b7280;
+	}
+	.cap-big {
+		fill: #2a9d8f;
+		stroke: #1c6b62;
+	}
+	.cap {
+		fill: #d6dade;
+		stroke: #8a9099;
+	}
+	.coil {
 		fill: none;
-		stroke: #e5484d;
+		stroke: #c27a2c;
+		stroke-width: 9;
+	}
+	.pot {
+		fill: #2f6fe0;
+		stroke: #fff;
+		stroke-width: 0.8;
+	}
+	.pin {
+		fill: #e1c46a;
+	}
+	.chip,
+	.header {
+		fill: #151515;
+	}
+	.button-ring {
+		fill: #2a2d33;
+		stroke: #9aa3ad;
 		stroke-width: 4;
 	}
-	.wire.usb path {
+	.button-cap {
+		fill: #c9ced6;
+	}
+	/* wires */
+	.wire path {
+		fill: none;
+		stroke-linejoin: round;
+		stroke-linecap: round;
+		stroke-width: var(--w);
+	}
+	.wire .case {
+		stroke: var(--sl-color-gray-4);
+		stroke-width: calc(var(--w) + 3px);
+	}
+	.core.red {
+		stroke: #e5484d;
+	}
+	.core.black {
+		stroke: #111;
+	}
+	.core.green {
+		stroke: #30a46c;
+	}
+	.core.blue {
 		stroke: #3e63dd;
 	}
-	.wire.gnd path {
-		stroke: var(--sl-color-gray-3);
-		stroke-width: 3;
+	.core.yellow {
+		stroke: #f5d90a;
 	}
-	.arrowhead {
+	.joint {
+		fill: #fff;
+		stroke: #111;
+		stroke-width: 1.5;
+	}
+	.joint-label {
+		font-size: 10px;
+		font-weight: 700;
+		fill: var(--sl-color-white);
+		pointer-events: none;
+	}
+	.lead {
+		font-size: 9px;
+		font-weight: 600;
 		fill: var(--sl-color-gray-2);
+		pointer-events: none;
+	}
+	.core.usb {
+		stroke: #3e63dd;
+	}
+	.core.link {
+		stroke: var(--sl-color-gray-3);
+		stroke-dasharray: 6 4;
+	}
+	.wire .case:has(+ .link) {
+		stroke: none;
 	}
 	.wire {
 		cursor: help;
 		outline: none;
 	}
-	.wire:hover path,
-	.wire:focus path,
-	.wire.active path {
-		stroke-width: 7;
+	.wire:hover .core,
+	.wire:focus .core,
+	.wire.active .core {
+		stroke-width: calc(var(--w) + 3px);
+	}
+	.wire:hover .case,
+	.wire:focus .case,
+	.wire.active .case {
+		stroke-width: calc(var(--w) + 6px);
 	}
 	.info {
 		font-size: var(--sl-text-sm);
