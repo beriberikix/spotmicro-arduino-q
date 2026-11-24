@@ -8,7 +8,6 @@ import Done from '../../../components/Done.astro';
 import Parts from '../../../components/Parts.astro';
 import PowerDiagram from '../../../components/PowerDiagram.astro';
 import Todo from '../../../components/Todo.astro';
-import Check from '../../../components/Check.astro';
 
 Before any servo goes into a leg, you'll test it and set it to its assembly angle. That needs a small bench rig: the
 UNO Q with the servo shield on top, and the SZBK07 feeding the servos 6.0 V. The same boards go into the robot later,
@@ -17,44 +16,50 @@ so the soldering here is done once.
 <Parts items={[
 	[1, 'Adafruit 16-channel PWM/Servo Shield (1411), with its header strip'],
 	[3, 'right-angle 3×4 headers (Adafruit 816), a 4th is optional', 'For channels 0–11. The plugs then point sideways, so they fit 1.8 mm under the top cover.'],
-	[1, 'electrolytic capacitor, 1000 µF or more, 10 V or more', 'Recommended for C2. Adafruit: about 100 µF per servo.'],
+	[1, 'electrolytic capacitor, 1000 µF or more, 10–16 V, low profile (about 8–10 mm across, 12–13 mm tall)', 'For C2, laid flat. Adafruit: about 100 µF per servo. A taller 25 V can is fine on the bench but may not clear the top cover.'],
 	[1, 'SZBK07'],
 	[1, 'UNO Q and USB-C cable'],
-	['', 'Bench supply 7–12 V (≥3 A) or a charged 2S LiPo with XT60; 16 AWG wire'],
+	['', 'Bench supply 10–12 V (≥3 A) or a charged 3S LiPo with XT60; 16 AWG wire', 'The SZBK07 needs at least 9 V in for 6.0 V out.'],
 ]} tools={['Soldering iron', 'Multimeter', 'Craft knife']} />
 
 ## The shield on a 3.3 V board
 
-The UNO Q's microcontroller runs at **3.3 V**, while the shield ships set up for 5 V Arduinos. Two changes make it safe,
-both on the shield's solder side. Check the
-[Adafruit guide](https://learn.adafruit.com/adafruit-16-channel-pwm-slash-servo-shield) photos if you're unsure which
-pads are which.
+The UNO Q's microcontroller runs at **3.3 V**, while the shield ships set up for 5 V Arduinos. Two changes make it
+safe: move one jumper, and leave two header pins out.
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/bench/shield-top.jpg`} alt="The top of the Adafruit 16-channel PWM/Servo Shield, unsoldered: proto area at the top, the PCA9685 chip in the middle with the six I2C address pads, four groups of servo header holes, the VCC select jumper at the bottom left next to the Reset button, and the analog header at the bottom right with SDA and SCL printed over pins 4 and 5." width="1400" height="1050" />
+	<figcaption>The shield as it comes. VCC select is at the bottom left, beside Reset. The analog header is at the bottom right; SDA and SCL are printed over its pins 4 and 5.</figcaption>
+</figure>
 
 <Steps>
 
-1. **Logic voltage jumper (SJ1): 5V → 3V.** SJ1 is a three-pad solder jumper. Its middle pad is the shield's logic
-   supply (VCC): it powers the PCA9685 and pulls the I2C lines up through two 10 kΩ resistors. From the factory the
-   middle pad is joined to the **5V** pad. Remove that solder (or cut the trace) and bridge the middle pad to the
-   **3V** pad instead.
+1. **VCC select: 5V → 3V.** VCC select is the three-pad jumper on the **top** of the shield, between the Reset button
+   and the IOREF/3V/5V header. Its middle pad is the shield's logic supply (VCC): it powers the PCA9685 and pulls the
+   I2C lines up through two 10 kΩ resistors. From the factory the middle pad is joined to the **5V** pad by a thin
+   copper bridge printed on the board, with no solder on it.
+
+   <img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/bench/vcc-select.jpg`} alt="Close-up of the VCC select jumper: three square pads labelled 3V on the left and 5V on the right. The middle and right pads are joined by a thin copper bridge; the left pad is separate." width="900" height="334" style="max-width:30rem" />
+
+   Cut the bridge between the middle and 5V pads with a craft knife: a few firm strokes across the gap, until the
+   meter shows no continuity between them. Then flow a blob of solder across the middle and **3V** pads.
 
    With VCC at 3.3 V the I2C lines stay at 3.3 V and the servo signal is 3.3 V, which DS3218s accept.
 
-2. **Disconnect A4/A5 from SDA/SCL.** On classic Arduinos A4/A5 *are* the I2C pins, so the shield joins them. On the
-   UNO Q they are separate microcontroller pins (A4/A5 are a second I2C bus, `Wire2`), so the shield ties two pairs of
-   pins together. Cut the traces between A4/A5 and the SDA/SCL pins next to them, and check with the meter that A4–SDA and A5–SCL no longer beep.
+2. **Leave A4 and A5 out.** On classic Arduinos A4/A5 *are* the I2C pins, so the shield joins them to SDA/SCL (hence
+   the SDA and SCL over pins 4 and 5). The traces run under the solder mask on the back, so they can't be cut cleanly.
+   On the UNO Q, A4/A5 are separate microcontroller pins (a second I2C bus, `Wire2`), and the shield talks to the
+   PCA9685 through the separate SDA/SCL pins next to AREF ("Uses only the SCL/SDA pins!"). So just don't connect A4
+   and A5: when you solder the header strip below, pull those two pins out of the 6-pin analog strip with pliers
+   first, or snip them flush.
 
-3. **Check with a meter.** With nothing plugged in: the shield's VCC (the middle pad of SJ1) has continuity to the 3V
-   header pin and **not** to the 5V pin.
+3. **Check with a meter.** With nothing plugged in:
+   - the shield's VCC (the middle pad) beeps to the **3V** header pin and **not** to the 5V pin;
+   - once the headers are on, the UNO Q's A4 and A5 sockets don't beep to SDA and SCL.
 
 </Steps>
 
-<Check id="shield-sj1-default" title="SJ1 factory setting">
-Adafruit doesn't document SJ1's factory setting in words. Look at your board: the blob should be on the 5V side, and
-it's the one you move. Leaving A4/A5 joined to SDA/SCL is harmless as long as no sketch uses A4/A5 or `Wire2`, but
-cutting them removes the risk.
-</Check>
-
-<Todo id="shield-sj1">Close-up of SJ1 before and after moving the jumper to 3V, and of the cut A4/A5 traces.</Todo>
+<Todo id="shield-sj1">Close-up of VCC select after moving it to 3V, and of the analog header with A4/A5 pins removed.</Todo>
 
 ## Solder the shield
 
@@ -62,35 +67,58 @@ cutting them removes the risk.
 
 1. **Header strip.** Solder the **plain male header strip** that comes with the shield (not stacking headers): the
    UNO Q's headers are female, and the Media Carrier goes underneath, not on top. Put the strips into the UNO Q, lay
-   the shield on, and solder one pin at each end first, so they come out straight.
+   the shield on, and solder one pin at each end first, so they come out straight. Remember the 6-pin analog strip
+   goes in without its A4 and A5 pins (step 2 above).
+
+   **Then trim the power and analog header pins flush** on top of the shield with flush cutters, and cover that row
+   of joints with a strip of Kapton (or electrical) tape. The servo plugs lie right over them. Untrimmed, the pin
+   tips stand up into the bottom (GND) row of the servo headers and can short a servo's GND to 5V, VIN or an analog
+   pin.
 2. **Right-angle servo headers.** Solder the 3×4 right-angle headers on channels 0–11 (and 12–15 if you have a fourth),
-   all pointing the same way, out over the edge of the shield where the servo headers sit. In the robot that edge faces
-   the front, so the plugs point towards the SZBK07 (see [Electronics plate](../../electronics/plate/)). The
+   all pointing the same way. Each header covers one block of four channels: its four columns go into the four
+   channels (0–3, 4–7, 8–11) and its three rows into PWM, V+ and GND. The pins then point **across** the rows, past
+   GND and out towards the board edge with the IOREF/RST/3V/5V/GND/VIN header, not sideways along the row (that would
+   cover the next block) and not inwards (C2 sits there). The plugs pass over the power header's solder joints and
+   hang past the board edge: that's why the shield uses plain male headers, whose plastic is underneath, and not
+   stacking headers, whose sockets would sit in the way on top. In the robot that edge faces the front, so the plugs point
+   towards the SZBK07 (see [Electronics plate](../../electronics/plate/)). The
    silkscreen marks the three rows (PWM signal, V+, GND); note which row is GND, because the servo plug's brown or
    black wire goes there.
 3. **Terminal block.** Solder the blue two-way terminal block (V+ and GND).
 4. **Capacitor.** Solder the capacitor into C2, minding polarity: the stripe (−) goes to the GND side, as marked on the
    silkscreen. Allow about 100 µF per servo; 1000 µF covers twelve DS3218s at idle and in gentle
-   moves.
+   moves. Bend the leads 90° and lay the can flat on the shield, away from the servo headers: standing
+   up, it's taller than the room under the top cover.
 
 </Steps>
 
-<Todo id="shield-soldered">Finished shield: right-angle headers, terminal block and capacitor, from the side and from above.</Todo>
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/bench/shield-soldered.jpg`} alt="The finished servo shield stacked on the UNO Q and Media Carrier: four right-angle 3×4 headers with their long pins pointing out over the power and analog header edge, a strip of yellow Kapton tape over the trimmed header joints beneath them, the blue terminal block at the back corner, and the capacitor bent over and lying on its side next to C2." width="1200" height="1040" style="max-width:34rem" />
+	<figcaption>The finished shield on the UNO Q: right-angle headers pointing out over the taped power and analog header joints, terminal block, and the capacitor laid on its side.</figcaption>
+</figure>
 
 ## Set the SZBK07 to 6.0 V
 
-**Do this before any servo is connected.** A full 2S pack is 8.4 V, which would burn DS3218s (rated 4.8–6.8 V), and an unchecked
+**Do this before any servo is connected.** A full 3S pack is 12.6 V, which would burn DS3218s (rated 4.8–6.8 V), and an unchecked
 regulator can also burn the shield's capacitor.
 
 <Steps>
 
 1. Wire the bench supply (or LiPo) to the SZBK07's **IN+ / IN−** with 16 AWG. Check polarity with the meter.
-2. Switch on. With nothing on the output, measure **OUT+ / OUT−** with the multimeter.
-3. Turn the **voltage (CV)** potentiometer until the meter reads **6.0 V**. It can take many turns.
-4. If your module has a **current limit (CC)** pot, turn it to maximum for now.
-5. Switch off.
+2. Set the board's small **ON/OFF** slide switch, next to the IN terminals, to **ON**.
+3. Switch on. With nothing on the output, measure **OUT+ / OUT−** with the multimeter.
+4. Turn the **voltage (CV)** potentiometer until the meter reads **6.0 V**. It can take many turns.
+5. If your module has a **current limit (CC)** pot, turn it to maximum for now.
+6. Switch off.
 
 </Steps>
+
+<Aside type="caution" title="Output won't move?">
+With nothing on the output, the CV pot moves the output by roughly a volt per turn. If it stays put however far you
+turn it, check the meter on the supply itself, the input voltage at IN+ / IN− (at least 9 V), and the ON/OFF switch.
+If those are all fine, the board is faulty: get another 300 W / 20 A "SZBK07" board, the same size, so it fits the
+plate's posts. Until it arrives, the bench supply set to 6.0 V can feed the shield's V+ directly.
+</Aside>
 
 <Todo id="szbk07-set" kind="video">Setting the SZBK07: meter on the output, turning the CV pot to 6.0 V (15–20 s).</Todo>
 
