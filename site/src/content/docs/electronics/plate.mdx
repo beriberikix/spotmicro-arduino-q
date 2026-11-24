@@ -8,7 +8,6 @@ import Done from '../../../components/Done.astro';
 import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
-import Todo from '../../../components/Todo.astro';
 import Check from '../../../components/Check.astro';
 
 One board stack sits at the rear of the plate: **Media Carrier** at the bottom, **UNO Q** in the middle, **servo
@@ -32,11 +31,16 @@ shield** on top. The **SZBK07** sits in front of it, over the camera cables.
 ## 1. IMU
 
 The IMU sits on four posts in the strip between the board stack and the right side rail, chip side up, with its two
-STEMMA QT sockets facing front and rear.
+STEMMA QT sockets facing front and rear. On this page "front" is the robot's front: the end of the plate with the
+SZBK07's four tall posts. The board stack's pads are at the rear.
+
+The IMU's two sockets are identical and wired together, so either one works. What matters is which way it points:
 
 <Steps>
 
-1. Plug one end of the 200 mm STEMMA QT cable into the IMU's **front** socket.
+1. Turn the IMU so the **Y arrow** printed above the chip (`X↓ Y→`) points to the front of the plate. Its X arrow then
+   points to the robot's right, and every robot's IMU is fitted the same way. Plug one end of the 200 mm STEMMA QT
+   cable into the socket that now faces the front.
 2. Screw the IMU onto its four posts with four <Hw>M2×5</Hw> self-tapping screws. They cut their own thread in the
    pilot holes: snug, not tight.
 
@@ -57,9 +61,11 @@ SZBK07.
 
 <Steps>
 
-1. Open each camera connector's latch on the carrier, push in the **Mini** end of a 200 mm cable (contacts facing the
-   right way, see the carrier's marking) and close the latch.
-2. The connector **nearer the carrier's USB-C edge** goes to the **right** camera. Mark that cable `R`.
+1. Turn the carrier over. The two camera connectors sit side by side along one long edge of its underside, labelled
+   **CAMERA0** and **CAMERA1**. (The single connector on the opposite edge is **DISPLAY**: leave it empty.)
+2. Open each camera connector's latch, push in the **Mini** end of a 200 mm cable (contacts facing the right way, see
+   the carrier's marking) and close the latch.
+3. **CAMERA0** goes to the **right** camera: mark its cable `R`. **CAMERA1** goes to the left camera.
 
 </Steps>
 
@@ -72,8 +78,9 @@ the board, and its washer overlaps the board's edge by about 1 mm.
 
 <Steps>
 
-1. Lay the carrier on its four pads, USB-C edge towards the right side rail, with its front edge (towards the SZBK07
-   posts) just behind the two small **front stops**.
+1. Lay the carrier on its four pads, camera connectors down and at the front (towards the SZBK07 posts), just behind
+   the two small **front stops**. **CAMERA0** is then on the right, and the board's angled corners point to the left
+   side rail.
 2. Put an M3 washer on each of four <Hw>M3×8</Hw> and screw them into the four clamp posts, two beside each short edge
    of the carrier. They cut their own thread in the pilot holes. Tighten until the washers just grip the board: snug,
    not tight, or the washers dig into it.
@@ -84,11 +91,13 @@ the board, and its washer overlaps the board's edge by about 1 mm.
 
 <Steps>
 
-3. Press the UNO Q onto the carrier's bottom connectors, its USB-C over the carrier's. Push over the pads, not in the
-   middle of the board.
+3. Press the UNO Q onto the carrier's two long connectors, its outline over the carrier's: angled corners to the
+   left, USB-C to the right. Push over the pads, not in the middle of the board.
 4. Plug the IMU cable into the UNO Q's **Qwiic socket**, on the board's left edge, now: the shield covers it once it's
    on. Run the cable forwards along the left side, across the plate in front of the board stack and the front stops,
-   and back to the IMU, flat on the plate.
+   and back to the IMU. It crosses **over** the two camera cables in the gap between the front stops and the SZBK07
+   posts; keep it there, not under the SZBK07, where the clearance belongs to the camera cables. If it ends up in the
+   wrong place later, unplug it at the IMU and feed it through: nothing needs unscrewing.
 
 </Steps>
 
@@ -106,23 +115,37 @@ plug in for that session only.
 
 ## 4. SZBK07
 
+<Render id="camera-cables" caption="Camera cables flat along the plate, out through the front shoulder plates" start="exploded" />
+
 <Steps>
 
-1. Lay the two camera cables flat along the plate towards the front.
+1. Lay the two camera cables flat along the plate towards the front and out through the front shoulder plates to the
+   head. The modelled route uses about 172 mm of each 200 mm cable, leaving about 28 mm to fold flat inside the
+   shoulder box.
 2. Stick a strip of Kapton (or electrical) tape over the solder joints on the SZBK07's underside, above all under the
    two terminal blocks. Their leads stick out about 3.5 mm; on the 6 mm posts that leaves about 2 mm over the cables,
    and the tape keeps a sharp lead from ever rubbing through one.
-3. Screw the SZBK07 onto its four posts over them with four <Hw>M3×8</Hw>. The screws thread into the pilot holes; no
-   nuts.
 
 </Steps>
 
-<Render id="camera-cables" caption="Camera cable routes: under the SZBK07, through the front shoulder plates" start="exploded" />
+<Render id="plate-szbk07" caption="SZBK07 onto its four posts over the camera cables, OUT end to the rear" start="exploded" />
 
-The cables run under the SZBK07 and out through the front shoulder plates to the head. The modelled route uses about
-172 mm of each 200 mm cable, leaving about 28 mm to fold flat inside the shoulder box.
+<Steps>
 
-<Todo id="plate-stack">The populated plate in the frame, from above: board stack, SZBK07, camera cables leaving at the front.</Todo>
-<Todo id="plate-carrier" kind="video">Laying the carrier on its pads, screwing down the four clamps, pressing on the UNO Q and the shield (30 s).</Todo>
+3. Turn the SZBK07 so its **OUT** terminal block, with the three small capacitors and the two blue pots, faces the
+   **rear**, towards the board stack: that keeps the lead to the shield's V+ short. The **IN** terminal block, with the
+   two large capacitors and the small ON/OFF slide switch, faces the **front**. Seen from above, the pots end up at
+   the rear-left corner.
+4. Screw it onto its four posts over the cables with four <Hw>M3×8</Hw>. The screws thread into the pilot holes; no
+   nuts.
+5. Check the board's ON/OFF slide switch is at **ON**. It's easy to knock while handling the board, and in the OFF
+   position the servos get nothing.
+
+</Steps>
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/photos/electronics/plate-done.jpg`} alt="The populated electronics plate in the frame, seen from above with the robot's front to the right: the blue servo shield on the board stack at the rear, the SZBK07 with its two finned heatsinks in front of it, the two orange camera cables running out under the SZBK07 through the front shoulder plate, and the small IMU board in the strip along the right side rail. The IMU cable runs from the left of the board stack, down through the gap between the stack and the SZBK07, to the IMU." width="1600" height="680" style="border-radius:0.4rem" />
+	<figcaption>The finished plate, front to the right: board stack at the rear, SZBK07 with its OUT end towards the stack, camera cables leaving at the front, IMU on the right, its cable crossing in the gap between the stack and the SZBK07.</figcaption>
+</figure>
 
 <Done id="plate" label="Boards on the plate" />
