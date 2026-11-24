@@ -356,8 +356,7 @@ STEPS = [
          explode=[(CARRIER, (0, 0, 30)), (CLAMPS, (0, 0, 42)), (UNOQ, (0, 0, 60)), (SHIELD, (0, 0, 95)),
                   (BUCK, (0, 0, 50))],
          view=(-0.8, -0.9, -1.0)),
-    # step 3 close-ups. The carrier hinges in about its hook edge (robot left, global y -59.4) before it drops onto the
-    # pads; its USB-C edge (robot right) then clicks under the snap clips.
+    # step 3 close-ups: carrier onto its pads and clamps, then the UNO Q and the shield.
     dict(id="plate-carrier", context=PLATE, new=CARRIER + [CLAMP_WASHERS, CLAMP_SCREWS],
          explode=[(CARRIER, (0, 0, 25)), (CLAMP_WASHERS, (0, 0, 45)), (CLAMP_SCREWS, (0, 0, 65))],
          view=(-1.0, 0.2, -0.65), focus=CARRIER + CLAMPS),
@@ -367,9 +366,13 @@ STEPS = [
     dict(id="plate-shield", context=PLATE + CARRIER + CLAMPS + UNOQ, new=SHIELD,
          explode=[(SHIELD, (0, 0, 35))],
          view=(-0.75, -0.9, -1.0), focus=CARRIER + SHIELD),
-    dict(id="camera-cables", context=PLATE + CARRIER + CLAMPS + UNOQ + SHIELD + BUCK + [INNER, CHASSIS_SIDES], new=FPC,
-         explode=[(FPC, (0, 0, 60))],
+    # step 4: the cables go down first, flat along the plate, then the SZBK07 drops onto its posts over them
+    dict(id="camera-cables", context=PLATE + CARRIER + CLAMPS + UNOQ + SHIELD + [INNER, CHASSIS_SIDES], new=FPC,
+         explode=[(FPC, (0, 0, 25))],
          view=(-0.6, -0.5, -1.0), focus=PLATE + FPC),
+    dict(id="plate-szbk07", context=PLATE + CARRIER + CLAMPS + UNOQ + SHIELD + FPC, new=BUCK,
+         explode=[(BUCK, (0, 0, 45))],
+         view=(-1.0, 0.35, -0.75), focus=BUCK + FPC),
     dict(id="head", context=[], new=HEAD + CAMS,
          explode=[(["L_Front_Cover"], (60, 0, 0)), (["L_Front_Cover_Screws"], (-60, 0, 0)), (CAMS, (-45, 0, 0))],
          view=(1.0, -0.8, -0.45)),
