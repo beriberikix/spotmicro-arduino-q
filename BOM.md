@@ -22,7 +22,7 @@ many vendors; check the specs in the notes before buying.
 | 1 | STEMMA QT / Qwiic JST SH 4-pin cable, 200 mm | IMU to the UNO Q's Qwiic socket, routed round the front of the board stack (about 145 mm). | [Adafruit 4401](https://www.adafruit.com/product/4401) |
 | 1 | 3S LiPo, about 5000-5200 mAh, 30C+, XT60, at most 138 x 47 x 25 mm | Sits in the LiPo brackets under the plate. The bay is 25.6 mm tall, so most 3S hard cases (37 mm) don't fit: use a soft case. The reference build uses a Zeee 3S 5200 mAh 50C soft case (132 x 43 x 25 mm, 343 g). | [search](https://www.amazon.com/s?k=3S+LiPo+5200mAh+soft+case+XT60) |
 | 1 | LiPo balance charger, 3S capable | Charging the battery. | [search](https://www.amazon.com/s?k=LiPo+balance+charger+3S) |
-| 1 | Main power switch or 19 mm latching push button | Fits the covers' 19 mm cutout. | [search](https://www.amazon.com/s?k=19mm+latching+push+button+LED) |
+| 1 | 19 mm latching push button | Switches the UNO Q's VIN only (well under 2 A); the XT60 is the servo disconnect. Fits the covers' 19 mm cutout. | [search](https://www.amazon.com/s?k=19mm+latching+push+button+LED) |
 | 1 | XT60 connector pair | Battery connector. | [search](https://www.amazon.com/s?k=XT60+connector+pair) |
 | 1 | USB-C PD power supply, 5 V 3 A | Bench work and flashing. The UNO Q does not boot from a non-PD supply. | [search](https://www.amazon.com/s?k=USB-C+PD+charger+15W) |
 | - | Wire (16 AWG for power, 22-26 AWG for signals), Dupont jumpers, heat shrink | | |
