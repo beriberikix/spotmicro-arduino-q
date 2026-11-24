@@ -1,7 +1,8 @@
 ---
 /**
  * Power wiring diagram. mode="bench": bench supply -> SZBK07 -> shield, UNO Q on USB-C.
- * mode="robot": LiPo -> XT60 -> switch -> SZBK07 -> shield V+, and -> UNO Q VIN.
+ * mode="robot": LiPo -> XT60 -> SZBK07 -> shield V+ (the XT60 is the servo disconnect), and
+ *   XT60 -> push button -> UNO Q VIN.
  * Hover or tap a wire to see its gauge and notes.
  */
 interface Props {
@@ -27,9 +28,9 @@ const bench = mode === 'bench';
 		</g>
 		{!bench && (
 			<g class="box">
-				<rect x="200" y="45" width="90" height="60" rx="8" />
-				<text x="245" y="72">Switch</text>
-				<text x="245" y="92" class="sub">see note</text>
+				<rect x="300" y="210" width="150" height="70" rx="8" />
+				<text x="375" y="240">Push button</text>
+				<text x="375" y="262" class="sub">UNO Q on/off</text>
 			</g>
 		)}
 		<g class="box buck">
@@ -65,16 +66,17 @@ const bench = mode === 'bench';
 			</g>
 		) : (
 			<>
-				<g class="wire" tabindex="0" data-info="Battery to switch through the XT60: 16 AWG. The battery lead runs under the plate and up through the slot at the rear-left corner.">
-					<path d="M160,75 L200,75" marker-end={`url(#arr-${mode})`} />
-					<text x="180" y="66" class="w">XT60</text>
+				<g class="wire" tabindex="0" data-info="Battery to SZBK07 input through the XT60: 16 AWG, carrying all the servo current (several amps when walking). There's no switch in this lead: unplug the XT60 to cut the servos. The battery lead runs under the plate and up through the slot at the rear-left corner.">
+					<path d="M160,75 L340,75" marker-end={`url(#arr-${mode})`} />
+					<text x="205" y="66" class="w">XT60</text>
+					<text x="295" y="66" class="w">16 AWG</text>
 				</g>
-				<g class="wire" tabindex="0" data-info="Switch to SZBK07 input: 16 AWG. This carries all the servo current (several amps when walking).">
-					<path d="M290,75 L340,75" marker-end={`url(#arr-${mode})`} />
+				<g class="wire" tabindex="0" data-info="Battery to the push button, tapped off the battery side of the SZBK07 input: 22 AWG. The button switches only the UNO Q, Media Carrier and cameras (well under 2 A).">
+					<path d="M250,75 L250,245 L300,245" marker-end={`url(#arr-${mode})`} />
 				</g>
-				<g class="wire" tabindex="0" data-info="Switched battery to UNO Q VIN: 22 AWG is enough (the UNO Q, Media Carrier and cameras draw well under 2 A). VIN takes 7–24 V.">
-					<path d="M310,75 L310,245 L550,245" marker-end={`url(#arr-${mode})`} />
-					<text x="420" y="236" class="w">22 AWG → VIN</text>
+				<g class="wire" tabindex="0" data-info="Push button to UNO Q VIN: 22 AWG. VIN takes 7–24 V.">
+					<path d="M450,245 L550,245" marker-end={`url(#arr-${mode})`} />
+					<text x="500" y="236" class="w">22 AWG → VIN</text>
 				</g>
 			</>
 		)}

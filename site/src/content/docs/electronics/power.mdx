@@ -1,20 +1,20 @@
 ---
 title: Power wiring
-description: Battery, XT60, main switch, SZBK07 and UNO Q VIN.
+description: Battery, XT60, SZBK07, power button and UNO Q VIN.
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
 import Done from '../../../components/Done.astro';
 import PowerDiagram from '../../../components/PowerDiagram.astro';
 import Todo from '../../../components/Todo.astro';
-import Check from '../../../components/Check.astro';
 
-Power comes from a 3S LiPo (12.6 V full, about 10.5 V when it needs charging) and splits in two after the main switch:
+Power comes from a 3S LiPo (12.6 V full, about 10.5 V when it needs charging) through one XT60 and splits in two:
 
-- **Servos:** the SZBK07 drops it to 6.0 V for the shield's V+ terminal. It needs its input about 3 V above its output,
+- **Servos:** the SZBK07 drops it to 6.0 V for the shield's V+ terminal. There's no switch in this path: the XT60 is
+  the servo disconnect. It needs its input about 3 V above its output,
   so it holds 6.0 V over the whole 3S discharge. A 2S pack (8.4 V full) can't feed it: the rail would sag to 4–5 V.
-- **Brains:** the battery goes straight into the UNO Q's **VIN** (7–24 V), which also powers the Media Carrier and
-  cameras. The IMU and the shield's logic run from the UNO Q's 3.3 V.
+- **Brains:** the push button switches the battery into the UNO Q's **VIN** (7–24 V), which also powers the Media
+  Carrier and cameras. The IMU and the shield's logic run from the UNO Q's 3.3 V.
 
 <PowerDiagram mode="robot" />
 
@@ -22,28 +22,31 @@ Power comes from a 3S LiPo (12.6 V full, about 10.5 V when it needs charging) an
 
 1. Solder the female XT60 to a 16 AWG lead for the battery side. The battery lead runs **under the plate**, beside the
    battery, and up through the **slot at the rear-left corner**.
-2. Wire the switch in the positive lead.
-3. From the switch, run 16 AWG to the SZBK07's **IN+**, and the ground to **IN−**.
-4. From the switch output, run a thinner lead (22 AWG) to the UNO Q's **VIN**, for example the VIN pin on the shield's
-   power header, which passes straight through to the UNO Q. Its ground goes to GND on the same header.
+2. Run that lead straight to the SZBK07's **IN+** and **IN−**, with no switch in it.
+3. Into the same two terminals, alongside the 16 AWG wires, clamp a thinner pair (22 AWG) for the UNO Q.
+4. Wire the push button into the 22 AWG positive, then run it to the UNO Q's **VIN**, for example the VIN pin on the
+   shield's power header, which passes straight through to the UNO Q. The 22 AWG ground goes to GND on the same
+   header.
 5. Keep the SZBK07 → shield V+ lead from the bench rig, shortened to length.
 6. Before plugging in the battery: meter **between VIN and GND**, and **between the SZBK07 input terminals**, to
    check there's no short and the polarity is right.
 
 </Steps>
 
-<Check id="main-switch" title="Main switch current rating">
-The BOM's 19 mm latching push button fits the covers' cutout, but these buttons are usually rated for 3–5 A, and the
-servo rail can draw several amps while walking and more at stall. Options to decide before this step is final:
-a switch rated for 15 A or more, switching only the UNO Q and keeping the XT60 as the servo disconnect, or the button
-driving a MOSFET or relay (see [ideas.md](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/docs/ideas.md#power)).
-</Check>
+The button only carries the UNO Q's current (well under 2 A), so a small 19 mm latching button is fine. The servo
+current (several amps while walking, more at stall) never goes through it.
+
+<Aside type="caution">
+With the XT60 plugged in, the SZBK07 and the servo rail are live even when the button is off. The servos stay limp
+without a signal from the shield, but unplug the XT60 before working on the wiring, and whenever you put the robot
+away: the SZBK07 draws a little from the battery all the time.
+</Aside>
 
 <Aside type="tip">
 Stop and charge at about 3.5 V per cell (10.5 V for the pack). That protects the LiPo, and keeps well clear of the
 SZBK07's 9 V minimum for a 6.0 V output.
 </Aside>
 
-<Todo id="power-wiring">The power wiring in the body: XT60 lead coming up through the rear-left slot, switch, SZBK07 input and VIN lead.</Todo>
+<Todo id="power-wiring">The power wiring in the body: XT60 lead coming up through the rear-left slot, the SZBK07 input with the thin VIN pair beside it, the push button and the VIN lead.</Todo>
 
 <Done id="power" label="Power wired and checked with the meter" />
