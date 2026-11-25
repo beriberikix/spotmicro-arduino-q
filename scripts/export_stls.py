@@ -27,6 +27,7 @@ SENSORMOUNT = "cad:Sensormount_DualCam"
 CARRIER_TEST = "cad:Carrier_Mount_Test"
 SZBK07_TEST = "cad:SZBK07_Mount_Test"
 IMU_TEST = "cad:IMU_Mount_Test"
+KOOBA_MOD = "mod:kooba"  # one of Kooba's covers, changed by KOOBA_MODS below
 
 PARTS = [
     # Chassis
@@ -53,15 +54,15 @@ PARTS = [
     ("legs", KOOBA + "Wrist__Counterpart.stl", "Wrist_Counterpart", 2, 2, "PLA", "20%", ""),
     ("legs", KOOBA + "Foot_Tip.stl", "Foot_Tip", 4, 0, "TPU", "20%", ""),
     # Hull
-    ("hull", KOOBA + "Top_Cover_Split_Front.stl", "Top_Cover_Split_Front", 1, 0, "PLA", "100%", ""),
-    ("hull", KOOBA + "Top_Cover_Split_Rear_with_OLED.stl", "Top_Cover_Split_Rear_with_OLED", 1, 0, "PLA", "100%", ""),
+    ("hull", KOOBA_MOD, "Top_Cover_Split_Front", 1, 0, "PLA", "100%", "Seam flanges moved inwards, clear of the servo shield's terminal block"),
+    ("hull", KOOBA_MOD, "Top_Cover_Split_Rear", 1, 0, "PLA", "100%", "From Top_Cover_Split_Rear_with_OLED: seam flanges moved to match the front half; OLED window, square opening and slits filled"),
     ("hull", KOOBA + "Bottom_Cover_Split_Front.stl", "Bottom_Cover_Split_Front", 1, 0, "PLA", "100%", ""),
     ("hull", KOOBA + "Bottom_Cover_Split_Rear.stl", "Bottom_Cover_Split_Rear", 1, 0, "PLA", "100%", ""),
     ("hull", KOOBA + "Rear_Cover_Shell_Long.stl", "Rear_Cover_Shell_Long", 1, 0, "PLA", "100%", ""),
     ("hull", KOOBA + "Rear_Cover_Plate.stl", "Rear_Cover_Plate", 1, 0, "PLA", "100%", ""),
     # Head
-    ("head", KOOBA + "Front_Cover_Optimized.stl", "Front_Cover_Optimized", 1, 0, "PLA", "100%", ""),
-    ("head", SENSORMOUNT, "Sensormount_DualCam", 1, 0, "PLA", "20%", "New: Kooba's sensor mount, holding two Raspberry Pi Camera Module 2s"),
+    ("head", KOOBA_MOD, "Front_Cover_Optimized", 1, 0, "PLA", "100%", "Sensor screw bosses lowered 2.27 mm (nut pockets with them) to take the camera mount's ears"),
+    ("head", SENSORMOUNT, "Sensormount_DualCam", 1, 0, "PLA", "20%", "New: Kooba's sensor mount, holding two Raspberry Pi Camera Module 2s, with four ears for the front cover's M3 screws"),
     # Optional
     ("optional/servo-horns", KOOBA + "Servohorn_6_B_Star.stl", "Servohorn_6_B_Star", 12, 0, "PLA", "20%", "Only if your servos lack FSH6S-type horns"),
     ("optional/rear-cover-medium", ROBJK + "Rear_Cover_Shell_Medium.stl", "Rear_Cover_Shell_Medium", 1, 0, "PLA", "100%", "robjk; shorter alternative to Rear_Cover_Shell_Long"),
@@ -328,6 +329,106 @@ def mirror_spot(x, y, z, face, rot):
     return -x, y, z, face, rot
 
 
+# Kooba covers changed for this build. Each is cut from Kooba's FreeCAD body (exact geometry, not the STL), in that
+# body's own frame, which is also the frame of his STL; the result is meshed and its STEP written in the print position.
+# Numbers below were checked against test prints.
+
+# Front cover: its four sensor screw bosses held nothing, because the camera mount sits beside them. The mount now has
+# four 2 mm ears flush with its back (cad/Sensormount_DualCam.FCStd, Cover_Ears), and each boss is lowered by
+# HEAD_BOSS_DROP so the ear sits on it; the side-loaded nut pocket and the screw hole move down with it and keep the
+# 1.65 mm cap, so the M3x8 still passes the whole nut. Worked in the frame of the assembled cover ("M": screw axes along
+# +Z at x 14 / 100, y 20.5 / 48.5), which is Kooba's body frame moved by HEAD_FRAME.
+HEAD_FRAME = (0.0, 14.457226, -31.814962)
+HEAD_BOSSES = [(14.0, 20.5, -1), (100.0, 48.5, 1), (14.0, 48.5, -1), (100.0, 20.5, 1)]  # x, y, side (-1 left, 1 right)
+HEAD_BOSS_TOP = 10.07
+HEAD_BOSS_DROP = 2.27
+
+
+def mod_front_cover(shape):
+    import Part
+    V = FreeCAD.Vector
+    t = V(*HEAD_FRAME)
+    cov = shape.copy()
+    cov.translate(t)
+    top = HEAD_BOSS_TOP - HEAD_BOSS_DROP
+    cuts, fills, voids, holes = [], [], [], []
+    for hx, hy, side in HEAD_BOSSES:
+        x0, x1 = (6.7, 20.0) if side < 0 else (94.0, 107.3)  # stops short of the cover wall's inner face
+        cuts.append(Part.makeBox(x1 - x0, 13.0, 3.0, V(x0, hy - 6.5, top)))
+        void = Part.makeBox(7.4, 10.2, 4.6, V(hx - 3.7, hy - 3.7, 4.0)).cut(cov)  # old nut pocket and hole
+        fills.append(void.common(Part.makeBox(x1 - x0, 10.25, top - 4.3, V(x0, hy - 6.25, 4.3))))
+        moved = void.copy()
+        moved.translate(V(0, 0, -HEAD_BOSS_DROP))
+        voids.append(moved)
+        holes.append(Part.makeCylinder(1.6, top - 0.3 + 0.01, V(hx, hy, 0.3)))
+    out = cov.cut(Part.makeCompound(cuts)).fuse(Part.makeCompound(fills))
+    out = out.cut(Part.makeCompound(voids + holes)).removeSplitter()
+    out.translate(t.negative())
+    return out
+
+
+# Top cover halves. The two halves are joined by an M3 screw through a pair of flanges hanging under the seam; Kooba's
+# flanges sit 27.5 mm either side of the centre line, and the one on the USB-C side lands on the servo shield's power
+# terminal block. Both flanges move to a symmetric pair 15 mm apart, between the shield's bent-over capacitor and the
+# far side; each keeps 2.75 mm from the servo headers. The rear half also loses its OLED window (with its counterbore,
+# pin recess and four pilot holes), the square opening and the two rounded slits, filled flush with its 2 mm top skin.
+# name: ((old flange centres), (new flange centres), seam-end band along Z), along the body's X (its width).
+SEAM_FLANGES = {
+    "Top_Cover_Split_Front": ((82.5, 137.5), (112.5, 127.5), (-106.7, -101.0)),
+    "Top_Cover_Split_Rear": ((27.5, -27.5), (-2.5, -17.5), (111.0, 116.7)),
+}
+TOP_SKIN = (120.0, 122.0)  # Y range of the top skin in both bodies
+REAR_FILLS = [((-30.0, 126.7), (30.0, 29.1)), ((5.5, 141.3), (18.0, 14.0)), ((26.2, 142.3), (10.0, 12.0))]  # (x, z), (w, d)
+OLED_PILOTS = [(-3.25, 129.35), (-3.25, 153.15), (-26.75, 129.35), (-26.75, 153.15)]
+
+
+def mod_top_cover(shape, name):
+    import Part
+    V = FreeCAD.Vector
+    olds, news, (z0, z1) = SEAM_FLANGES[name]
+    boxes = [Part.makeBox(7.2, TOP_SKIN[0] - 80, z1 - z0, V(x - 3.6, 80, z0)) for x in olds]
+    flange = shape.common(boxes[0])
+    out = shape.cut(Part.makeCompound(boxes))
+    for x in news:
+        f = flange.copy()
+        f.translate(V(x - olds[0], 0, 0))
+        out = out.fuse(f)
+    if name == "Top_Cover_Split_Rear":
+        skin = TOP_SKIN[1] - TOP_SKIN[0]
+        fills = [Part.makeBox(w, skin, dz, V(x, TOP_SKIN[0], z)) for (x, z), (w, dz) in REAR_FILLS]
+        fills += [Part.makeCylinder(1.2, skin + 0.6, V(x, TOP_SKIN[0] - 0.6, z), V(0, 1, 0)) for x, z in OLED_PILOTS]
+        out = out.fuse(fills)
+    return out.removeSplitter()
+
+
+# output name: (Kooba FreeCAD file, body label, modifier, expected volume change in mm3)
+KOOBA_MODS = {
+    "Front_Cover_Optimized": ("Front_Cover_Optimized.FCStd", "Front_Cover_Optimized", mod_front_cover, -1003),
+    "Top_Cover_Split_Front": ("Top_Cover_Split_Front.FCStd", "Top_Cover_Split_Front", lambda s: mod_top_cover(s, "Top_Cover_Split_Front"), 0),
+    "Top_Cover_Split_Rear": ("Top_Cover_Split_Rear_with_OLED.FCStd", "Top_Cover_Split_Rear_with_OLED", lambda s: mod_top_cover(s, "Top_Cover_Split_Rear"), 1382),
+}
+
+
+def export_kooba_mod(dest, name, step_dest):
+    fcstd, label, mod, change = KOOBA_MODS[name]
+    doc = FreeCAD.openDocument(os.path.join(REF, KOOBA, fcstd), hidden=True)
+    body = [o for o in doc.Objects if o.TypeId == "PartDesign::Body" and o.Label == label][0]
+    src = body.Shape.copy()
+    FreeCAD.closeDocument(doc.Name)
+    shape = mod(src)
+    if len(shape.Solids) != 1 or not shape.isValid() or abs(shape.Volume - src.Volume - change) > 15:
+        raise RuntimeError(f"{name}: modified cover has {len(shape.Solids)} solids, valid {shape.isValid()}, "
+                           f"volume change {shape.Volume - src.Volume:.0f} mm3 (expected {change})")
+    mesh = MeshPart.meshFromShape(Shape=shape, LinearDeflection=0.05, AngularDeflection=0.2, Relative=False)
+    b = mesh.BoundBox  # the mesh's box: a B-rep box can be loose
+    move = FreeCAD.Vector(-(b.XMin + b.XMax) / 2, -(b.YMin + b.YMax) / 2, -b.ZMin)
+    mesh.translate(move.x, move.y, move.z)
+    mesh.write(dest)
+    shape.translate(move)
+    os.makedirs(os.path.dirname(step_dest), exist_ok=True)
+    shape.exportStep(step_dest)
+
+
 def main():
     if os.path.isdir(OUT):
         for entry in os.listdir(OUT):
@@ -347,6 +448,8 @@ def main():
                         os.path.join(ROOT, "step", "head", "Sensormount_DualCam.step"))
         elif src in (CARRIER_TEST, SZBK07_TEST, IMU_TEST):
             export_mount_test(dest, src)
+        elif src == KOOBA_MOD:
+            export_kooba_mod(dest, name, os.path.join(ROOT, "step", folder, name + ".step"))
         else:
             Mesh.Mesh(os.path.join(REF, src)).write(dest)  # rewrite as binary STL
         to_print_position(dest, name)
@@ -383,7 +486,8 @@ def write_readme(rows):
         "Sources and licenses: Kooba's SpotMicroESP32 and robjk's reinforced shoulders (CC BY, Thingiverse",
         "thing:4559827 and thing:4937631), the helper stand from Leika (stefi01, CC BY 4.0; Nova-SM2, MIT), and",
         "`electronics/UnoQ_Mountingplate.stl` and `head/Sensormount_DualCam.stl` (this project, modified from Kooba,",
-        "CC BY-SA 4.0). See ../NOTICE.md.",
+        "CC BY-SA 4.0). `head/Front_Cover_Optimized.stl` and the two top cover halves are Kooba's, changed for this build",
+        "as noted below. See ../NOTICE.md.",
         "",
     ]
     current = None
