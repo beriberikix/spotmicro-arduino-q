@@ -150,7 +150,7 @@ python3 scripts/build_makerworld_3mf.py --no-orient --stand        # makerworld/
 
 All are sliced for the P1S (0.4 mm nozzle, 0.20 mm Standard, Textured PEI) with 3 walls on structural plates, 100%
 infill on the covers and 20% elsewhere. The script stops on any part that misses its plate or any slicer warning.
-`--no-orient` keeps `Top_Cover_Split_Rear_with_OLED` from being auto-oriented into a position that needs supports.
+`--no-orient` keeps `Top_Cover_Split_Rear` from being auto-oriented into a position that needs supports.
 
 ### Exploded-view animation
 

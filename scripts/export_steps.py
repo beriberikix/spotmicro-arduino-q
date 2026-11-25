@@ -6,8 +6,8 @@
 # Each source solid is fitted to its STL by point-cloud registration (24 axis-aligned starts,
 # refined with ICP); a part is only written when 95% of points sampled on the STL lie within
 # FIT_LIMIT of the placed STEP surface (STL facets approximate large curved covers to about 0.06 mm). Mirrored STLs get
-# mirrored STEPs. This project's own parts (the electronics plate and the camera mount) are written by
-# scripts/export_stls.py. Parts that exist only as STL upstream (robjk's extended servo mount and M3
+# mirrored STEPs. This project's own parts (the electronics plate and the camera mount) and the Kooba covers it
+# changes (front cover, top cover halves; KOOBA_MODS there) are written by scripts/export_stls.py. Parts that exist only as STL upstream (robjk's extended servo mount and M3
 # bearing pin) have no STEP.
 import itertools
 import os
@@ -45,13 +45,10 @@ PARTS = [
     ("legs/Wrist.stl", f"{KOOBA}/Wrist.FCStd", None, True),
     ("legs/Wrist_Counterpart.stl", f"{KOOBA}/Wrist__Counterpart.FCStd", None, True),
     ("legs/Foot_Tip.stl", f"{KOOBA}/Foot_Tip.FCStd", None, False),
-    ("hull/Top_Cover_Split_Front.stl", f"{KOOBA}/Top_Cover_Split_Front.FCStd", None, False),
-    ("hull/Top_Cover_Split_Rear_with_OLED.stl", f"{KOOBA}/Top_Cover_Split_Rear_with_OLED.FCStd", None, False),
     ("hull/Bottom_Cover_Split_Front.stl", f"{KOOBA}/Bottom_Cover_Split_Front.FCStd", ["Bottom_Cover_Split_Front"], False),
     ("hull/Bottom_Cover_Split_Rear.stl", f"{KOOBA}/Bottom_Cover_Split_Rear.FCStd", ["Bottom_Cover_Split_Rear"], False),
     ("hull/Rear_Cover_Shell_Long.stl", f"{KOOBA}/Rear_Cover_Shell_Long.FCStd", None, False),
     ("hull/Rear_Cover_Plate.stl", f"{KOOBA}/Rear_Cover_Plate.FCStd", None, False),
-    ("head/Front_Cover_Optimized.stl", f"{KOOBA}/Front_Cover_Optimized.FCStd", None, False),
     ("optional/servo-horns/Servohorn_6_B_Star.stl", f"{KOOBA}/Servohorn_6_B_Star.FCStd", None, False),
     ("optional/rear-cover-medium/Rear_Cover_Shell_Medium.stl", f"{ROBJK}/Rear_Cover_Shell_Medium.FCStd", ["Rear_Cover_Shell_medium"], False),
     ("optional/rear-cover-medium/Rear_Cover_Plate_Medium.stl", f"{ROBJK}/Rear_Cover_Shell_Medium.FCStd", ["Rear_Cover_Plate_medium"], False),

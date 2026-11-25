@@ -87,7 +87,7 @@ PLATES = [
     ]),
     ("Body covers", {}, WHITE, [
         ("hull/Top_Cover_Split_Front.stl", 1, SOLID),
-        ("hull/Top_Cover_Split_Rear_with_OLED.stl", 1, SOLID),
+        ("hull/Top_Cover_Split_Rear.stl", 1, SOLID),
         ("hull/Bottom_Cover_Split_Front.stl", 1, SOLID),
         ("hull/Bottom_Cover_Split_Rear.stl", 1, SOLID),
     ]),

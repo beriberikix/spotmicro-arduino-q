@@ -9,7 +9,8 @@ Every part is in its print orientation, centred, with its lowest point at Z = 0.
 Sources and licenses: Kooba's SpotMicroESP32 and robjk's reinforced shoulders (CC BY, Thingiverse
 thing:4559827 and thing:4937631), the helper stand from Leika (stefi01, CC BY 4.0; Nova-SM2, MIT), and
 `electronics/UnoQ_Mountingplate.stl` and `head/Sensormount_DualCam.stl` (this project, modified from Kooba,
-CC BY-SA 4.0). See ../NOTICE.md.
+CC BY-SA 4.0). `head/Front_Cover_Optimized.stl` and the two top cover halves are Kooba's, changed for this build
+as noted below. See ../NOTICE.md.
 
 
 ## chassis
@@ -56,8 +57,8 @@ CC BY-SA 4.0). See ../NOTICE.md.
 
 | File | Normal | Mirrored | Material | Infill | Notes |
 | ---- | ------ | -------- | -------- | ------ | ----- |
-| [Top_Cover_Split_Front.stl](hull/Top_Cover_Split_Front.stl) | 1 | - | PLA | 100% |  |
-| [Top_Cover_Split_Rear_with_OLED.stl](hull/Top_Cover_Split_Rear_with_OLED.stl) | 1 | - | PLA | 100% |  |
+| [Top_Cover_Split_Front.stl](hull/Top_Cover_Split_Front.stl) | 1 | - | PLA | 100% | Seam flanges moved inwards, clear of the servo shield's terminal block |
+| [Top_Cover_Split_Rear.stl](hull/Top_Cover_Split_Rear.stl) | 1 | - | PLA | 100% | From Top_Cover_Split_Rear_with_OLED: seam flanges moved to match the front half; OLED window, square opening and slits filled |
 | [Bottom_Cover_Split_Front.stl](hull/Bottom_Cover_Split_Front.stl) | 1 | - | PLA | 100% |  |
 | [Bottom_Cover_Split_Rear.stl](hull/Bottom_Cover_Split_Rear.stl) | 1 | - | PLA | 100% |  |
 | [Rear_Cover_Shell_Long.stl](hull/Rear_Cover_Shell_Long.stl) | 1 | - | PLA | 100% |  |
@@ -67,8 +68,8 @@ CC BY-SA 4.0). See ../NOTICE.md.
 
 | File | Normal | Mirrored | Material | Infill | Notes |
 | ---- | ------ | -------- | -------- | ------ | ----- |
-| [Front_Cover_Optimized.stl](head/Front_Cover_Optimized.stl) | 1 | - | PLA | 100% |  |
-| [Sensormount_DualCam.stl](head/Sensormount_DualCam.stl) | 1 | - | PLA | 20% | New: Kooba's sensor mount, holding two Raspberry Pi Camera Module 2s |
+| [Front_Cover_Optimized.stl](head/Front_Cover_Optimized.stl) | 1 | - | PLA | 100% | Sensor screw bosses lowered 2.27 mm (nut pockets with them) to take the camera mount's ears |
+| [Sensormount_DualCam.stl](head/Sensormount_DualCam.stl) | 1 | - | PLA | 20% | New: Kooba's sensor mount, holding two Raspberry Pi Camera Module 2s, with four ears for the front cover's M3 screws |
 
 ## optional/servo-horns
 
