@@ -65,6 +65,16 @@ KNEE = (KNEE_PIN + KNEE_BEARING + KNEE_HORN + KNEE_HORN_SCREWS + KNEE_HORN_NUTS 
 SHOULDER = SHOULDER_MOUNT + SH_SERVO + SH_SERVO_DAMP + SH_SERVO_SCREWS + SH_SERVO_NUTS + SH_PIN
 HIP = HIP_HORN + HIP_HORN_SCREWS + HIP_HORN_NUTS + CAP + CAP_SCREWS + CAP_NUTS
 LEG_ALL = LOWER_LEG + UPPER_LEG + KNEE + SHOULDER + HIP + COVER
+# Rerouting a knee cable through the upper leg (Troubleshooting): with the leg off the robot and the shoulder joint off
+# the hip servo, the top shell comes off with the two hip-servo screws that pass through it and the four knee-plate
+# screws (heads inside on the horn-plate side, outside on the bearing-plate side). The two knee-plate nuts on the
+# horn-plate screws sit in the top shell and come with it.
+REROUTE_HIP_SCREWS = ["LL_Body082", "LL_Body083"]
+REROUTE_KNEE_SCREWS_IN = ["LL_Body078", "LL_Body079"]
+REROUTE_KNEE_SCREWS_OUT = ["LL_Body084", "LL_Body085"]
+REROUTE_TOP_NUTS = ["LL_Body067", "LL_Body068"]
+REROUTE_STAYS = ([n for n in LOWER_LEG + UPPER_LEG + KNEE if n not in
+                  UPPER_TOP + REROUTE_HIP_SCREWS + REROUTE_KNEE_SCREWS_IN + REROUTE_KNEE_SCREWS_OUT + REROUTE_TOP_NUTS])
 
 # ---------------------------------------------------------------- selections made at render time
 def sel(**kw):
@@ -317,6 +327,11 @@ STEPS = [
          new=SH_SERVO + SH_SERVO_DAMP + SH_SERVO_SCREWS + SH_SERVO_NUTS,
          explode=[(SH_SERVO + SH_SERVO_DAMP, (0, 0, 70)), (SH_SERVO_SCREWS, (-60, 0, 0)), (SH_SERVO_NUTS, (40, 0, 0))],
          view=(-0.8, 1.0, -0.5)),
+    dict(id="knee-reroute", context=REROUTE_STAYS,
+         new=UPPER_TOP + REROUTE_TOP_NUTS + REROUTE_HIP_SCREWS + REROUTE_KNEE_SCREWS_IN + REROUTE_KNEE_SCREWS_OUT,
+         explode=[(UPPER_TOP + REROUTE_TOP_NUTS, (0, 70, 0)), (REROUTE_HIP_SCREWS + REROUTE_KNEE_SCREWS_IN, (0, -45, 0)),
+                  (REROUTE_KNEE_SCREWS_OUT, (0, 120, 0))],
+         view=(-0.45, -1.0, -0.75)),
     dict(id="shoulder-cover", context=LOWER_LEG + UPPER_LEG + KNEE + SHOULDER + HIP,
          new=COVER, explode=[(COVER, (0, 0, 60))],
          view=OUTSIDE),
