@@ -3,6 +3,10 @@ title: Troubleshooting
 description: Common problems when building a Spot Micro, and fixes.
 ---
 
+import { Steps } from '@astrojs/starlight/components';
+import Render from '../../../components/Render.astro';
+import Check from '../../../components/Check.astro';
+
 ## Mechanical
 
 | Problem | Fix |
@@ -14,8 +18,113 @@ description: Common problems when building a Spot Micro, and fixes.
 | A joint can't reach its reference pose | Refit that horn one spline tooth over. |
 | Upper leg wobbles on the hip | The shoulder cover's bearing isn't on its pin, or the cover screws are loose. |
 | Cables won't pull through the top shell | Open the shells slightly; avoid sleeving. |
+| A knee cable runs outside the upper leg | Route it along the outside, or take the leg apart to reroute it: see [Knee cable outside the upper leg](#knee-cable-outside-the-upper-leg). |
 | Horn screws poke through and rub the servo | Thread an M2 nut onto each M2×8 as a spacer, or use M2×6. |
 | A part snapped at a thin point | Reprint with more walls (3–4) and check the infill matches the [stl list](https://github.com/beriberikix/spotmicro-arduino-q/blob/main/stl/README.md). |
+
+## Knee cable outside the upper leg
+
+If a knee servo's extension cable wasn't laid in the top shell's groove when the upper leg was closed (see
+[Upper leg](../../legs/upper-leg/), step 3), there are two ways to deal with it.
+
+- **Option A, route it along the outside.** No disassembly and no calibration. Recommended.
+- **Option B, reroute it through the upper leg.** Neater, but the top shell can't come off with the leg assembled:
+  two of the hip-servo screws that hold it point straight at the servo cap, with only 8 mm behind their heads, and the
+  cap itself can only come off once the shoulder servo is out of its mount. So the leg comes off the robot, and the hip
+  and shoulder angles have to be set again afterwards. The knee keeps its calibration.
+
+### Option A: along the outside
+
+<Steps>
+
+1. Unplug the battery.
+2. Run the knee cable along the upper leg's inner face (the side facing the body), from the knee to the shoulder.
+3. Hold it there in two or three places with small zip ties round the upper leg, adhesive cable clips or strips of
+   tape. Keep it away from the knee joint's moving edges and from under the shoulder cover's rim.
+4. Leave a slack loop where it crosses the knee and another where it crosses the hip, so neither joint pulls on it.
+5. Reconnect the battery and move the knee, the hip and the shoulder through their range in servo_tool. Watch that the
+   cable never goes tight or catches.
+
+</Steps>
+
+### Option B: through the upper leg
+
+<Check id="knee-reroute-order" title="Option B's order is from the CAD">
+This order comes from the CAD and the build pages, not from a leg taken apart. In particular, check that with the
+shoulder servo out of its mount a hex key reaches the hip horn's centre screw.
+</Check>
+
+**Take it apart**
+
+<Steps>
+
+1. Unplug the battery, unplug the leg's three leads from the shield and pull them back out of the body.
+2. Take the leg off the body, reversing [Shoulders into the frame](../../body/install-shoulders/). The shoulder servo's
+   shaft comes out of its horn on the outer shoulder plate.
+3. Take off the shoulder cover: its three <kbd class="hw">M3×20</kbd> from the cap side, and its bearing off the pin on
+   the top shell. Keep the three nuts from the cover's slots.
+4. Take the shoulder servo out of its mount: its four <kbd class="hw">M3×20</kbd> (reversing
+   [Shoulder servo](../../shoulders/shoulder-servo/)). This clears the way to the hip servo's centre screw.
+5. Undo the <kbd class="hw">M3×8</kbd> in the centre of the hip horn and pull the shoulder joint (mount, cap and horn
+   together) off the hip servo's shaft. Leave the horn screwed to the cap.
+6. Support the lower leg and undo the four <kbd class="hw">M3×20</kbd> that hold the knee plates to the upper leg, two on
+   each side. The two on the servo-horn plate's side go into nuts in the top shell; the two on the bearing plate's side
+   go into nuts in the bottom shell, so tape over those pockets. Leave both knee plates on the knee servo's horn and the
+   bearing: the knee keeps its angle.
+7. Of the four <kbd class="hw">M3×20</kbd> through the hip servo, undo the two that also pass through the top shell (now
+   reachable); the other two hold the servo in the bottom shell. Hold or tape the bottom shell's outer nuts.
+8. Lift the top shell off outwards.
+
+</Steps>
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/knee-reroute-labels.png`} alt="The front-left leg off the robot, without its shoulder joint. The upper leg's top shell, in orange, is lifted outwards off the bottom shell. Two hip-servo screws are drawn backed out at the hip end, labelled as the two that pass through the top shell, with a note to leave the other two in. Two knee-plate screws are drawn backed out at the knee end, labelled as two of the four, with two more on the inside." width="1020" height="960" loading="lazy" style="background:#fff;border-radius:0.4rem" />
+	<figcaption>Steps 6 to 8: the top shell, the two hip-servo screws that pass through it and the four knee-plate screws. The shoulder joint is already off the hip servo.</figcaption>
+</figure>
+
+<Render id="knee-reroute" caption="The top shell and its six screws coming off and going back on" />
+
+**Route the cable**
+
+<Steps>
+
+1. Lay the knee extension cable straight and snug in the groove along the top shell's edge, from the knee end, and take
+   its plug out through the hole at the hip end. A loop inside the groove gets pinched when the shells close.
+2. If the hip lead doesn't come out of that hole already, put it through now too, one plug at a time.
+3. Leave the slack at the knee end, where the cable goes in between the shells. With the top shell held on, move the
+   knee by hand to fully folded and fully straight: the cable shouldn't go tight or come out of the groove.
+
+</Steps>
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/upper-leg-cable.png`} alt="The upper leg's top shell from the side that meets the bottom shell, with a red dashed line from the knee end along the groove to the hole at the hip end." width="1040" height="660" loading="lazy" style="background:#fff;border-radius:0.4rem" />
+	<figcaption>In the top shell: in between the shells at the knee end, along the groove, out of the hole at the hip end.</figcaption>
+</figure>
+
+**Put it back**
+
+<Steps>
+
+1. Lower the top shell back on, both leads coming out of the hole and the knee cable in its groove. Check the cable
+   isn't pinched along the shells' edges.
+2. Put the two hip-servo <kbd class="hw">M3×20</kbd> back into their nuts, then the four knee-plate
+   <kbd class="hw">M3×20</kbd>. The knee plates only fit one way, so the knee angle is unchanged.
+3. Fit the shoulder joint back onto the hip servo and set the hip angle again: [Hip joint](../../shoulders/hip/),
+   step 4.
+4. Put the shoulder servo back in its mount ([Shoulder servo](../../shoulders/shoulder-servo/)).
+5. Put the hip and knee leads through the slot in the cap's extension, leaving a loop for the hip, and fit the shoulder
+   cover ([Shoulder cover](../../shoulders/cover/), steps 2 to 5).
+6. Put the leg back on the body and set the shoulder angle again
+   ([Shoulders into the frame](../../body/install-shoulders/)).
+7. Plug the leads back into the shield, reconnect the battery and move all three joints through their range in
+   servo_tool. Watch that no lead pulls or catches at the knee, the cap or the shoulder.
+
+</Steps>
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/leg-cable-route.png`} alt="The shoulder joint with the cover off: a red dashed line from the top shell's hole to the slot in the servo cap's extension, and a blue label on the shoulder servo's own slot in its mount." width="1280" height="960" loading="lazy" style="background:#fff;border-radius:0.4rem" />
+	<figcaption>At the shoulder (step 5): hip and knee leads through the slot in the cap's extension; the shoulder lead keeps its own slot.</figcaption>
+</figure>
 
 ## Servos and power
 
