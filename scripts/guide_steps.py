@@ -230,7 +230,7 @@ HEAD = ["L_Front_Cover", "L_Front_Cover_Screws", "Sensormount_DualCam"]
 CAMS = ["Camera_Module_2_left", "Camera_Module_2_right"]
 BATTERY_RAILS = ["Battery_Rail_Right", "Battery_Rail_Left"]
 LIPO = ["LiPo_3S_placeholder"]
-BOTTOM_COVER = ["Bottom_Cover_3S"]   # floor 5 mm lower than Kooba's, for a 3S pack
+BOTTOM_COVER = ["Bottom_Cover_3S"]   # floor 6 mm lower than Kooba's, for a 3S pack
 TOP_COVER = ["L_Top_Cover_Assembly"]
 REAR_COVER = ["L_Rear_Cover_Assembly", "L_Rear_Cover_Screws001"]
 COVER_HW = [sel(labels=r"^Cover M3 Nut "), "L_Head_Cover_Screws"]

@@ -1,6 +1,6 @@
 ---
 title: Shoulder cover
-description: Reinforced shoulder cover with a 625ZZ bearing, bolted to the extended cap.
+description: Hip and knee leads through the cap, then the reinforced shoulder cover with a 625ZZ bearing, bolted to the extended cap.
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
@@ -23,15 +23,25 @@ screws are the last of bag D.
 
 <Render id="shoulder-cover" caption="Shoulder cover over the hip, onto the cap extension and the bearing pin" />
 
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/leg-cable-route.png`} alt="The front-left shoulder joint with the shoulder cover left off, the servo cap shown in orange. A red dashed line runs from the hole in the upper leg's top shell, where the hip and knee leads come out, to the long slot between the three screw holes in the cap's extension. A blue label points to the separate slot in the top wall of the shoulder servo mount, where the shoulder servo's own lead comes out." width="1280" height="960" loading="lazy" style="background:#fff;border-radius:0.4rem" />
+	<figcaption>Where the leads go, with the shoulder cover off: hip and knee leads from the upper leg through the slot in the cap's extension (red); the shoulder servo's lead out of its own slot in the mount (blue).</figcaption>
+</figure>
+
 <Steps>
 
 1. Drop a 625ZZ into the cover's bearing hole **from the inside** (the side that faces the upper leg). It's a slip fit, not a press
    fit: the hole has a lip on the outside face that stops it.
-2. Slide the cover's bearing over the M3 bearing pin on the upper leg's top shell, and bring its other end against the
+2. **Leads.** The hip and knee leads come out of the hole in the upper leg's top shell. Push them, connectors first,
+   through the slot in the cap's extension, between its three screw holes, and pull them through towards the body.
+   Leave a loose loop between the upper leg and the cap: the upper leg swings on the hip, and the loop lets it move
+   through its whole range without pulling on the leads. The shoulder servo's own lead stays where it is, in the slot
+   in the top wall of its mount.
+3. Slide the cover's bearing over the M3 bearing pin on the upper leg's top shell, and bring its other end against the
    extended servo cap.
-3. Drop an M3 nut into each of the three slots in the cover. Bolt the cover to the cap with three <Hw>M3×20</Hw>
+4. Drop an M3 nut into each of the three slots in the cover. Bolt the cover to the cap with three <Hw>M3×20</Hw>
    from the cap side: the heads sit in the cap's recesses and thread into the nuts in the cover.
-4. Check for play: hold the shoulder joint and try to wiggle the upper leg sideways. It should feel solid now. Don't
+5. Check for play: hold the shoulder joint and try to wiggle the upper leg sideways. It should feel solid now. Don't
    swing the leg round by hand, though: that back-drives the hip servo.
 
 </Steps>
