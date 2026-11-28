@@ -12,7 +12,8 @@ import WhichSide from '../../../components/WhichSide.astro';
 import LegPick from '../../../components/LegPick.astro';
 
 The upper leg is two shells around the **hip servo**. The top shell has an extra hole for the bearing pin that the
-shoulder cover will ride on. Both servo leads, the knee's and the hip's, leave through the hole in the top shell.
+shoulder cover will ride on. Both servo leads, the knee's and the hip's, leave through the hole in the top shell, and later go on through the slot
+in the servo cap under the shoulder cover.
 
 <Parts per="per leg" total={4} bag="C" items={[
 	[1, 'Upper-leg bottom shell (<code>Limb_Bottom_Shell</code>)', 'Normal for left legs, mirrored for right'],
@@ -107,6 +108,11 @@ bearing on the pin before the screw: the M3 head is wider than the bearing's bor
 <Render id="upper-shells" caption="Top shell onto the bottom shell, four M3×20 through the servo" />
 
 This is the fiddly part: there is very little room between the shells.
+
+<figure>
+	<img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/renders/upper-leg-cable.png`} alt="The upper leg's top shell on its own, from the side that meets the bottom shell, knee end on the left and hip end on the right. A red dashed line runs from the knee end, where the knee cable enters between the shells, along the groove beside the shell's edge, to the rounded hole in the hip end, where it leaves together with the hip servo's lead." width="1040" height="660" loading="lazy" style="background:#fff;border-radius:0.4rem" />
+	<figcaption>The knee cable's route through the top shell: in between the shells at the knee end, along the groove, and out of the hole at the hip end with the hip lead.</figcaption>
+</figure>
 
 <Steps>
 
