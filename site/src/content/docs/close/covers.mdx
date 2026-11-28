@@ -1,6 +1,6 @@
 ---
 title: Battery and covers
-description: LiPo brackets and battery, the rear cover with the switch, and the bottom and top covers.
+description: The battery on its strap, the rear cover with the switch, and the bottom and top covers.
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
@@ -9,11 +9,12 @@ import Hw from '../../../components/Hw.astro';
 import Parts from '../../../components/Parts.astro';
 import Render from '../../../components/Render.astro';
 import Todo from '../../../components/Todo.astro';
-import Check from '../../../components/Check.astro';
 
 <Parts bag="G" items={[
-	[3, 'LiPo brackets (front, middle, rear)'],
-	[1, '3S LiPo, at most 138 × 47 × 25 mm'],
+	[1, '3S LiPo, at most 130 × 50 × 32 mm'],
+	[2, 'Battery rails'],
+	[6, '<kbd class="hw">M3×8</kbd>', 'Battery rails into the plate (pilot holes, no nuts)'],
+	[2, 'Hook-and-loop straps, 20 mm wide, about 250 mm long'],
 	[1, 'Rear cover shell (long) + rear cover plate'],
 	[2, 'Top cover halves + 2 bottom cover halves'],
 	[8, '<kbd class="hw">M3×8</kbd> + 8 M3 nuts', 'Joining the cover halves'],
@@ -24,20 +25,31 @@ import Check from '../../../components/Check.astro';
 
 ## Battery
 
+<Render id="battery" caption="The two battery rails and the pack under the plate, seen from below" />
+
+The pack hangs under the plate on two hook-and-loop straps that run round its width, through slots in two battery
+rails, one each side of it. The rails screw up into pilot holes in the plate's underside: no nuts. The bottom cover's
+floor sits 34 mm below the plate, which leaves room for the pack and the straps under it.
+
 <Steps>
 
-1. Fit the three LiPo brackets under the plate.
-2. Slide the battery into the brackets, its lead towards the **rear-left slot**.
+1. **Rails.** With the robot on its back, hold a rail against the plate's underside on each side of the middle, its wall
+   on the inside, and screw it up into the three pilot holes with three <Hw>M3×8</Hw>. Snug, not tight: they cut their
+   own thread.
+2. **Straps.** Thread each strap through a slot in the left rail from the outside, fold its end back on itself and
+   press it closed.
+3. **Pack.** Lay the pack against the plate's underside between the rails, leads at the rear, over the straps' loose
+   ends. The leads leave the pack's end at its corners: let them come out sideways.
+4. **Close the straps.** Take each strap under the pack and up through the matching slot in the right rail from the
+   inside. Pull it tight and fold it back on itself.
+5. **Main lead.** Take the XT60 lead up through the plate's **rear-left slot**.
+6. **Balance lead.** Tuck it beside the pack.
 
 </Steps>
 
-<Check id="lipo-brackets" title="How the LiPo brackets fix">
-The brackets aren't in the CAD assembly yet. Document how they fix to the plate on the first build. From the CAD, they
-hang under the plate from screw holes 65 mm in front of the centre, at the centre and 65 mm behind, and leave a bay
-48 mm wide and 25.6 mm tall (the bottom cover's floor is right below them), about 138 mm long.
-</Check>
+To charge or swap the battery later, take the bottom cover off and open the straps on the right.
 
-<Todo id="battery">The battery in its brackets under the plate, lead coming up through the rear-left slot.</Todo>
+<Todo id="battery">The battery strapped under the plate, lead coming up through the rear-left slot.</Todo>
 
 ## Covers
 

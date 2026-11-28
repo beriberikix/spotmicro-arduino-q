@@ -45,7 +45,6 @@ and two snap clips (USB-C edge). Clip the carrier in, then press the UNO Q onto 
 | Servo plugs to top cover | 1.8 mm |
 | SZBK07 to top cover | 4.5 mm |
 | Carrier's bottom sockets to plate | 0.95 mm |
-| Board stack to battery-cable tunnel | 0.7 mm |
 | Servo plugs to SZBK07 | 5.5 mm |
 
 - **Servo wires:** run sideways into the channels beside the SZBK07 (23 mm left, 19 mm right).

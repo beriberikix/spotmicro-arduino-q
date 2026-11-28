@@ -7,7 +7,7 @@
 # refined with ICP); a part is only written when 95% of points sampled on the STL lie within
 # FIT_LIMIT of the placed STEP surface (STL facets approximate large curved covers to about 0.06 mm). Mirrored STLs get
 # mirrored STEPs. This project's own parts (the electronics plate and the camera mount) and the Kooba covers it
-# changes (front cover, top cover halves; KOOBA_MODS there) are written by scripts/export_stls.py. Parts that exist only as STL upstream (robjk's extended servo mount and M3
+# changes (front, top and bottom covers, LiPo brackets; KOOBA_MODS there) are written by scripts/export_stls.py. Parts that exist only as STL upstream (robjk's extended servo mount and M3
 # bearing pin) have no STEP.
 import itertools
 import os
@@ -32,9 +32,6 @@ PARTS = [
     ("chassis/Chassis_Side.stl", f"{KOOBA}/Chassis_Side.FCStd", None, False),
     ("chassis/Top_Shoulder.stl", f"{KOOBA}/Top_Shoulder.FCStd", None, False),
     ("chassis/Bottom_Shoulder.stl", f"{KOOBA}/Bottom_Shoulder.FCStd", None, False),
-    ("chassis/LiPo_Mountingbracket_Front.stl", f"{KOOBA}/LiPo_Mountingbracket_Front.FCStd", None, False),
-    ("chassis/LiPo_Mountingbracket_Middle.stl", f"{KOOBA}/LiPo_Mountingbracket_Middle.FCStd", None, False),
-    ("chassis/LiPo_Mountingbracket_Rear.stl", f"{KOOBA}/LiPo_Mountingbracket_Rear.FCStd", None, False),
     ("shoulders/Shoulder_Joint_Servo_Cap_Extended.stl", f"{ROBJK}/Limb_Top_Shell_mod.FCStd", ["Shoulder_Joint_Servohorn_Cap"], False),
     ("shoulders/Shoulder_Cover.stl", f"{ROBJK}/Limb_Top_Shell_mod.FCStd", ["Shoulder Cover"], False),
     ("shoulders/Shoulder_Joint_Ball_Bearing_Pin.stl", f"{KOOBA}/Shoulder_Joint_Ball_Bearing_Pin.FCStd", None, False),
@@ -45,8 +42,6 @@ PARTS = [
     ("legs/Wrist.stl", f"{KOOBA}/Wrist.FCStd", None, True),
     ("legs/Wrist_Counterpart.stl", f"{KOOBA}/Wrist__Counterpart.FCStd", None, True),
     ("legs/Foot_Tip.stl", f"{KOOBA}/Foot_Tip.FCStd", None, False),
-    ("hull/Bottom_Cover_Split_Front.stl", f"{KOOBA}/Bottom_Cover_Split_Front.FCStd", ["Bottom_Cover_Split_Front"], False),
-    ("hull/Bottom_Cover_Split_Rear.stl", f"{KOOBA}/Bottom_Cover_Split_Rear.FCStd", ["Bottom_Cover_Split_Rear"], False),
     ("hull/Rear_Cover_Shell_Long.stl", f"{KOOBA}/Rear_Cover_Shell_Long.FCStd", None, False),
     ("hull/Rear_Cover_Plate.stl", f"{KOOBA}/Rear_Cover_Plate.FCStd", None, False),
     ("optional/servo-horns/Servohorn_6_B_Star.stl", f"{KOOBA}/Servohorn_6_B_Star.FCStd", None, False),

@@ -53,9 +53,7 @@ PLATES = [
         ("electronics/UnoQ_Mountingplate.stl", 1, {}),
         ("chassis/Top_Shoulder.stl", 2, {}),
         ("chassis/Bottom_Shoulder.stl", 2, {}),
-        ("chassis/LiPo_Mountingbracket_Front.stl", 1, {}),
-        ("chassis/LiPo_Mountingbracket_Middle.stl", 1, {}),
-        ("chassis/LiPo_Mountingbracket_Rear.stl", 1, {}),
+        ("chassis/Battery_Rail.stl", 2, {}),
     ]),
     ("Shoulder joints and head mounts", STRUCTURAL, BLACK, [
         ("shoulders/Shoulder_Joint_Servomount_extended_BB.stl", 2, {}),

@@ -21,7 +21,8 @@ many vendors; check the specs in the notes before buying.
 | 12 | Small zip ties (about 100 mm) or Velcro straps | Bundling each leg's three servo leads. | [search](https://www.amazon.com/s?k=small+zip+ties+100mm) |
 | 1 | Adafruit MPU-6050 6-DoF accel and gyro, STEMMA QT / Qwiic | On four posts on the plate, held with four M2x5 self-tapping screws. Same chip and I2C address (0x68) as a GY-521. | [Adafruit 3886](https://www.adafruit.com/product/3886) |
 | 1 | STEMMA QT / Qwiic JST SH 4-pin cable, 200 mm | IMU to the UNO Q's Qwiic socket, routed round the front of the board stack (about 145 mm). | [Adafruit 4401](https://www.adafruit.com/product/4401) |
-| 1 | 3S LiPo, about 5000-5200 mAh, 30C+, XT60, at most 138 x 47 x 25 mm | Sits in the LiPo brackets under the plate. The bay is 25.6 mm tall, so most 3S hard cases (37 mm) don't fit: use a soft case. The reference build uses a Zeee 3S 5200 mAh 50C soft case (132 x 43 x 25 mm, 343 g). | [search](https://www.amazon.com/s?k=3S+LiPo+5200mAh+soft+case+XT60) |
+| 1 | 3S LiPo, about 5000-5200 mAh, 30C+, XT60, soft case, at most 130 x 50 x 32 mm | Hangs under the plate on two hook-and-loop straps; the bottom cover's floor is 34 mm below the plate. The reference build uses a Zeee 3S 5200 mAh 50C (measured 126 x 43 x 31.2 mm). | [search](https://www.amazon.com/s?k=3S+LiPo+5200mAh+soft+case+XT60) |
+| 2 | Hook-and-loop straps, 20 mm wide, about 250 mm long | Hold the battery, round its width, through the two battery rails. | [search](https://www.amazon.com/s?k=hook+and+loop+battery+strap+20mm) |
 | 1 | LiPo balance charger, 3S capable | Charging the battery. | [search](https://www.amazon.com/s?k=LiPo+balance+charger+3S) |
 | 1 | 19 mm latching push button with a 12 V LED | Switches the UNO Q's VIN only (well under 2 A); the XT60 is the servo disconnect. Fits the covers' 19 mm cutout. Get the 12 V (or 12-24 V) LED version: a 3-6 V LED burns out on 3S. | [search](https://www.amazon.com/s?k=19mm+latching+push+button+LED) |
 | 1 | XT60 connector pair | Battery connector. | [search](https://www.amazon.com/s?k=XT60+connector+pair) |
@@ -61,6 +62,7 @@ DS3218 on all twelve joints: 20 kg·cm at 6 V, 4.8-6.8 V. MG996R (11 kg·cm) wor
 | 64 + 64 | M3x20 cylinder-head screws + M3 nuts | Servos, upper legs |
 | 12 + 12 | M3x20 screws + M3 nuts | Shoulder covers to the extended servo caps (3 per cover) |
 | 4 | M3x8 screws | SZBK07 to its posts |
+| 6 | M3x8 screws | Battery rails into the plate's pilot holes (no nuts) |
 | 4 + 4 | M3x8 screws + M3 washers (DIN 125, 7 mm OD) | Media Carrier clamps: the washers clamp the carrier's short edges |
 | 12 | M2x5 self-tapping screws | Cameras to the head mount (8), IMU to its posts (4) |
 | 12 | 625ZZ ball bearing, unflanged | Shoulder and leg joints (8), shoulder covers (4) |

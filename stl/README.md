@@ -22,9 +22,7 @@ as noted below. See ../NOTICE.md.
 | [Chassis_Side.stl](chassis/Chassis_Side.stl) | 2 | - | PLA | 20% |  |
 | [Top_Shoulder.stl](chassis/Top_Shoulder.stl) | 2 | - | PLA | 20% | 2 mm longer than Kooba's (49.5 mm), for shoulder clearance |
 | [Bottom_Shoulder.stl](chassis/Bottom_Shoulder.stl) | 2 | - | PLA | 20% | 2 mm longer than Kooba's (49.5 mm), for shoulder clearance |
-| [LiPo_Mountingbracket_Front.stl](chassis/LiPo_Mountingbracket_Front.stl) | 1 | - | PLA | 20% |  |
-| [LiPo_Mountingbracket_Middle.stl](chassis/LiPo_Mountingbracket_Middle.stl) | 1 | - | PLA | 20% |  |
-| [LiPo_Mountingbracket_Rear.stl](chassis/LiPo_Mountingbracket_Rear.stl) | 1 | - | PLA | 20% |  |
+| [Battery_Rail.stl](chassis/Battery_Rail.stl) | 2 | - | PLA | 20% | New: left and right of the 3S pack, two 20 mm hook-and-loop straps through their slots; replace Kooba's LiPo brackets |
 
 ## electronics
 
@@ -59,8 +57,8 @@ as noted below. See ../NOTICE.md.
 | ---- | ------ | -------- | -------- | ------ | ----- |
 | [Top_Cover_Split_Front.stl](hull/Top_Cover_Split_Front.stl) | 1 | - | PLA | 100% | Seam flanges moved inwards, clear of the servo shield's terminal block |
 | [Top_Cover_Split_Rear.stl](hull/Top_Cover_Split_Rear.stl) | 1 | - | PLA | 100% | From Top_Cover_Split_Rear_with_OLED: seam flanges moved to match the front half; OLED window, square opening and slits filled |
-| [Bottom_Cover_Split_Front.stl](hull/Bottom_Cover_Split_Front.stl) | 1 | - | PLA | 100% |  |
-| [Bottom_Cover_Split_Rear.stl](hull/Bottom_Cover_Split_Rear.stl) | 1 | - | PLA | 100% |  |
+| [Bottom_Cover_Split_Front.stl](hull/Bottom_Cover_Split_Front.stl) | 1 | - | PLA | 100% | Floor 6 mm lower, for a 3S pack |
+| [Bottom_Cover_Split_Rear.stl](hull/Bottom_Cover_Split_Rear.stl) | 1 | - | PLA | 100% | Floor 6 mm lower, for a 3S pack |
 | [Rear_Cover_Shell_Long.stl](hull/Rear_Cover_Shell_Long.stl) | 1 | - | PLA | 100% |  |
 | [Rear_Cover_Plate.stl](hull/Rear_Cover_Plate.stl) | 1 | - | PLA | 100% |  |
 
@@ -101,4 +99,4 @@ as noted below. See ../NOTICE.md.
 | [SZBK07_Mount_Test.stl](optional/test-prints/SZBK07_Mount_Test.stl) | 1 | - | PLA | 20% | SZBK07 posts from the electronics plate |
 | [IMU_Mount_Test.stl](optional/test-prints/IMU_Mount_Test.stl) | 1 | - | PLA | 20% | MPU-6050 posts and ribs, cut from the electronics plate at full thickness |
 
-Required prints: 74 parts.
+Required prints: 73 parts.

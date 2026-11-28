@@ -20,7 +20,10 @@ In `cad/UnoQ_Mountingplate.FCStd`:
 
 - Removed: ESP32 TTL pins, ESP32-SOC pocket and antenna pocket, header-board pins, LM2596 pins, HW-482 relay pins,
   PCA9685 pins, the power-cable cap and cable hollow, and the original SZBK07 pins and screw-hole deepening.
-- Added: a `Params` spreadsheet; four Media Carrier support pads, two fixed hooks and two snap clips; four SZBK07 posts
+- Removed: the LiPo bracket screw holes and nut pockets (filled by `Kooba_LiPo_Holes_Fill`).
+- Removed: the balance-charger cable tunnel and its slot, and the USB-ports fin (`Kooba_Tunnel_And_USB_Fin_Removal`,
+  `Kooba_Tunnel_Slot_Fill`).
+- Added: a `Params` spreadsheet; six blind pilot holes in the underside for the battery rails (`Battery_Rail_Pilots`); four Media Carrier support pads, two fixed hooks and two snap clips; four SZBK07 posts
   with M3 pilot holes.
 - Fixed: a redundant constraint in `Sketch677`, and the edge fillet next to the removed cap now references only the
   edges that remain.
@@ -44,5 +47,9 @@ Made by `scripts/export_stls.py` (`KOOBA_MODS`) from Kooba's FreeCAD files:
 - `Top_Cover_Split_Front` and `Top_Cover_Split_Rear` (from `Top_Cover_Split_Rear_with_OLED`): the seam flanges move
   from 27.5 mm either side of the centre line to a pair 15 mm apart, clear of the servo shield's terminal block. The
   rear half's OLED window, square opening and two slits are filled.
+- `Bottom_Cover_Split_Front` and `Bottom_Cover_Split_Rear`: the side walls are 6 mm taller, so the floor sits 6 mm
+  lower and a 3S pack fits.
+- Kooba's three `LiPo_Mountingbracket` parts aren't used: `stl/chassis/Battery_Rail.stl` (this project) holds the pack
+  with two straps instead.
 
 In `cad/Sensormount_DualCam.FCStd`, four screw ears (`Cover_Ears`, `Cover_Ear_Roots`) are added for those screws.
