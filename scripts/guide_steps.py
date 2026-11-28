@@ -228,7 +228,9 @@ BUCK = ["SZBK07"]
 FPC = ["FPC_left", "FPC_right"]
 HEAD = ["L_Front_Cover", "L_Front_Cover_Screws", "Sensormount_DualCam"]
 CAMS = ["Camera_Module_2_left", "Camera_Module_2_right"]
-BOTTOM_COVER = ["L_Bottom_Cover_Assembly"]
+BATTERY_RAILS = ["Battery_Rail_Right", "Battery_Rail_Left"]
+LIPO = ["LiPo_3S_placeholder"]
+BOTTOM_COVER = ["Bottom_Cover_3S"]   # floor 5 mm lower than Kooba's, for a 3S pack
 TOP_COVER = ["L_Top_Cover_Assembly"]
 REAR_COVER = ["L_Rear_Cover_Assembly", "L_Rear_Cover_Screws001"]
 COVER_HW = [sel(labels=r"^Cover M3 Nut "), "L_Head_Cover_Screws"]
@@ -377,8 +379,12 @@ STEPS = [
          explode=[(["L_Front_Cover"], (60, 0, 0)), (["L_Front_Cover_Screws"], (-60, 0, 0)), (CAMS, (-45, 0, 0))],
          view=(1.0, -0.8, -0.45)),
     # ---------------------------------------------------------------- covers
+    # battery rails and the pack between them, under the plate, seen from below
+    dict(id="battery", context=BODY + CARRIER + UNOQ + SHIELD + BUCK, new=BATTERY_RAILS + LIPO,
+         explode=[(BATTERY_RAILS, (0, 0, -35)), (LIPO, (0, 0, -75))],
+         view=(0.55, -0.6, 0.75), focus=PLATE + BATTERY_RAILS + LIPO),
     dict(id="covers", context=BODY + ALL_LEGS + [outer_shoulder(None), sel(labels="FOS Servohorn", box=(FRONT, None, None))] + CARRIER + UNOQ
-         + SHIELD + BUCK + HEAD + CAMS,
+         + SHIELD + BUCK + HEAD + CAMS + BATTERY_RAILS + LIPO,
          new=BOTTOM_COVER + TOP_COVER + REAR_COVER,
          explode=[(BOTTOM_COVER, (0, 0, -90)), (TOP_COVER, (0, 0, 110)), (REAR_COVER, (-90, 0, 0))],
          view=ISO_FRONT),

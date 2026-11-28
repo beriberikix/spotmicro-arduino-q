@@ -27,6 +27,7 @@ SENSORMOUNT = "cad:Sensormount_DualCam"
 CARRIER_TEST = "cad:Carrier_Mount_Test"
 SZBK07_TEST = "cad:SZBK07_Mount_Test"
 IMU_TEST = "cad:IMU_Mount_Test"
+BATTERY_RAIL_SRC = "gen:battery_rail"
 KOOBA_MOD = "mod:kooba"  # one of Kooba's covers, changed by KOOBA_MODS below
 
 PARTS = [
@@ -36,9 +37,7 @@ PARTS = [
     ("chassis", KOOBA + "Chassis_Side.stl", "Chassis_Side", 2, 0, "PLA", "20%", ""),
     ("chassis", KOOBA + "Top_Shoulder.stl", "Top_Shoulder", 2, 0, "PLA", "20%", "2 mm longer than Kooba's (49.5 mm), for shoulder clearance"),
     ("chassis", KOOBA + "Bottom_Shoulder.stl", "Bottom_Shoulder", 2, 0, "PLA", "20%", "2 mm longer than Kooba's (49.5 mm), for shoulder clearance"),
-    ("chassis", KOOBA + "LiPo_Mountingbracket_Front.stl", "LiPo_Mountingbracket_Front", 1, 0, "PLA", "20%", ""),
-    ("chassis", KOOBA + "LiPo_Mountingbracket_Middle.stl", "LiPo_Mountingbracket_Middle", 1, 0, "PLA", "20%", ""),
-    ("chassis", KOOBA + "LiPo_Mountingbracket_Rear.stl", "LiPo_Mountingbracket_Rear", 1, 0, "PLA", "20%", ""),
+    ("chassis", BATTERY_RAIL_SRC, "Battery_Rail", 2, 0, "PLA", "20%", "New: left and right of the 3S pack, two 20 mm hook-and-loop straps through their slots; replace Kooba's LiPo brackets"),
     ("electronics", PLATE, "UnoQ_Mountingplate", 1, 0, "PLA", "20%", "New: UNO Media Carrier + UNO Q + servo shield stack, SZBK07, Adafruit MPU-6050 (ribbed posts), carrier clamp posts and front stops"),
     # Shoulder joints (robjk reinforced)
     ("shoulders", ROBJK + "Shoulder_Joint_Servomount_extended_BB.stl", "Shoulder_Joint_Servomount_extended_BB", 2, 2, "PLA", "20%", "robjk; bearing-pin seat changed to M2"),
@@ -56,8 +55,8 @@ PARTS = [
     # Hull
     ("hull", KOOBA_MOD, "Top_Cover_Split_Front", 1, 0, "PLA", "100%", "Seam flanges moved inwards, clear of the servo shield's terminal block"),
     ("hull", KOOBA_MOD, "Top_Cover_Split_Rear", 1, 0, "PLA", "100%", "From Top_Cover_Split_Rear_with_OLED: seam flanges moved to match the front half; OLED window, square opening and slits filled"),
-    ("hull", KOOBA + "Bottom_Cover_Split_Front.stl", "Bottom_Cover_Split_Front", 1, 0, "PLA", "100%", ""),
-    ("hull", KOOBA + "Bottom_Cover_Split_Rear.stl", "Bottom_Cover_Split_Rear", 1, 0, "PLA", "100%", ""),
+    ("hull", KOOBA_MOD, "Bottom_Cover_Split_Front", 1, 0, "PLA", "100%", "Floor 6 mm lower, for a 3S pack"),
+    ("hull", KOOBA_MOD, "Bottom_Cover_Split_Rear", 1, 0, "PLA", "100%", "Floor 6 mm lower, for a 3S pack"),
     ("hull", KOOBA + "Rear_Cover_Shell_Long.stl", "Rear_Cover_Shell_Long", 1, 0, "PLA", "100%", ""),
     ("hull", KOOBA + "Rear_Cover_Plate.stl", "Rear_Cover_Plate", 1, 0, "PLA", "100%", ""),
     # Head
@@ -371,7 +370,8 @@ def mod_front_cover(shape):
 # flanges sit 27.5 mm either side of the centre line, and the one on the USB-C side lands on the servo shield's power
 # terminal block. Both flanges move to a symmetric pair 15 mm apart, between the shield's bent-over capacitor and the
 # far side; each keeps 2.75 mm from the servo headers. The rear half also loses its OLED window (with its counterbore,
-# pin recess and four pilot holes), the square opening and the two rounded slits, filled flush with its 2 mm top skin.
+# pin recess and four pilot holes), the square opening for Kooba's balance-plug holder and the two rounded slits, filled
+# flush with its 2 mm top skin.
 # name: ((old flange centres), (new flange centres), seam-end band along Z), along the body's X (its width).
 SEAM_FLANGES = {
     "Top_Cover_Split_Front": ((82.5, 137.5), (112.5, 127.5), (-106.7, -101.0)),
@@ -401,8 +401,95 @@ def mod_top_cover(shape, name):
     return out.removeSplitter()
 
 
+# LiPo bay for the 3S pack (126 x 43 x 31.2 mm measured). Kooba's three brackets were drawn for a 2S pack: their bay is
+# 25.5 mm tall, their end walls box in leads that leave a 3S pack's end at its corners, and the rear one's balance-plug
+# holder is too small for a 3S plug. They are replaced by two battery rails (BATTERY_RAIL), one each side of the pack,
+# screwed up into blind pilot holes in the plate's underside (Battery_Rail_Pilots in cad/UnoQ_Mountingplate.FCStd), so
+# no nuts sit on top of the plate. Two 20 mm hook-and-loop straps run across the pack's width, through slots in the
+# rails, and hold it up against the plate. The bottom cover's floor drops BAY_DROP so the pack and the straps under it
+# fit (28 -> 34 mm below the plate).
+BAY_DROP = 6.0
+# Bottom covers: stretched across the side walls at this Y of Kooba's body (floor at Y -38, open edge at Y -80). The
+# rear half's top edge ramps down to about Y -68, so the plane is below that: there the front half's walls are exactly
+# straight (its sections at Y -68..-65.4 are identical) and the rear half's within about 1 degree, with no edges within
+# a millimetre, so the stretch only lengthens straight wall.
+BOTTOM_STRETCH_Y = -66.4
+# Battery rail, in the plate's frame on the pack's right (+X; the left one is the same part turned 180 degrees about Z),
+# hanging down from the plate's underside at Z 0. A flange outside the pack's width carries three M3x8, which end
+# 0.4 mm short of the end of the plate's 3.9 mm pilot holes; a side wall 2 mm from the pack locates it sideways and has
+# a slot for each strap.
+BATTERY_RAIL = {
+    "length": (-49.0, 49.0),           # Y
+    "flange": (23.5, 35.0, 4.5),       # X range, thickness
+    "holes": (31.0, (-45.0, 0.0, 45.0), 3.4),  # X, Ys (the plate's pilot holes), clearance diameter
+    "wall": (23.5, 26.0, 16.0),        # X range (the pack's side is at X 21.5), depth below the plate
+    "slots": ((-35.0, 35.0), 22.0, (6.5, 10.0)),  # strap centres in Y, slot length for a 20 mm strap, Z below the plate
+}
+
+
+def build_battery_rail():
+    """The right-hand rail in the plate frame (see BATTERY_RAIL)."""
+    import Part
+    V = FreeCAD.Vector
+    r = BATTERY_RAIL
+    y0, y1 = r["length"]
+    fx0, fx1, ft = r["flange"]
+    wx0, wx1, wd = r["wall"]
+    out = Part.makeBox(fx1 - fx0, y1 - y0, ft, V(fx0, y0, -ft)).fuse(Part.makeBox(wx1 - wx0, y1 - y0, wd, V(wx0, y0, -wd)))
+    hx, hys, hd = r["holes"]
+    out = out.cut(Part.makeCompound([Part.makeCylinder(hd / 2, ft + 2, V(hx, y, -ft - 1)) for y in hys]))
+    ys, sl, (sz0, sz1) = r["slots"]
+    out = out.cut(Part.makeCompound([Part.makeBox(wx1 - wx0 + 2, sl, sz1 - sz0, V(wx0 - 1, y - sl / 2, -sz1)) for y in ys]))
+    return out.removeSplitter()
+
+
+def export_battery_rail(dest, step_dest):
+    shape = build_battery_rail()
+    if len(shape.Solids) != 1 or not shape.isValid():
+        raise RuntimeError("battery rail is not one valid solid")
+    shape.rotate(FreeCAD.Vector(0, 0, 0), FreeCAD.Vector(1, 0, 0), 180)   # plate face on the bed, wall up
+    mesh = MeshPart.meshFromShape(Shape=shape, LinearDeflection=0.05, AngularDeflection=0.2, Relative=False)
+    b = mesh.BoundBox
+    move = FreeCAD.Vector(-(b.XMin + b.XMax) / 2, -(b.YMin + b.YMax) / 2, -b.ZMin)
+    mesh.translate(move.x, move.y, move.z)
+    mesh.write(dest)
+    shape.translate(move)
+    os.makedirs(os.path.dirname(step_dest), exist_ok=True)
+    shape.exportStep(step_dest)
+
+
+def stretch_solid(shape, axis, at, extra):
+    """Cut the solid across `axis` at `at`, move the part beyond it out by `extra` and fill the gap with the
+    cross-section. Only valid where nothing but straight walls cross the plane."""
+    import Part
+    V = FreeCAD.Vector
+    k = "xyz".index(axis)
+    d = V(*[1 if i == k else 0 for i in range(3)])
+    big = 2000.0
+    corner = [-big / 2] * 3
+    corner[k] = at - big
+    lo = Part.makeBox(big, big, big, V(*corner))      # everything below `at` along the axis
+    hi = lo.copy()
+    hi.translate(d * big)
+    low, high = shape.common(lo), shape.common(hi)
+    high.translate(d * extra)
+    face = Part.Face(shape.slice(d, at), "Part::FaceMakerBullseye")
+    out = low.fuse([high, face.extrude(d * extra)]).removeSplitter()
+    expected = face.Area * extra
+    if abs(out.Volume - shape.Volume - expected) > 0.01 * expected + 1:
+        raise RuntimeError(f"stretch added {out.Volume - shape.Volume:.1f} mm3, expected {expected:.1f}")
+    return out
+
+
+def mod_bottom_cover(shape):
+    # floor is on the +Y side of the plane: moving it out lowers the floor
+    return stretch_solid(shape, "y", BOTTOM_STRETCH_Y, BAY_DROP)
+
+
 # output name: (Kooba FreeCAD file, body label, modifier, expected volume change in mm3)
 KOOBA_MODS = {
+    "Bottom_Cover_Split_Front": ("Bottom_Cover_Split_Front.FCStd", "Bottom_Cover_Split_Front", mod_bottom_cover, 1228),
+    "Bottom_Cover_Split_Rear": ("Bottom_Cover_Split_Rear.FCStd", "Bottom_Cover_Split_Rear", mod_bottom_cover, 2580),
     "Front_Cover_Optimized": ("Front_Cover_Optimized.FCStd", "Front_Cover_Optimized", mod_front_cover, -1003),
     "Top_Cover_Split_Front": ("Top_Cover_Split_Front.FCStd", "Top_Cover_Split_Front", lambda s: mod_top_cover(s, "Top_Cover_Split_Front"), 0),
     "Top_Cover_Split_Rear": ("Top_Cover_Split_Rear_with_OLED.FCStd", "Top_Cover_Split_Rear_with_OLED", lambda s: mod_top_cover(s, "Top_Cover_Split_Rear"), 1382),
@@ -414,9 +501,14 @@ def export_kooba_mod(dest, name, step_dest):
     doc = FreeCAD.openDocument(os.path.join(REF, KOOBA, fcstd), hidden=True)
     body = [o for o in doc.Objects if o.TypeId == "PartDesign::Body" and o.Label == label][0]
     src = body.Shape.copy()
+    # the brackets sit in an App::Part that turns them into Kooba's print position
+    parent = [p for p in body.InList if p.TypeId == "App::Part"]
+    print_pl = parent[0].Placement if parent else FreeCAD.Placement()
     FreeCAD.closeDocument(doc.Name)
     shape = mod(src)
-    if len(shape.Solids) != 1 or not shape.isValid() or abs(shape.Volume - src.Volume - change) > 15:
+    shape.Placement = print_pl.multiply(shape.Placement)
+    print(f"{name}: volume change {shape.Volume - src.Volume:.1f} mm3")
+    if len(shape.Solids) != 1 or not shape.isValid() or (change is not None and abs(shape.Volume - src.Volume - change) > 15):
         raise RuntimeError(f"{name}: modified cover has {len(shape.Solids)} solids, valid {shape.isValid()}, "
                            f"volume change {shape.Volume - src.Volume:.0f} mm3 (expected {change})")
     mesh = MeshPart.meshFromShape(Shape=shape, LinearDeflection=0.05, AngularDeflection=0.2, Relative=False)
@@ -448,6 +540,8 @@ def main():
                         os.path.join(ROOT, "step", "head", "Sensormount_DualCam.step"))
         elif src in (CARRIER_TEST, SZBK07_TEST, IMU_TEST):
             export_mount_test(dest, src)
+        elif src == BATTERY_RAIL_SRC:
+            export_battery_rail(dest, os.path.join(ROOT, "step", folder, name + ".step"))
         elif src == KOOBA_MOD:
             export_kooba_mod(dest, name, os.path.join(ROOT, "step", folder, name + ".step"))
         else:
